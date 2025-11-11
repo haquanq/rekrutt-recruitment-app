@@ -2,7 +2,9 @@
   "name": "@recruitment-app/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev": "nx run-many --target=dev --all"
+  },
   "private": true,
   "dependencies": {},
   "devDependencies": {
