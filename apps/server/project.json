@@ -1,0 +1,30 @@
+{
+    "name": "server",
+    "root": "apps/server",
+    "sourceRoot": "apps/server/src",
+    "projectType": "application",
+    "targets": {
+        "dev": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "php artisan serve",
+                "cwd": "apps/server"
+            }
+        },
+        "test": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "php artisan test",
+                "cwd": "apps/server"
+            }
+        },
+        "migrate": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "php artisan migrate",
+                "cwd": "apps/server"
+            }
+        }
+    },
+    "tags": ["laravel", "backend"]
+}
