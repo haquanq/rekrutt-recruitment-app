@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create("contract_type", function (Blueprint $table) {
+            $table->id("id");
+            $table->string("name");
+            $table->text("description");
+            $table->timestamps();
+
+            $table->primary(columns: ["id"], name: "pk_contract_type");
+            $table->unique(columns: ["name"], name: "uq_contract_type__name");
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists("contract_type");
+    }
+};
