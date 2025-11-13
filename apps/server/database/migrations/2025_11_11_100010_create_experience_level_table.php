@@ -9,10 +9,9 @@ return new class extends Migration {
     {
         Schema::create("experience_level", function (Blueprint $table) {
             $table->bigInteger("id")->generatedAs()->always();
-            $table->string("name");
-            $table->text("description");
+            $table->string("name", 100);
+            $table->string("description", 300);
             $table->timestamps();
-
 
             $table->unique(
                 columns: ["name"],

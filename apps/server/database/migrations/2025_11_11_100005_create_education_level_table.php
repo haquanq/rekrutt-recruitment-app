@@ -9,8 +9,8 @@ return new class extends Migration {
     {
         Schema::create("education_level", function (Blueprint $table) {
             $table->bigInteger("id")->generatedAs()->always();
-            $table->string("name");
-            $table->text("description");
+            $table->string("name", 100);
+            $table->string("description", 300);
             $table->timestamps();
 
             $table->unique(columns: ["name"], name: "uq_education_level__name");

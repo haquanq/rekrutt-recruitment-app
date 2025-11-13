@@ -12,11 +12,11 @@ return new class extends Migration {
     {
         Schema::create("user", function (Blueprint $table) {
             $table->bigInteger("id")->generatedAs()->always();
-            $table->string("first_name");
-            $table->string("last_name");
-            $table->string("email");
-            $table->string("username");
-            $table->string("password");
+            $table->string("first_name", 100);
+            $table->string("last_name", 100);
+            $table->string("email", 300);
+            $table->string("username", 40);
+            $table->string("password", 30);
             $table->timestamps();
 
             $table->enum("role", UserRole::cases());

@@ -9,11 +9,10 @@ return new class extends Migration {
     {
         Schema::create("hiring_source", function (Blueprint $table) {
             $table->bigInteger("id")->generatedAs()->always();
-            $table->string("name")->unique();
-            $table->text("description");
+            $table->string("name", 100);
+            $table->string("description", 300);
             $table->string("site_url")->nullable();
             $table->timestamps();
-
 
             $table->unique(columns: ["name"], name: "uq_hiring_source__name");
         });
