@@ -11,7 +11,7 @@ return new class extends Migration {
         Schema::create("interview", function (Blueprint $table) {
             $table->bigInteger("id")->generatedAs()->always();
             $table->string("title", 100);
-            $table->string("description", 300);
+            $table->string("description", 500);
             $table->timestampTZ("scheduled_start_at");
             $table->timestampTZ("schedules_end_at");
             $table->timestampTZ("started_at")->nullable();

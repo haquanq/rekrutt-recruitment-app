@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create("contract_type", function (Blueprint $table) {
             $table->bigInteger("id")->generatedAs()->always();
             $table->string("name", 100);
-            $table->string("description", 300);
+            $table->string("description", 500)->nullable();
             $table->timestamps();
 
             $table->unique(columns: ["name"], name: "uq_contract_type__name");

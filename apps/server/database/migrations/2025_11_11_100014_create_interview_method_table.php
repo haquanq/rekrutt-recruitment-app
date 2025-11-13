@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create("interview_method", function (Blueprint $table) {
             $table->bigInteger("id")->generatedAs()->always();
             $table->string("name", 100);
-            $table->string("description", 300);
+            $table->string("description", 500)->nullable();
             $table->timestamps();
 
             $table->unique(

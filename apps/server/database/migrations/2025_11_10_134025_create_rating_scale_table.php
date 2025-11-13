@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create("rating_scale", function (Blueprint $table) {
             $table->bigInteger("id")->generatedAs()->always();
             $table->string("name", 100);
-            $table->string("description", 300)->nullable();
+            $table->string("description", 500)->nullable();
             $table->boolean("is_active")->default(0);
             $table->timestamps();
 
