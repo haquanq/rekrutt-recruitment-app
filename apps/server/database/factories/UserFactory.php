@@ -18,6 +18,7 @@ class UserFactory extends Factory
             "first_name" => fake()->firstName(),
             "last_name" => fake()->lastName(),
             "email" => fake()->unique()->safeEmail(),
+            "phone_number" => fake()->unique()->numerify("##########"),
             "username" => fake()->userName(),
             "password" => (static::$password ??= Hash::make("password")),
             "created_at" => Carbon::now(),
