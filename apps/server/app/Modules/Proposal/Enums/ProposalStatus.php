@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Enums;
+namespace App\Modules\Proposal\Enums;
 
 enum ProposalStatus: string
 {
     case DRAFT = "DRAFT";
-    case PUBLISHED = "PENDING";
+    case REVIEWING = "REVIEWING";
     case APPROVED = "APPROVED";
     case REJECTED = "REJECTED";
 }
