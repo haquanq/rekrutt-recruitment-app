@@ -21,8 +21,8 @@ class GlobalResponseWrapperMiddleware
             $wrappedData = [
                 "success" => $response->isSuccessful(),
                 "status_code" => $response->getStatusCode(),
-                "timestamp" => Carbon::now(),
-                "request_id" => Str::uuid(),
+                "timestamp" => Carbon::now()->toISOString(),
+                "request_id" => Str::uuid()->toString(),
             ];
 
             $isError = $response->status() >= 400;
@@ -33,7 +33,7 @@ class GlobalResponseWrapperMiddleware
                 $wrappedData["data"] = $payload;
             }
 
-            $response->setData(ArrayHelper::convertKeys($wrappedData, fn($value) => Str::camel($value)));
+            $response->setData(ArrayHelper::convertKeysToCamelCase($wrappedData));
         }
 
         return $response;
