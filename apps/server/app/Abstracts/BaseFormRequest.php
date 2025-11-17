@@ -2,7 +2,7 @@
 
 namespace App\Abstracts;
 
-use App\Traits\ArrayHelper;
+use App\Helpers\ArrayHelper;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
