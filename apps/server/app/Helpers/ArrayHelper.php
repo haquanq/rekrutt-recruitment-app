@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ArrayHelper
@@ -13,8 +12,8 @@ class ArrayHelper
         foreach ($data as $key => $value) {
             $newValue = $value;
 
-            if (\is_array($value)) {
-                $newValue = static::convertKeys($value, $converter);
+            if (\is_array($newValue) || \is_object($newValue)) {
+                $newValue = static::convertKeys((array) $newValue, $converter);
             }
 
             $newArray[$converter(\strval($key))] = $newValue;
