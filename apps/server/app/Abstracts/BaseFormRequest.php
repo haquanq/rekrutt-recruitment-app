@@ -6,7 +6,6 @@ use App\Helpers\ArrayHelper;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Str;
 
 class BaseFormRequest extends FormRequest
 {
@@ -24,7 +23,7 @@ class BaseFormRequest extends FormRequest
     }
     protected function prepareForValidation(): void
     {
-        $convertedData = ArrayHelper::convertKeys($this->all(), fn($value) => Str::snake($value));
+        $convertedData = ArrayHelper::convertKeysToSnakeCase($this->all());
         $this->replace($convertedData);
     }
 }
