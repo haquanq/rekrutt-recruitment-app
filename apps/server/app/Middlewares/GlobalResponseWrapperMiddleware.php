@@ -15,7 +15,7 @@ class GlobalResponseWrapperMiddleware
     {
         $response = $next($request);
 
-        if ($response instanceof JsonResponse) {
+        if ($response instanceof JsonResponse && $response->getData()) {
             $payload = (array) $response->getData();
 
             $wrappedData = [
@@ -33,7 +33,11 @@ class GlobalResponseWrapperMiddleware
                 $wrappedData["data"] = $payload;
             }
 
-            $response->setData(ArrayHelper::convertKeysToCamelCase($wrappedData));
+            $noContent = $response->status() === 204;
+
+            if (!$noContent) {
+                $response->setData(ArrayHelper::convertKeysToCamelCase($wrappedData));
+            }
         }
 
         return $response;
