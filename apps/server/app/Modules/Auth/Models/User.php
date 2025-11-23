@@ -35,14 +35,6 @@ class User extends Authenticatable implements JWTSubject
         "suspension_note",
     ];
 
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        if (!isset($this->attributes["password"])) {
-            $this->attributes["password"] = Hash::make("12345678");
-        }
-    }
-
     public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
