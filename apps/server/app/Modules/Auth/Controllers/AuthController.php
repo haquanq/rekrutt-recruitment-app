@@ -5,6 +5,7 @@ namespace App\Modules\Auth\Controllers;
 use App\Abstracts\BaseController;
 use App\Modules\Auth\Requests\LoginRequest;
 use App\Modules\Auth\Resources\UserResource;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends BaseController
@@ -16,7 +17,7 @@ class AuthController extends BaseController
             return $this->unauthorizedResponse("Invalid credentials.");
         }
 
-        $cookie = cookie("jwt_token", $token, config("jwt.ttl"), sameSite: "none", secure: true);
+        $cookie = cookie("jwt_token", $token, config("jwt.refresh_ttl"), sameSite: "none", secure: true);
         return $this->okResponse(new UserResource(Auth::user()))->withCookie($cookie);
     }
 
@@ -26,11 +27,11 @@ class AuthController extends BaseController
         return $this->noContentResponse();
     }
 
-    public function refresh()
+    public function refresh(Request $request)
     {
         $token = Auth::refresh();
-        $cookie = cookie("jwt_token", $token, config("jwt.ttl"), sameSite: "none", secure: true);
-        return $this->okResponse(new UserResource(Auth::user()))->withCookie($cookie);
+        $cookie = cookie("jwt_token", $token, config("jwt.refresh_ttl"), sameSite: "none", secure: true);
+        return $this->noContentResponse()->withCookie($cookie);
     }
 
     public function me()
