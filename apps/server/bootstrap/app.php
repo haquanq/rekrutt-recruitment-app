@@ -1,6 +1,7 @@
 <?php
 
 use App\Middlewares\GlobalResponseWrapperMiddleware;
+use App\Middlewares\JWTCookieMiddleware;
 use App\Middlewares\ProtectedRouteMiddleware;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(api: __DIR__ . "/../routes/api.php", commands: __DIR__ . "/../routes/console.php", health: "/up")
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->prepend(JWTCookieMiddleware::class);
         $middleware->alias(["protected" => ProtectedRouteMiddleware::class]);
         $middleware->append(GlobalResponseWrapperMiddleware::class);
     })
@@ -42,12 +44,12 @@ return Application::configure(basePath: dirname(__DIR__))
                     Response::HTTP_NOT_FOUND,
                 );
             }
-            return response()->json(
-                [
-                    "message" => "Oops, something wrong happened!",
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR,
-            );
+            // return response()->json(
+            //     [
+            //         "message" => "Oops, something wrong happened!",
+            //     ],
+            //     Response::HTTP_INTERNAL_SERVER_ERROR,
+            // );
         });
     })
     ->create();
