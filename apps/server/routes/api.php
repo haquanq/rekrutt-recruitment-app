@@ -9,8 +9,11 @@ Route::group(["prefix" => "auth", "middleware" => "protected"], function () {
         ->name("login")
         ->withoutMiddleware("protected");
 
+    Route::post("refresh", [AuthController::class, "refresh"])
+        ->name("refresh")
+        ->withoutMiddleware("protected");
+
     Route::post("logout", [AuthController::class, "logout"]);
-    Route::post("refresh", [AuthController::class, "refresh"]);
     Route::post("me", [AuthController::class, "me"]);
 });
 
