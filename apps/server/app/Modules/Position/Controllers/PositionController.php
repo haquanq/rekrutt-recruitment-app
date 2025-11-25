@@ -8,21 +8,32 @@ use App\Modules\Position\Requests\UpdatePositionRequest;
 use App\Modules\Position\Models\Position;
 use App\Modules\Position\Resources\PositionResource;
 use Illuminate\Support\Facades\Gate;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PositionController extends BaseController
 {
     public function index()
     {
         Gate::authorize("findAll", Position::class);
-        $positions = Position::all();
+
+        $positions = QueryBuilder::for(Position::class)
+            ->allowedIncludes(["department"])
+            ->allowedFilters([AllowedFilter::partial("title")])
+            ->get();
+
         return $this->okResponse(PositionResource::collection(PositionResource::collection($positions)));
     }
 
     public function show(int $id)
     {
         Gate::authorize("findById", Position::class);
-        $positions = Position::findOrFail($id);
-        return $this->okResponse(new PositionResource($positions));
+
+        $position = QueryBuilder::for(Position::class)
+            ->allowedIncludes(["department"])
+            ->get();
+
+        return $this->okResponse(new PositionResource($position));
     }
 
     public function store(StorePositionRequest $request)
