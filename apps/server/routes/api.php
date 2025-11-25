@@ -17,4 +17,14 @@ Route::group(["prefix" => "auth", "middleware" => "protected"], function () {
     Route::post("me", [AuthController::class, "me"]);
 });
 
-Route::apiResource("users", UserController::class)->middleware("protected");
+Route::controller(UserController::class)
+    ->middleware("protected")
+    ->prefix("users")
+    ->group(function () {
+        Route::get("/", "index");
+        Route::get("/{id}", "show");
+        Route::post("/", "store");
+        Route::put("/{id}", "update");
+        Route::delete("/{id}", "destroy");
+        Route::patch("/{id}/status", "updateStatus");
+    });
