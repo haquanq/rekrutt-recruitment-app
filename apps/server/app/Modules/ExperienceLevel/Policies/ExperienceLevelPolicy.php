@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\EducationLevel\Policies;
+namespace App\Modules\ExperienceLevel\Policies;
 
 use App\Modules\Auth\Enums\UserRole;
 use App\Modules\Auth\Models\User;
