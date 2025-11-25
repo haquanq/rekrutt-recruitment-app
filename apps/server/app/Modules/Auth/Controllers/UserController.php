@@ -44,7 +44,7 @@ class UserController extends BaseController
 
     public function updateStatus(UpdateUserStatusRequest $request, int $id)
     {
-        echo json_encode($request->validated());
+        Gate::authorize("update", User::class);
         User::findOrFail($id)->update($request->validated());
         return $this->noContentResponse();
     }
