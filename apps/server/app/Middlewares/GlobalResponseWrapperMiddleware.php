@@ -15,9 +15,7 @@ class GlobalResponseWrapperMiddleware
     {
         $response = $next($request);
 
-        if ($response instanceof JsonResponse && $response->getData()) {
-            $payload = (array) $response->getData();
-
+        if ($response instanceof JsonResponse) {
             $wrappedData = [
                 "success" => $response->isSuccessful(),
                 "status_code" => $response->getStatusCode(),
@@ -25,11 +23,13 @@ class GlobalResponseWrapperMiddleware
                 "request_id" => Str::uuid()->toString(),
             ];
 
+            $payload = (array) $response->getData();
+
             $isError = $response->status() >= 400;
 
             if ($isError) {
                 $wrappedData["error"] = $payload;
-            } elseif ($payload) {
+            } else {
                 $wrappedData["data"] = $payload;
             }
 
