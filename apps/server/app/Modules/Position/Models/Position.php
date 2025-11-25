@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Position extends BaseModel
 {
-    protected $fillable = ["name", "description"];
+    protected $guarded = ["id", "created_at", "updated_at"];
+
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
