@@ -7,16 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CandidateExperience extends BaseModel
 {
-    protected $fillable = [
-        "fromDate",
-        "toDate",
-        "employerName",
-        "employerDescription",
-        "positionTitle",
-        "positionDuty",
-        "note",
-        "candidate_id",
-    ];
+    protected $guarded = ["id", "created_at", "updated_at"];
 
     public function candidate(): BelongsTo
     {
