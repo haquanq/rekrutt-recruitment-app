@@ -19,16 +19,19 @@ class UserPolicy
 
     public function create(User $user): bool
     {
-        return true;
+        $role = UserRole::tryFrom($user["role"]);
+        return $role === UserRole::ADMIN;
     }
 
     public function update(User $user): bool
     {
-        return true;
+        $role = UserRole::tryFrom($user["role"]);
+        return $role === UserRole::ADMIN;
     }
 
     public function delete(User $user): bool
     {
-        return true;
+        $role = UserRole::tryFrom($user["role"]);
+        return $role === UserRole::ADMIN;
     }
 }
