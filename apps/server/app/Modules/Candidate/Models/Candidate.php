@@ -14,17 +14,17 @@ class Candidate extends BaseModel
 
     public function source(): BelongsTo
     {
-        return $this->belongsTo(HiringSource::class);
+        return $this->belongsTo(HiringSource::class, "hiring_source_id", "id");
     }
 
     public function experiences(): HasMany
     {
-        return $this->hasMany(CandidateExperience::class);
+        return $this->hasMany(CandidateExperience::class, "candidate_experience_id", "id");
     }
 
     public function documents(): HasMany
     {
-        return $this->hasMany(CandidateDocument::class);
+        return $this->hasMany(CandidateDocument::class, "candidate_document_id", "id");
     }
 
     public function applications(): HasMany
