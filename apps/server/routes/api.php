@@ -2,6 +2,7 @@
 
 use App\Modules\Auth\Controllers\AuthController;
 use App\Modules\Auth\Controllers\UserController;
+use App\Modules\ContractType\Controllers\ContractTypeController;
 use App\Modules\Department\Controllers\DepartmentController;
 use App\Modules\Position\Controllers\PositionController;
 use App\Modules\RatingScale\Controllers\RatingScaleController;
@@ -67,6 +68,16 @@ Route::middleware("protected")->group(function () {
     Route::controller(RatingScalePointController::class)
         ->prefix("rating-scale-points")
         ->group(function () {
+            Route::get("/{id}", "show");
+            Route::post("/", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
+
+    Route::controller(ContractTypeController::class)
+        ->prefix("contract-types")
+        ->group(function () {
+            Route::get("/", "index");
             Route::get("/{id}", "show");
             Route::post("/", "store");
             Route::put("/{id}", "update");
