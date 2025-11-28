@@ -10,9 +10,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Recruitment extends BaseModel
 {
-    public function user(): BelongsTo
+    public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "created_by_user_id");
+    }
+
+    public function closedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, "closed_by_user_id");
     }
 
     public function proposal(): BelongsTo
