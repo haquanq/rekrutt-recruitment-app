@@ -17,12 +17,12 @@ class Proposal extends BaseModel
 {
     protected $guarded = ["id", "created_at", "updated_at"];
 
-    public function creator(): BelongsTo
+    public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, "created_by_user_id");
     }
 
-    public function reviewer(): BelongsTo
+    public function reviewedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, "reviewed_by_user_id");
     }
