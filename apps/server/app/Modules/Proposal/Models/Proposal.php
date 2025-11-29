@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Proposal extends BaseModel
 {
+    protected $guarded = ["id", "created_at", "updated_at"];
+
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, "created_by_user_id");
