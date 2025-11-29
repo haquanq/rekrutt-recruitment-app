@@ -19,7 +19,15 @@ class ProposalController extends BaseController
         Gate::authorize("findAll", Proposal::class);
 
         $proposals = QueryBuilder::for(Proposal::class)
-            ->allowedIncludes(["candidate", "position", "contractType", "educationLevel", "experienceLevel"])
+            ->allowedIncludes([
+                "candidate",
+                "position",
+                "contractType",
+                "educationLevel",
+                "experienceLevel",
+                "createdBy",
+                "reviewedBy",
+            ])
             ->allowedFilters([
                 AllowedFilter::exact("status"),
                 AllowedFilter::partial("title"),
@@ -35,7 +43,15 @@ class ProposalController extends BaseController
         Gate::authorize("findById", Proposal::class);
 
         $proposal = QueryBuilder::for(Proposal::class)
-            ->allowedIncludes(["candidate", "position", "contractType", "educationLevel", "experienceLevel"])
+            ->allowedIncludes([
+                "candidate",
+                "position",
+                "contractType",
+                "educationLevel",
+                "experienceLevel",
+                "createdBy",
+                "reviewedBy",
+            ])
             ->findOrFail($id);
 
         return $this->okResponse(new ProposalResource($proposal));
