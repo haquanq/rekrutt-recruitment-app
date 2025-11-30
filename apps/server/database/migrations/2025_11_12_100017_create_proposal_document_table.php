@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string("file_url", 500)->nullable();
             $table->string("file_extension", 50)->nullable();
             $table->string("mime_type", 300);
-            $table->string("note", 300)->nullable();
+            $table->string("description", 500)->nullable();
             $table->timestampsTZ();
 
             $table
