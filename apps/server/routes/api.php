@@ -7,7 +7,9 @@ use App\Modules\Candidate\Controllers\CandidateDocumentController;
 use App\Modules\Candidate\Controllers\CandidateExperienceController;
 use App\Modules\ContractType\Controllers\ContractTypeController;
 use App\Modules\Department\Controllers\DepartmentController;
+use App\Modules\EducationLevel\Controllers\EducationLevelController;
 use App\Modules\ExperienceLevel\Controllers\ExperienceLevelController;
+use App\Modules\HiringSource\Controllers\HiringSourceController;
 use App\Modules\Position\Controllers\PositionController;
 use App\Modules\Proposal\Controllers\ProposalController;
 use App\Modules\Proposal\Controllers\ProposalDocumentController;
@@ -102,7 +104,7 @@ Route::middleware("protected")->group(function () {
         });
 
     Route::prefix("education-levels")
-        ->controller(ExperienceLevelController::class)
+        ->controller(EducationLevelController::class)
         ->group(function () {
             Route::get("", "index");
             Route::get("/{id}", "show");
@@ -112,7 +114,7 @@ Route::middleware("protected")->group(function () {
         });
 
     Route::prefix("hiring-source")
-        ->controller(ExperienceLevelController::class)
+        ->controller(HiringSourceController::class)
         ->group(function () {
             Route::get("", "index");
             Route::get("/{id}", "show");
