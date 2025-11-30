@@ -25,11 +25,18 @@ class ScrambleServiceProvider extends ServiceProvider
             });
     }
 
+    public function createDtoName(string $name): string
+    {
+        $name = str_replace(["Request", "Resource"], "Dto", $name);
+        $name = str_replace(["StoreDto"], "CreateDto", $name);
+        return $name;
+    }
+
     public function updateSchemas(OpenApi $document)
     {
         $newSchemas = [];
         foreach ($document->components->schemas as $schemaName => $schema) {
-            $newSchemaName = str_replace(["Request", "Resource"], "Dto", $schemaName);
+            $newSchemaName = $this->createDtoName($schemaName);
             $schema->setTitle($newSchemaName);
 
             $newProperties = [];
@@ -52,8 +59,7 @@ class ScrambleServiceProvider extends ServiceProvider
 
         foreach ($operation->requestBodyObject->content as $contentType => $content) {
             if ($content instanceof Reference) {
-                $newName = str_replace(["Request", "Resource"], "Dto", $content->fullName);
-                $content->fullName = $newName;
+                $content->fullName = $this->createDtoName($content->fullName);
             }
         }
     }
@@ -72,13 +78,9 @@ class ScrambleServiceProvider extends ServiceProvider
             foreach ($response->content as $contentType => $content) {
                 if ($content instanceof Schema) {
                     if ($content->type instanceof Reference) {
-                        $newName = str_replace(["Request", "Resource"], "Dto", $content->type->fullName);
-                        $content->type->fullName = $newName;
-                        $content->setTitle($newName);
+                        $content->type->fullName = $this->createDtoName($content->type->fullName);
                     } elseif (isset($content->type->items)) {
-                        $newName = str_replace(["Request", "Resource"], "Dto", $content->type->items->fullName);
-                        $content->type->items->fullName = $newName;
-                        $content->setTitle($newName);
+                        $content->type->items->fullName = $this->createDtoName($content->type->items->fullName);
                     }
                 }
             }
