@@ -7,9 +7,7 @@ use App\Modules\Candidate\Controllers\CandidateDocumentController;
 use App\Modules\Candidate\Controllers\CandidateExperienceController;
 use App\Modules\ContractType\Controllers\ContractTypeController;
 use App\Modules\Department\Controllers\DepartmentController;
-use App\Modules\EducationLevel\Controllers\EducationLevelController;
 use App\Modules\ExperienceLevel\Controllers\ExperienceLevelController;
-use App\Modules\HiringSource\Controllers\HiringSourceController;
 use App\Modules\Position\Controllers\PositionController;
 use App\Modules\Proposal\Controllers\ProposalController;
 use App\Modules\Proposal\Controllers\ProposalDocumentController;
@@ -18,44 +16,158 @@ use App\Modules\RatingScale\Controllers\RatingScalePointController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix("auth")->group(function () {
-    Route::post("login", [AuthController::class, "login"])->name("login");
-    Route::post("refresh", [AuthController::class, "refresh"]);
-
-    Route::middleware(["protected"])->group(function () {
-        Route::post("logout", [AuthController::class, "logout"]);
-        Route::post("me", [AuthController::class, "me"]);
+    Route::controller(AuthController::class)->group(function () {
+        Route::post("login", "login")->name("login");
+        Route::post("refresh", "refresh");
     });
+
+    Route::middleware(["protected"])
+        ->controller(AuthController::class)
+        ->group(function () {
+            Route::post("logout", "logout");
+            Route::post("me", "me");
+        });
 });
 
 Route::middleware("protected")->group(function () {
-    Route::apiResource("users", UserController::class)->parameters(["users" => "id"]);
+    Route::prefix("users")
+        ->controller(UserController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::patch("/{id}/status", "updateStatus");
+            Route::delete("/{id}", "destroy");
+        });
 
-    Route::apiResource("departments", DepartmentController::class)->parameters(["departments" => "id"]);
-    Route::apiResource("positions", PositionController::class)->parameters(["positions" => "id"]);
+    Route::prefix("departments")
+        ->controller(DepartmentController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
 
-    Route::apiResource("rating-scales", RatingScaleController::class)->parameters(["rating-scales" => "id"]);
-    Route::apiResource("rating-scale-points", RatingScalePointController::class)->parameters([
-        "rating-scale-points" => "id",
-    ]);
+    Route::prefix("positions")
+        ->controller(PositionController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
 
-    Route::apiResource("contract-types", ContractTypeController::class)->parameters(["contract-types" => "id"]);
-    Route::apiResource("education-levels", EducationLevelController::class)->parameters(["education-levels" => "id"]);
-    Route::apiResource("experience-levels", ExperienceLevelController::class)->parameters([
-        "experience-levels" => "id",
-    ]);
+    Route::prefix("rating-scales")
+        ->controller(RatingScaleController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
 
-    Route::apiResource("hiring-sources", HiringSourceController::class)->parameters(["hiring-sources" => "id"]);
+    Route::prefix("rating-scale-points")
+        ->controller(RatingScalePointController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
 
-    Route::apiResource("candidates", CandidateController::class)->parameters(["candidates" => "id"]);
-    Route::apiResource("candidate-documents", CandidateDocumentController::class)->parameters([
-        "candidate-documents" => "id",
-    ]);
-    Route::apiResource("candidate-experiences", CandidateExperienceController::class)->parameters([
-        "candidate-experiences" => "id",
-    ]);
+    Route::prefix("contract-types")
+        ->controller(ContractTypeController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
 
-    Route::apiResource("proposals", ProposalController::class)->parameters(["proposals" => "id"]);
-    Route::apiResource("proposal-documents", ProposalDocumentController::class)->parameters([
-        "proposal-documents" => "id",
-    ]);
+    Route::prefix("experience-levels")
+        ->controller(ExperienceLevelController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
+
+    Route::prefix("education-levels")
+        ->controller(ExperienceLevelController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
+
+    Route::prefix("hiring-source")
+        ->controller(ExperienceLevelController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
+
+    Route::prefix("candidates")
+        ->controller(CandidateController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
+
+    Route::prefix("candidate-documents")
+        ->controller(CandidateDocumentController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
+
+    Route::prefix("candidate-experiences")
+        ->controller(CandidateExperienceController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
+
+    Route::prefix("proposals")
+        ->controller(ProposalController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
+
+    Route::prefix("proposal-documents")
+        ->controller(ProposalDocumentController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
 });
