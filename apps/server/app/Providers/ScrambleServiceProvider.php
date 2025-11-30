@@ -7,6 +7,7 @@ use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\Operation;
 use Dedoc\Scramble\Support\Generator\Reference;
 use Dedoc\Scramble\Support\Generator\Schema;
+use Dedoc\Scramble\Support\Generator\Types\Type;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Str;
@@ -25,31 +26,32 @@ class ScrambleServiceProvider extends ServiceProvider
             });
     }
 
-    public function createDtoName(string $name): string
+    public function createCustomeModelName(string $name): string
     {
         $name = str_replace(["Request", "Resource"], "Dto", $name);
         $name = str_replace(["StoreDto"], "CreateDto", $name);
         return $name;
     }
 
+    public function updateTypeReference(Reference|Schema|Type $type): void
+    {
+        if ($type instanceof Reference) {
+            $type->fullName = $this->createCustomeModelName($type->fullName);
+        } elseif ($type->type === "array" && $type->items instanceof Reference) {
+            $type->items->fullName = $this->createCustomeModelName($type->items->fullName);
+        }
+    }
+
     public function updateSchemas(OpenApi $document)
     {
         $newSchemas = [];
         foreach ($document->components->schemas as $schemaName => $schema) {
-            $newSchemaName = $this->createDtoName($schemaName);
-            $schema->setTitle($newSchemaName);
+            $newSchemaName = $this->createCustomeModelName($schemaName);
 
             if (isset($schema->type->properties)) {
                 $newProperties = [];
                 foreach ($schema->type->properties as $propertyName => $propertySchema) {
-                    if ($propertySchema instanceof Reference) {
-                        $propertySchema->fullName = $this->createDtoName($propertySchema->fullName);
-
-                        Log::info(json_encode($propertySchema));
-                    } elseif ($propertySchema->type === "array") {
-                        $propertySchema->items->fullName = $this->createDtoName($propertySchema->items->fullName);
-                    }
-
+                    $this->updateTypeReference($propertySchema);
                     $newProperties[Str::camel($propertyName)] = $propertySchema;
                 }
                 $schema->type->properties = $newProperties;
@@ -68,7 +70,7 @@ class ScrambleServiceProvider extends ServiceProvider
 
         foreach ($operation->requestBodyObject->content as $contentType => $content) {
             if ($content instanceof Reference) {
-                $content->fullName = $this->createDtoName($content->fullName);
+                $content->fullName = $this->createCustomeModelName($content->fullName);
             }
         }
     }
@@ -86,11 +88,7 @@ class ScrambleServiceProvider extends ServiceProvider
 
             foreach ($response->content as $contentType => $content) {
                 if ($content instanceof Schema) {
-                    if ($content->type instanceof Reference) {
-                        $content->type->fullName = $this->createDtoName($content->type->fullName);
-                    } elseif (isset($content->type->items)) {
-                        $content->type->items->fullName = $this->createDtoName($content->type->items->fullName);
-                    }
+                    $this->updateTypeReference($content);
                 }
             }
         }
