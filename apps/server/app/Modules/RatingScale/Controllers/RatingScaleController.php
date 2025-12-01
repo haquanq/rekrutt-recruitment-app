@@ -7,6 +7,7 @@ use App\Modules\RatingScale\Requests\RatingScaleStoreRequest;
 use App\Modules\RatingScale\Requests\RatingScaleUpdateRequest;
 use App\Modules\RatingScale\Models\RatingScale;
 use App\Modules\RatingScale\Resources\RatingScaleResource;
+use App\Modules\RatingScale\Resources\RatingScaleResourceCollection;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -20,9 +21,9 @@ class RatingScaleController extends BaseController
         $ratingScales = QueryBuilder::for(RatingScale::class)
             ->allowedIncludes(["points"])
             ->allowedFilters([AllowedFilter::partial("name"), AllowedFilter::exact("isActive", "is_active")])
-            ->get();
+            ->autoPaginate();
 
-        return $this->okResponse(RatingScaleResource::collection(RatingScaleResource::collection($ratingScales)));
+        return RatingScaleResourceCollection::make($ratingScales);
     }
 
     public function show(int $id)
@@ -31,9 +32,9 @@ class RatingScaleController extends BaseController
 
         $ratingScale = QueryBuilder::for(RatingScale::class)
             ->allowedIncludes(["points"])
-            ->get();
+            ->findOrFail($id);
 
-        return $this->okResponse(new RatingScaleResource($ratingScale));
+        return RatingScaleResource::make($ratingScale);
     }
 
     public function store(RatingScaleStoreRequest $request)
