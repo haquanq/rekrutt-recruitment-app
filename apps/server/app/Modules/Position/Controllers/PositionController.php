@@ -69,7 +69,7 @@ class PositionController extends BaseController
     /**
      * Find position by Id
      *
-     * Return a unique position
+     * Return a unique position. Allow relations query
      */
     #[
         QueryParameter(
@@ -106,7 +106,7 @@ class PositionController extends BaseController
     /**
      * Update position
      *
-     * Update position information. Return empty
+     *  Return empty
      */
     public function update(PositionUpdateRequest $request, int $id)
     {
