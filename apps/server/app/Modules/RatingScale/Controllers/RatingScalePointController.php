@@ -7,7 +7,7 @@ use App\Modules\RatingScale\Requests\RatingScalePointStoreRequest;
 use App\Modules\RatingScale\Requests\RatingScalePointUpdateRequest;
 use App\Modules\RatingScale\Models\RatingScalePoint;
 use App\Modules\RatingScale\Resources\RatingScalePointResource;
-use App\Modules\RatingScale\Resources\RatingScaleResource;
+use App\Modules\RatingScale\Resources\RatingScalePointResourceCollection;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -19,9 +19,9 @@ class RatingScalePointController extends BaseController
 
         $ratingScalePoints = QueryBuilder::for(RatingScalePoint::class)
             ->allowedIncludes(["ratingScale"])
-            ->get();
+            ->autoPaginate();
 
-        return $this->okResponse(RatingScalePointResource::collection($ratingScalePoints));
+        return RatingScalePointResourceCollection::make($ratingScalePoints);
     }
 
     public function show(int $id)
@@ -30,9 +30,9 @@ class RatingScalePointController extends BaseController
 
         $ratingScalePoint = QueryBuilder::for(RatingScalePoint::class)
             ->allowedIncludes(["ratingScale"])
-            ->get();
+            ->findOrFail($id);
 
-        return $this->okResponse(new RatingScalePointResource($ratingScalePoint));
+        return RatingScalePointResource::make($ratingScalePoint);
     }
 
     public function store(RatingScalePointStoreRequest $request)
