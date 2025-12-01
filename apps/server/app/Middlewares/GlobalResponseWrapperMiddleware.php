@@ -16,6 +16,10 @@ class GlobalResponseWrapperMiddleware
         $response = $next($request);
 
         if ($response instanceof JsonResponse && $request->is("api/*")) {
+            if ($response->status() === 204) {
+                return $response;
+            }
+
             $wrappedData = [
                 "success" => $response->isSuccessful(),
                 "status_code" => $response->getStatusCode(),
@@ -25,19 +29,15 @@ class GlobalResponseWrapperMiddleware
 
             $payload = (array) $response->getData();
 
-            $isError = $response->status() >= 400;
-
-            if ($isError) {
+            if (isset($payload["data"])) {
+                $wrappedData = [...$wrappedData, ...$payload];
+            } elseif ($response->status() >= 400) {
                 $wrappedData["error"] = $payload;
             } else {
                 $wrappedData["data"] = $payload;
             }
 
-            $noContent = $response->status() === 204;
-
-            if (!$noContent) {
-                $response->setData(ArrayHelper::convertKeysToCamelCase($wrappedData));
-            }
+            $response->setData(ArrayHelper::convertKeysToCamelCase($wrappedData));
         }
 
         return $response;
