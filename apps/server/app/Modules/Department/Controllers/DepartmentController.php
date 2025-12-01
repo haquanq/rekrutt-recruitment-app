@@ -18,7 +18,7 @@ class DepartmentController extends BaseController
     /**
      * Find all departments
      *
-     * Retrive a list of departments. Allows pagination, relations and filter query.
+     * Return a list of departments. Allows pagination, relations and filter query.
      */
     #[
         QueryParameter(
