@@ -21,6 +21,7 @@ class AuthController extends BaseController
     {
         $credentials = $request->validated();
         if (!($token = Auth::attempt($credentials))) {
+            // Invalid credentials
             return $this->unauthorizedResponse("Invalid credentials.");
         }
 
