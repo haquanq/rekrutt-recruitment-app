@@ -19,7 +19,7 @@ class RatingScaleController extends BaseController
 
         $ratingScales = QueryBuilder::for(RatingScale::class)
             ->allowedIncludes(["points"])
-            ->allowedFilters([AllowedFilter::partial("name")])
+            ->allowedFilters([AllowedFilter::partial("name"), AllowedFilter::exact("isActive", "is_active")])
             ->get();
 
         return $this->okResponse(RatingScaleResource::collection(RatingScaleResource::collection($ratingScales)));
