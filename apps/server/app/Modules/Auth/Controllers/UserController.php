@@ -3,14 +3,13 @@
 namespace App\Modules\Auth\Controllers;
 
 use App\Abstracts\BaseController;
-use App\Modules\Auth\Enums\UserRole;
+use App\Modules\Auth\Requests\UserActivateRequest;
+use App\Modules\Auth\Requests\UserRetireRequest;
 use App\Modules\Auth\Requests\UserStoreRequest;
+use App\Modules\Auth\Requests\UserSuspendRequest;
 use App\Modules\Auth\Requests\UserUpdateRequest;
 use App\Modules\Auth\Models\User;
-use App\Modules\Auth\Requests\UserStatusUpdateRequest;
 use App\Modules\Auth\Resources\UserResource;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class UserController extends BaseController
@@ -42,7 +41,21 @@ class UserController extends BaseController
         return $this->noContentResponse();
     }
 
-    public function updateStatus(UserStatusUpdateRequest $request, int $id)
+    public function suspend(UserSuspendRequest $request, User $id)
+    {
+        Gate::authorize("update", User::class);
+        User::findOrFail($id)->update($request->validated());
+        return $this->noContentResponse();
+    }
+
+    public function retire(UserRetireRequest $request, int $id)
+    {
+        Gate::authorize("update", User::class);
+        User::findOrFail($id)->update($request->validated());
+        return $this->noContentResponse();
+    }
+
+    public function activate(UserActivateRequest $request, int $id)
     {
         Gate::authorize("update", User::class);
         User::findOrFail($id)->update($request->validated());
