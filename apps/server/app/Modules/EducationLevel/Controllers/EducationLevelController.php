@@ -15,7 +15,7 @@ class EducationLevelController extends BaseController
 {
     public function index()
     {
-        Gate::authorize("findAll", EducationLevel::class);
+        Gate::authorize("viewAny", EducationLevel::class);
 
         $educationlevels = QueryBuilder::for(EducationLevel::class)
             ->allowedFilters([AllowedFilter::partial("name")])
@@ -26,7 +26,7 @@ class EducationLevelController extends BaseController
 
     public function show(int $id)
     {
-        Gate::authorize("findByid", EducationLevel::class);
+        Gate::authorize("view", EducationLevel::class);
         $educationLevel = EducationLevel::findOrFail($id);
         return $this->okResponse(new EducationLevelResource($educationLevel));
     }

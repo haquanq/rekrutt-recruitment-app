@@ -15,7 +15,7 @@ class RatingScalePointController extends BaseController
 {
     public function index()
     {
-        Gate::authorize("findAll", RatingScalePoint::class);
+        Gate::authorize("viewAny", RatingScalePoint::class);
 
         $ratingScalePoints = QueryBuilder::for(RatingScalePoint::class)
             ->allowedIncludes(["ratingScale"])
@@ -26,7 +26,7 @@ class RatingScalePointController extends BaseController
 
     public function show(int $id)
     {
-        Gate::authorize("findById", RatingScalePoint::class);
+        Gate::authorize("view", RatingScalePoint::class);
 
         $ratingScalePoint = QueryBuilder::for(RatingScalePoint::class)
             ->allowedIncludes(["ratingScale"])

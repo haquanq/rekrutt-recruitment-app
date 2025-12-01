@@ -15,7 +15,7 @@ class HiringSourceController extends BaseController
 {
     public function index()
     {
-        Gate::authorize("findAll", HiringSource::class);
+        Gate::authorize("viewAny", HiringSource::class);
 
         $hiringSources = QueryBuilder::for(HiringSource::class)
             ->allowedFilters([AllowedFilter::partial("name")])
@@ -26,7 +26,7 @@ class HiringSourceController extends BaseController
 
     public function show(int $id)
     {
-        Gate::authorize("findById", HiringSource::class);
+        Gate::authorize("view", HiringSource::class);
         $hiringSource = HiringSource::findOrFail($id);
         return $this->okResponse(new HiringSourceResource($hiringSource));
     }

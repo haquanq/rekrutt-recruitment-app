@@ -15,7 +15,7 @@ class ExperienceLevelController extends BaseController
 {
     public function index()
     {
-        Gate::authorize("findAll", ExperienceLevel::class);
+        Gate::authorize("viewAny", ExperienceLevel::class);
         $experienceLevels = QueryBuilder::for(ExperienceLevel::class)
             ->allowedFilters([AllowedFilter::partial("name")])
             ->get();
@@ -25,7 +25,7 @@ class ExperienceLevelController extends BaseController
 
     public function show(int $id)
     {
-        Gate::authorize("findById", ExperienceLevel::class);
+        Gate::authorize("view", ExperienceLevel::class);
         $experienceLevel = ExperienceLevel::findOrFail($id);
         return $this->okResponse(new ExperienceLevelResource($experienceLevel));
     }

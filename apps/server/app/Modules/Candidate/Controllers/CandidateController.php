@@ -15,7 +15,7 @@ class CandidateController extends BaseController
 {
     public function index()
     {
-        Gate::authorize("findAll", Candidate::class);
+        Gate::authorize("viewAny", Candidate::class);
         $candidates = QueryBuilder::for(Candidate::class)
             ->allowedIncludes(["hiringSource", "experiences", "documents"])
             ->allowedFilters([
@@ -31,7 +31,7 @@ class CandidateController extends BaseController
 
     public function show(int $id)
     {
-        Gate::authorize("findById", Candidate::class);
+        Gate::authorize("view", Candidate::class);
 
         $candidate = QueryBuilder::for(Candidate::class)
             ->allowedIncludes(["hiringSource", "experiences", "documents"])

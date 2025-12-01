@@ -15,7 +15,7 @@ class CandidateExperienceController extends BaseController
 {
     public function index()
     {
-        Gate::authorize("findAll", CandidateExperience::class);
+        Gate::authorize("viewAny", CandidateExperience::class);
 
         $candidateExperiences = QueryBuilder::for(CandidateExperience::class)
             ->allowedIncludes(["candidate"])
@@ -30,7 +30,7 @@ class CandidateExperienceController extends BaseController
 
     public function show(int $id)
     {
-        Gate::authorize("findById", CandidateExperience::class);
+        Gate::authorize("view", CandidateExperience::class);
 
         $candidateExperience = QueryBuilder::for(CandidateExperience::class)
             ->allowedIncludes(["candidate"])

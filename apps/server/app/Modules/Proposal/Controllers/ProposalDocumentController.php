@@ -17,7 +17,7 @@ class ProposalDocumentController extends BaseController
 {
     public function index()
     {
-        Gate::authorize("findAll", ProposalDocument::class);
+        Gate::authorize("viewAny", ProposalDocument::class);
 
         $candidateDocuments = QueryBuilder::for(ProposalDocument::class)
             ->allowedIncludes(["proposal"])
@@ -29,7 +29,7 @@ class ProposalDocumentController extends BaseController
 
     public function show(int $id)
     {
-        Gate::authorize("findByid", ProposalDocument::class);
+        Gate::authorize("view", ProposalDocument::class);
 
         $candidateDocument = QueryBuilder::for(ProposalDocument::class)
             ->allowedIncludes(["candidate"])

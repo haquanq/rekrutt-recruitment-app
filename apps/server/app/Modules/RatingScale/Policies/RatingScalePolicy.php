@@ -7,12 +7,12 @@ use App\Modules\Auth\Models\User;
 
 class RatingScalePolicy
 {
-    public function findAll(User $user): bool
+    public function viewAny(User $user): bool
     {
         return true;
     }
 
-    public function findById(User $user): bool
+    public function view(User $user): bool
     {
         return true;
     }
