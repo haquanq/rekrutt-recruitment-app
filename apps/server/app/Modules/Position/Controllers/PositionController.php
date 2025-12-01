@@ -71,10 +71,23 @@ class PositionController extends BaseController
      *
      * Return a unique position
      */
+    #[
+        QueryParameter(
+            name: "include",
+            type: "string",
+            description: "Include nested relations </br>" .
+                " Allow relations: department </br>" .
+                "Example: include=department",
+        ),
+    ]
     public function show(int $id)
     {
         Gate::authorize("view", Position::class);
-        $position = Position::findOrFail($id);
+
+        $position = QueryBuilder::for(Position::class)
+            ->allowedIncludes(["department"])
+            ->findOrFail($id);
+
         return PositionResource::make($position);
     }
 
