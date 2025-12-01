@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends BaseController
 {
+    /**
+     * Login
+     *
+     * Return authenticated user with cookies
+     */
     public function login(UserLoginRequest $request)
     {
         $credentials = $request->validated();
@@ -21,12 +26,22 @@ class AuthController extends BaseController
         return $this->okResponse(new UserResource(Auth::user()))->withCookie($cookie);
     }
 
+    /**
+     * Logout
+     *
+     * Return no content
+     */
     public function logout()
     {
         Auth::logout();
         return $this->noContentResponse();
     }
 
+    /**
+     * Refresh access token
+     *
+     * Return no content
+     */
     public function refresh(Request $request)
     {
         $token = Auth::refresh();
@@ -34,6 +49,11 @@ class AuthController extends BaseController
         return $this->noContentResponse()->withCookie($cookie);
     }
 
+    /**
+     * Me
+     *
+     * Return authenticated user
+     */
     public function me()
     {
         return $this->okResponse(new UserResource(Auth::user()));
