@@ -2,24 +2,28 @@
 
 namespace App\Providers;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        //
+        Builder::macro("autoPaginate", function (
+            $defaultPerPage = 15,
+            $columns = ["*"],
+            $pageName = "page",
+            $page = null,
+        ) {
+            $pageSize = (int) request()->input("page.size", $defaultPerPage);
+            $pageNumber = (int) request()->input("page.number", $page);
+
+            $pageSize = min($pageSize, 100);
+            $pageSize = max($pageSize, 1);
+
+            return $this->paginate($pageSize, $columns, $pageName, $pageNumber);
+        });
     }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        JsonResource::withoutWrapping();
-    }
+    public function boot(): void {}
 }
