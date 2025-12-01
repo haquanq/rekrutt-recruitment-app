@@ -37,7 +37,7 @@ class ScrambleServiceProvider extends ServiceProvider
     {
         if ($type instanceof Reference) {
             $type->fullName = $this->findAndRenameSchemaNames($type->fullName);
-        } elseif ($type->type === "array" && $type->items instanceof Reference) {
+        } elseif ($type->type === "array" && isset($type->items) && $type->items instanceof Reference) {
             $type->items->fullName = $this->findAndRenameSchemaNames($type->items->fullName);
         }
 
