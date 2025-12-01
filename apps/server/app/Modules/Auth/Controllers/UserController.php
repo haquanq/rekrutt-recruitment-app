@@ -10,21 +10,38 @@ use App\Modules\Auth\Requests\UserSuspendRequest;
 use App\Modules\Auth\Requests\UserUpdateRequest;
 use App\Modules\Auth\Models\User;
 use App\Modules\Auth\Resources\UserResource;
+use App\Modules\Auth\Resources\UserResourceCollection;
 use Illuminate\Support\Facades\Gate;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends BaseController
 {
     public function index()
     {
         Gate::authorize("viewAny", User::class);
-        return $this->okResponse(UserResource::collection(User::all()));
+
+        $users = QueryBuilder::for(User::class)
+            ->allowedIncludes("position")
+            ->allowedFilters([
+                AllowedFilter::exact("email"),
+                AllowedFilter::exact("username"),
+                AllowedFilter::exact("role"),
+                AllowedFilter::exact("positionId", "position_id"),
+                AllowedFilter::exact("status"),
+            ])
+            ->autoPaginate();
+
+        return UserResourceCollection::make($users);
     }
 
     public function show(int $id)
     {
         Gate::authorize("view", User::class);
-        $user = User::findOrFail($id);
-        return $this->okResponse(new UserResource($user));
+
+        $user = QueryBuilder::for(User::class)->allowedIncludes("position")->findOrFail($id);
+
+        return UserResource::make($user);
     }
 
     public function store(UserStoreRequest $request)
