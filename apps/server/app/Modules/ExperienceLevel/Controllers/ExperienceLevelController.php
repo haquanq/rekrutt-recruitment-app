@@ -7,6 +7,7 @@ use App\Modules\ExperienceLevel\Models\ExperienceLevel;
 use App\Modules\ExperienceLevel\Requests\ExperienceLevelStoreRequest;
 use App\Modules\ExperienceLevel\Requests\ExperienceLevelUpdateRequest;
 use App\Modules\ExperienceLevel\Resources\ExperienceLevelResource;
+use App\Modules\ExperienceLevel\Resources\ExperienceLevelResourceCollection;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -18,16 +19,16 @@ class ExperienceLevelController extends BaseController
         Gate::authorize("viewAny", ExperienceLevel::class);
         $experienceLevels = QueryBuilder::for(ExperienceLevel::class)
             ->allowedFilters([AllowedFilter::partial("name")])
-            ->get();
+            ->autoPaginate();
 
-        return $this->okResponse(ExperienceLevelResource::collection($experienceLevels));
+        return ExperienceLevelResourceCollection::make($experienceLevels);
     }
 
     public function show(int $id)
     {
         Gate::authorize("view", ExperienceLevel::class);
         $experienceLevel = ExperienceLevel::findOrFail($id);
-        return $this->okResponse(new ExperienceLevelResource($experienceLevel));
+        return ExperienceLevelResource::make($experienceLevel);
     }
 
     public function store(ExperienceLevelStoreRequest $request)
