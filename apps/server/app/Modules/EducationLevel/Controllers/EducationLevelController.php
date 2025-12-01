@@ -7,6 +7,7 @@ use App\Modules\EducationLevel\Requests\EducationLevelStoreRequest;
 use App\Modules\EducationLevel\Requests\EducationLevelUpdateRequest;
 use App\Modules\EducationLevel\Models\EducationLevel;
 use App\Modules\EducationLevel\Resources\EducationLevelResource;
+use App\Modules\EducationLevel\Resources\EducationLevelResourceCollection;
 use Dedoc\Scramble\Attributes\QueryParameter;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -48,9 +49,9 @@ class EducationLevelController extends BaseController
 
         $educationlevels = QueryBuilder::for(EducationLevel::class)
             ->allowedFilters([AllowedFilter::partial("name")])
-            ->get();
+            ->autoPaginate();
 
-        return $this->okResponse(EducationLevelResource::collection($educationlevels));
+        return EducationLevelResourceCollection::make($educationlevels);
     }
 
     /**
@@ -62,7 +63,7 @@ class EducationLevelController extends BaseController
     {
         Gate::authorize("view", EducationLevel::class);
         $educationLevel = EducationLevel::findOrFail($id);
-        return $this->okResponse(new EducationLevelResource($educationLevel));
+        return EducationLevelResource::make($educationLevel);
     }
 
     /**
