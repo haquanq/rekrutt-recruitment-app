@@ -56,7 +56,7 @@ class PositionController extends BaseController
     ]
     public function index()
     {
-        Gate::authorize("findAll", Position::class);
+        Gate::authorize("viewAny", Position::class);
 
         $positions = QueryBuilder::for(Position::class)
             ->allowedIncludes(["department"])
@@ -74,7 +74,7 @@ class PositionController extends BaseController
      */
     public function show(int $id)
     {
-        Gate::authorize("findById", Position::class);
+        Gate::authorize("view", Position::class);
         $position = Position::findOrFail($id);
         return PositionResource::make($position);
     }
