@@ -88,7 +88,7 @@ class ScrambleServiceProvider extends ServiceProvider
 
             foreach ($response->content as $contentType => $content) {
                 if ($content instanceof Schema) {
-                    $this->updateTypeReference($content);
+                    $this->updateTypeReference($content->type);
                 }
             }
         }
