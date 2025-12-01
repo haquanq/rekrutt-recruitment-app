@@ -39,7 +39,9 @@ Route::middleware("protected")->group(function () {
             Route::get("/{id}", "show");
             Route::post("", "store");
             Route::put("/{id}", "update");
-            Route::patch("/{id}/status", "updateStatus");
+            Route::post("/{id}/suspend", "suspend");
+            Route::post("/{id}/retire", "retire");
+            Route::post("/{id}/activate", "activate");
             Route::delete("/{id}", "destroy");
         });
 
