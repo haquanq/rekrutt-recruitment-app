@@ -2,9 +2,9 @@
 
 namespace App\Modules\RatingScale\Requests;
 
-use App\Modules\RatingScale\Abstracts\BaseRatingScaleRequest;
+use App\Modules\RatingScale\Abstracts\BaseRatingScalePointRequest;
 
-class RatingScalePointStoreRequest extends BaseRatingScaleRequest
+class RatingScalePointStoreRequest extends BaseRatingScalePointRequest
 {
     public function rules(): array
     {
