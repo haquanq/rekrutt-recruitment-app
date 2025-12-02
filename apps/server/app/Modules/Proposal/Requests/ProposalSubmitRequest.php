@@ -7,7 +7,6 @@ use App\Modules\Proposal\Enums\ProposalStatus;
 use App\Modules\Proposal\Models\Proposal;
 use App\Modules\Proposal\Rules\ProposalStatusTransitionsFromRule;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rule;
 
 class ProposalSubmitRequest extends BaseProposalRequest
 {
@@ -37,7 +36,7 @@ class ProposalSubmitRequest extends BaseProposalRequest
         $this->proposal = Proposal::findOrFail($this->route("id"));
 
         $this->merge([
-            "status" => ProposalStatus::PENDING->value . "awd",
+            "status" => ProposalStatus::PENDING->value,
         ]);
     }
 }
