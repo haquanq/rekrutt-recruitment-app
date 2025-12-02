@@ -5,6 +5,8 @@ namespace App\Modules\Proposal\Policies;
 use App\Modules\Auth\Enums\UserRole;
 use App\Modules\Auth\Models\User;
 use App\Modules\Proposal\Models\Proposal;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Log;
 
 class ProposalPolicy
 {
@@ -18,29 +20,35 @@ class ProposalPolicy
         return true;
     }
 
-    public function create(User $user): bool
+    public function create(User $user): Response
     {
-        $role = UserRole::tryFrom($user["role"]);
-        $isManagers = \in_array($role, [UserRole::MANAGER, UserRole::HIRING_MANAGER]);
-        return $isManagers;
+        if (!$user->hasRole(UserRole::MANAGER, UserRole::HIRING_MANAGER)) {
+            return Response::deny("You are not allowed to create proposal");
+        }
+
+        return Response::allow();
     }
 
-    public function update(User $user): bool
+    public function update(User $user, Proposal $proposal): Response
     {
-        $role = UserRole::tryFrom($user["role"]);
-        return \in_array($role, [UserRole::MANAGER, UserRole::HIRING_MANAGER]);
+        Log::info(json_encode($user->department));
+        if (!$user->hasRole(UserRole::MANAGER, UserRole::HIRING_MANAGER)) {
+            return Response::deny("You are not allowed to update this proposal");
+        } elseif ($user->id !== $proposal->created_by_user_id) {
+            return Response::deny("You are not the author of this proposal");
+        }
+
+        return Response::allow();
     }
 
-    public function updateResourse(User $user, Proposal $proposal): bool
+    public function delete(User $user, Proposal $proposal): Response
     {
-        return $user->id === $proposal->created_by_user_id;
-    }
+        if (!$user->hasRole(UserRole::MANAGER, UserRole::HIRING_MANAGER)) {
+            return Response::deny("You are not allowed to delete this proposal");
+        } elseif ($user->id !== $proposal->created_by_user_id) {
+            return Response::deny("You are not the author of this proposal");
+        }
 
-    public function delete(User $user, Proposal $proposal): bool
-    {
-        $role = UserRole::tryFrom($user["role"]);
-        $isManagers = \in_array($role, [UserRole::MANAGER, UserRole::HIRING_MANAGER]);
-        $belongsToCurrentUser = $user->id === $proposal->created_by_user_id;
-        return $isManagers && $belongsToCurrentUser;
+        return Response::allow();
     }
 }
