@@ -12,7 +12,12 @@ class ProposalStatusTransitionsFromRule implements ValidationRule
 
     public function validate(string $attribute, mixed $newStatus, Closure $fail): void
     {
-        $newStatus = ProposalStatus::from($newStatus);
+        $newStatus = ProposalStatus::tryFrom($newStatus);
+
+        if (!$newStatus) {
+            $fail("The selected proposal status is invalid.");
+            return;
+        }
 
         if ($this->oldStatus === $newStatus) {
             return;
