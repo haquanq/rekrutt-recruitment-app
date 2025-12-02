@@ -9,6 +9,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Spatie\QueryBuilder\Exceptions\InvalidQuery as InvalidQueryException;
 use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -35,6 +36,15 @@ return Application::configure(basePath: dirname(__DIR__))
                         "message" => "Resource not found",
                     ],
                     Response::HTTP_NOT_FOUND,
+                );
+            }
+
+            if ($exception instanceof InvalidQueryException) {
+                return response()->json(
+                    [
+                        "message" => $exception->getMessage(),
+                    ],
+                    Response::HTTP_BAD_REQUEST,
                 );
             }
 
