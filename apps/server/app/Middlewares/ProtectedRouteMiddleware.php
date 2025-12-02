@@ -16,9 +16,7 @@ class ProtectedRouteMiddleware
             return response()->json(["message" => "Unauthorized."], Response::HTTP_UNAUTHORIZED);
         }
 
-        $status = UserStatus::tryFrom(Auth::user()->status);
-
-        if ($status !== UserStatus::ACTIVE) {
+        if (Auth::user()->status !== UserStatus::ACTIVE) {
             return response()->json(["message" => "Your account is no longer active."], Response::HTTP_FORBIDDEN);
         }
 
