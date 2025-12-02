@@ -27,10 +27,7 @@ class ProposalUpdateRequest extends BaseProposalRequest
 
     public function prepareForValidation(): void
     {
-        $proposalId = $this->route("id");
-        if ($proposalId) {
-            $this->proposal = Proposal::findOrFail($proposalId);
-        }
         parent::prepareForValidation();
+        $this->proposal = Proposal::findOrFail($this->route("id"));
     }
 }
