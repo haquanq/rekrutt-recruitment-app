@@ -3,8 +3,9 @@
 namespace App\Modules\Proposal\Controllers;
 
 use App\Abstracts\BaseController;
-use App\Modules\Proposal\Requests\ProposalPendingRequest;
+use App\Modules\Proposal\Enums\ProposalStatus;
 use App\Modules\Proposal\Requests\ProposalStoreRequest;
+use App\Modules\Proposal\Requests\ProposalSubmitRequest;
 use App\Modules\Proposal\Requests\ProposalUpdateRequest;
 use App\Modules\Proposal\Resources\ProposalResource;
 use App\Modules\Proposal\Models\Proposal;
@@ -161,6 +162,23 @@ class ProposalController extends BaseController
         $proposal = Proposal::findOrFail($id);
         Gate::authorize("delete", $proposal);
         $proposal->delete();
+        return $this->noContentResponse();
+    }
+
+    /**
+     * Submit proposal
+     *
+     * Submit proposal for approval. Return no content
+     *
+     * Authorization rules:
+     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be the author of the proposal.
+     */
+    public function submit(ProposalSubmitRequest $request)
+    {
+        if ($request->proposal->status === ProposalStatus::DRAFT) {
+            $request->proposal->update($request->validated());
+        }
         return $this->noContentResponse();
     }
 }
