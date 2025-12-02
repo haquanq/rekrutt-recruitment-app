@@ -23,7 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($exception->getPrevious() instanceof AuthorizationException) {
                 return response()->json(
                     [
-                        "message" => "Permission denied",
+                        "message" => $exception->getMessage(),
                     ],
                     Response::HTTP_FORBIDDEN,
                 );
