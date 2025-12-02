@@ -11,16 +11,16 @@ class PositionExistsInCurrentUserDepartmentRule implements ValidationRule
 {
     public function validate(string $attribute, mixed $id, Closure $fail): void
     {
-        $proposal = Position::find($id);
+        $poosition = Position::find($id);
 
-        if (!$proposal) {
+        if (!$poosition) {
             $fail("Position does not exist");
             return;
         }
 
         $departmentId = Auth::user()->position->department->id;
 
-        if ($proposal->departmentId !== $departmentId) {
+        if ($poosition->department_id !== $departmentId) {
             $fail("Position does not belong to current user department");
             return;
         }
