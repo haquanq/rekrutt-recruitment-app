@@ -2,6 +2,8 @@
 
 namespace App\Modules\Auth\Models;
 
+use App\Modules\Auth\Enums\UserRole;
+use App\Modules\Auth\Enums\UserStatus;
 use App\Modules\Interview\Models\Interview;
 use App\Modules\Interview\Models\InterviewEvaluation;
 use App\Modules\Interview\Models\InterviewInterviewer;
@@ -12,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -24,6 +25,8 @@ class User extends Authenticatable implements JWTSubject
 
     protected $casts = [
         "password" => "hashed",
+        "status" => UserStatus::class,
+        "role" => UserRole::class,
     ];
 
     protected $guarded = ["id", "created_at", "updated_at"];
