@@ -3,6 +3,8 @@
 namespace App\Modules\Proposal\Abstracts;
 
 use App\Abstracts\BaseFormRequest;
+use App\Modules\Proposal\Enums\ProposalStatus;
+use App\Modules\Proposal\Rules\ProposalExistsWithStatusRule;
 use Illuminate\Validation\Rules\File as FileRule;
 
 abstract class BaseProposalDocumentRequest extends BaseFormRequest
@@ -19,7 +21,7 @@ abstract class BaseProposalDocumentRequest extends BaseFormRequest
              * Id of Proposal where document will be attached
              * @example 1
              */
-            "proposal_id" => ["required", "integer", "exists:proposal,id"],
+            "proposal_id" => ["required", "integer", new ProposalExistsWithStatusRule(ProposalStatus::DRAFT)],
             /**
              * Document file (.pdf, .docx, .doc).
              * Max: 5MB
