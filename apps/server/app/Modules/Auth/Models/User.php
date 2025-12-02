@@ -31,6 +31,11 @@ class User extends Authenticatable implements JWTSubject
 
     protected $guarded = ["id", "created_at", "updated_at"];
 
+    public function hasRole(UserRole ...$roles): bool
+    {
+        return \in_array($this->role, $roles);
+    }
+
     public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
