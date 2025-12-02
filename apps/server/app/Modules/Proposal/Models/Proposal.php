@@ -8,6 +8,7 @@ use App\Modules\ContractType\Models\ContractType;
 use App\Modules\EducationLevel\Models\EducationLevel;
 use App\Modules\ExperienceLevel\Models\ExperienceLevel;
 use App\Modules\Position\Models\Position;
+use App\Modules\Proposal\Enums\ProposalStatus;
 use App\Modules\Recruitment\Models\Recruitment;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,6 +17,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Proposal extends BaseModel
 {
     protected $guarded = ["id", "created_at", "updated_at"];
+
+    protected $casts = [
+        "status" => ProposalStatus::class,
+    ];
 
     public function createdBy(): BelongsTo
     {
