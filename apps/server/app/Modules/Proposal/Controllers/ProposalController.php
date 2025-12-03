@@ -221,7 +221,7 @@ class ProposalController extends BaseController
     public function reject(ProposalRejectRequest $request)
     {
         if ($request->proposal->status === ProposalStatus::REJECTED) {
-            throw new ConflictHttpException("Cannot reject. Proposal is already reviewed.");
+            throw new ConflictHttpException("Cannot reject. Proposal is already rejected.");
         }
 
         $request->proposal->update($request->validated());
@@ -240,7 +240,7 @@ class ProposalController extends BaseController
     public function approve(ProposalApproveRequest $request)
     {
         if ($request->proposal->status === ProposalStatus::APPROVED) {
-            throw new ConflictHttpException("Cannot approve. Proposal is already reviewed");
+            throw new ConflictHttpException("Cannot approve. Proposal is already approved.");
         }
 
         $request->proposal->update($request->validated());
