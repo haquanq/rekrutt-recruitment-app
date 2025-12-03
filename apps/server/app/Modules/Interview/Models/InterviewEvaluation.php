@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InterviewEvaluation extends BaseModel
 {
+    protected $guarded = ["id", "created_at", "updated_at"];
+
     public function interview(): BelongsTo
     {
         return $this->belongsTo(Interview::class);
