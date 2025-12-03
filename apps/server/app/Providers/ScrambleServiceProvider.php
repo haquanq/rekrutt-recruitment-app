@@ -49,6 +49,12 @@ class ScrambleServiceProvider extends ServiceProvider
             }
             $type->properties = $newProperties;
         }
+
+        if (isset($type->required)) {
+            $type->required = array_map(function ($property) {
+                return Str::camel($property);
+            }, $type->required);
+        }
     }
 
     public function updateSchemas(OpenApi $document)
