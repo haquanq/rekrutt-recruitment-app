@@ -18,6 +18,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class ProposalController extends BaseController
 {
@@ -148,8 +149,17 @@ class ProposalController extends BaseController
      * - User must be the author of the proposal.
      */
     #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
+    #[OpenApiResponse(409, description: "Conflict error", type: AuthorizationException::class)]
     public function update(ProposalUpdateRequest $request)
     {
+        if ($request->proposal->status === ProposalStatus::PENDING) {
+            throw new ConflictHttpException("Cannot update. Proposal is pending for approval.");
+        }
+
+        if ($request->proposal->status === ProposalStatus::APPROVED) {
+            throw new ConflictHttpException("Cannot update. Proposal is approved.");
+        }
+
         $request->proposal->update($request->validated());
         return $this->noContentResponse();
     }
@@ -163,9 +173,19 @@ class ProposalController extends BaseController
      * - User with roles: MANAGER, HIRING_MANAGER.
      * - User must be the author of the proposal.
      */
+    #[OpenApiResponse(409, description: "Conflict error", type: AuthorizationException::class)]
     public function destroy(int $id)
     {
         $proposal = Proposal::findOrFail($id);
+
+        if ($proposal->status === ProposalStatus::PENDING) {
+            throw new ConflictHttpException("Cannot delete. Proposal is pending for approval.");
+        }
+
+        if ($proposal->status === ProposalStatus::APPROVED) {
+            throw new ConflictHttpException("Cannot delete. Proposal is approved.");
+        }
+
         Gate::authorize("delete", $proposal);
         $proposal->delete();
         return $this->noContentResponse();
@@ -181,11 +201,14 @@ class ProposalController extends BaseController
      * - User must be the author of the proposal.
      */
     #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
+    #[OpenApiResponse(409, description: "Conflict error", type: AuthorizationException::class)]
     public function submit(ProposalSubmitRequest $request)
     {
-        if ($request->proposal->status === ProposalStatus::DRAFT) {
-            $request->proposal->update($request->validated());
+        if ($request->proposal->status === ProposalStatus::PENDING) {
+            throw new ConflictHttpException("Cannot submit. Proposal is already submitted.");
         }
+
+        $request->proposal->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -198,11 +221,14 @@ class ProposalController extends BaseController
      * - User with roles: EXECUTIVE.
      */
     #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
+    #[OpenApiResponse(409, description: "Conflict error", type: AuthorizationException::class)]
     public function reject(ProposalRejectRequest $request)
     {
-        if ($request->proposal->status === ProposalStatus::PENDING) {
-            $request->proposal->update($request->validated());
+        if ($request->proposal->status === ProposalStatus::REJECTED) {
+            throw new ConflictHttpException("Cannot reject. Proposal is already reviewed.");
         }
+
+        $request->proposal->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -215,11 +241,14 @@ class ProposalController extends BaseController
      * - User with roles: EXECUTIVE.
      */
     #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
+    #[OpenApiResponse(409, description: "Conflict error", type: AuthorizationException::class)]
     public function approve(ProposalApproveRequest $request)
     {
-        if ($request->proposal->status === ProposalStatus::PENDING) {
-            $request->proposal->update($request->validated());
+        if ($request->proposal->status === ProposalStatus::APPROVED) {
+            throw new ConflictHttpException("Cannot approve. Proposal is already reviewed");
         }
+
+        $request->proposal->update($request->validated());
         return $this->noContentResponse();
     }
 }
