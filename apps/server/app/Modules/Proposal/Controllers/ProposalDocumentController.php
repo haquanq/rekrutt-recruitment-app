@@ -66,6 +66,14 @@ class ProposalDocumentController extends BaseController
 
     public function update(ProposalDocumentUpdateRequest $request)
     {
+        if ($request->proposalDocument->proposal->status === ProposalStatus::PENDING) {
+            throw new ConflictHttpException("Cannot update. Proposal of this document is pending for approval.");
+        }
+
+        if ($request->proposalDocument->proposal->status === ProposalStatus::APPROVED) {
+            throw new ConflictHttpException("Cannot update. Proposal of this document is approved.");
+        }
+
         $request->proposalDocument->update($request->validated());
         return $this->noContentResponse();
     }
@@ -76,10 +84,12 @@ class ProposalDocumentController extends BaseController
 
         Gate::authorize("delete", $proposalDocument);
 
-        if ($proposalDocument->proposal->status !== ProposalStatus::DRAFT) {
-            throw new ConflictHttpException(
-                "The document cannot be deleted because the proposal is " . $proposalDocument->proposal->status->value,
-            );
+        if ($proposalDocument->proposal->status === ProposalStatus::PENDING) {
+            throw new ConflictHttpException("Cannot delete. Proposal of this document is pending for approval.");
+        }
+
+        if ($proposalDocument->proposal->status === ProposalStatus::APPROVED) {
+            throw new ConflictHttpException("Cannot delete. Proposal of this document is approved.");
         }
 
         $proposalDocument->delete();
