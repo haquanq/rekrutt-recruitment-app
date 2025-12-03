@@ -9,6 +9,8 @@ use App\Modules\Proposal\Requests\ProposalDocumentStoreRequest;
 use App\Modules\Proposal\Requests\ProposalDocumentUpdateRequest;
 use App\Modules\Proposal\Resources\ProposalDocumentResource;
 use App\Modules\Proposal\Resources\ProposalDocumentResourceCollection;
+use Dedoc\Scramble\Attributes\Response as OpenApiResponse;
+use Dedoc\Scramble\Attributes\QueryParameter;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -18,6 +20,46 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class ProposalDocumentController extends BaseController
 {
+    /**
+     * Find all proposal documents
+     *
+     * Return a list of proposal documents. Allows pagination, relations and filter query.
+     *
+     * Authorization rules:
+     * - User with roles: any.
+     */
+    #[
+        QueryParameter(
+            name: "page[number]",
+            type: "integer",
+            description: "Current page number (default: 1)",
+            example: 1,
+        ),
+    ]
+    #[
+        QueryParameter(
+            name: "page[size]",
+            type: "integer",
+            description: "Size of current page (default: 15, max: 100)",
+            example: 15,
+        ),
+    ]
+    #[
+        QueryParameter(
+            name: "include",
+            type: "string",
+            description: "Include nested relations </br>" .
+                " Allow relations: proposal </br>" .
+                "Example: include=position,createdBy",
+        ),
+    ]
+    #[
+        QueryParameter(
+            name: "filter[*]",
+            type: "string",
+            description: "Filter by fields </br>" . "Allow fields: proposalId </br>" . "Example: filter[proposalId]=1",
+        ),
+    ]
     public function index()
     {
         Gate::authorize("viewAny", ProposalDocument::class);
@@ -30,6 +72,23 @@ class ProposalDocumentController extends BaseController
         return ProposalDocumentResourceCollection::make($proposalDocuments);
     }
 
+    /**
+     * Find proposal document by Id
+     *
+     * Return a unique proposal document. Allows relations query.
+     *
+     * Authorization rules:
+     * - User with roles: any.
+     */
+    #[
+        QueryParameter(
+            name: "include",
+            type: "string",
+            description: "Include nested relations </br>" .
+                " Allow relations: proposal </br>" .
+                "Example: include=position,createdBy",
+        ),
+    ]
     public function show(int $id)
     {
         Gate::authorize("view", ProposalDocument::class);
@@ -41,6 +100,17 @@ class ProposalDocumentController extends BaseController
         return ProposalDocumentResource::make($proposalDocument);
     }
 
+    /**
+     * Create proposal document
+     *
+     * Return a unique proposal document
+     *
+     * Authorization rules:
+     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be the author of the related proposal.
+     *
+     */
+    #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
     public function store(ProposalDocumentStoreRequest $request)
     {
         $file = $request->file("document");
@@ -64,6 +134,16 @@ class ProposalDocumentController extends BaseController
         return $this->createdResponse(new ProposalDocumentResource($createdProposalDocument));
     }
 
+    /**
+     * Update proposal document description
+     *
+     * Return no content
+     *
+     * Authorization rules:
+     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be the author of the related proposal.
+     */
+    #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
     public function update(ProposalDocumentUpdateRequest $request)
     {
         if ($request->proposalDocument->proposal->status === ProposalStatus::PENDING) {
@@ -78,6 +158,15 @@ class ProposalDocumentController extends BaseController
         return $this->noContentResponse();
     }
 
+    /**
+     * Detele proposal document
+     *
+     * Permanently delete proposal document. Return no content
+     *
+     * Authorization rules:
+     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be the author of the related proposal.
+     */
     public function destroy(int $id)
     {
         $proposalDocument = ProposalDocument::with("proposal")->findOrFail($id);
