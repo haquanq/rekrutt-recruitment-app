@@ -62,11 +62,9 @@ class ProposalDocumentController extends BaseController
         return $this->createdResponse(new ProposalDocumentResource($createdProposalDocument));
     }
 
-    public function update(ProposalDocumentUpdateRequest $request, int $id)
+    public function update(ProposalDocumentUpdateRequest $request)
     {
-        $proposalDocument = ProposalDocument::findOrFail($id)->load("proposal");
-        Gate::authorize("update", $proposalDocument);
-        $proposalDocument->update($request->validated());
+        $request->proposalDocument->update($request->validated());
         return $this->noContentResponse();
     }
 
