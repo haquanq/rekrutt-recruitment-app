@@ -16,6 +16,7 @@ use App\Modules\Proposal\Controllers\ProposalController;
 use App\Modules\Proposal\Controllers\ProposalDocumentController;
 use App\Modules\RatingScale\Controllers\RatingScaleController;
 use App\Modules\RatingScale\Controllers\RatingScalePointController;
+use App\Modules\Recruitment\Controllers\RecruitmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix("auth")->group(function () {
@@ -187,5 +188,17 @@ Route::middleware("protected")->group(function () {
             Route::post("", "store");
             Route::put("/{id}", "update");
             Route::delete("/{id}", "destroy");
+        });
+
+    Route::prefix("recruitments")
+        ->controller(RecruitmentController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+            Route::post("/{id}/publish", "publish");
+            Route::post("/{id}/close", "close");
         });
 });
