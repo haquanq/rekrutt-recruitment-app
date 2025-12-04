@@ -107,7 +107,7 @@ class CandidateController extends BaseController
     /**
      * Create candidate
      *
-     * Return a unique candidate.
+     * Return created candidate.
      *
      * Authorization rules:
      * - User with roles: RECRUITER, HIRING_MANAGER.
