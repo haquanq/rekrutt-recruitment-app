@@ -10,12 +10,22 @@ return new class extends Migration {
     {
         Schema::create("interview_evaluation", function (Blueprint $table) {
             $table->bigInteger("id")->generatedAs()->always();
-            $table->string("comment", 300);
-            $table->foreignId("interview_id")->constrained("interview")->onDelete("cascade");
-            $table->foreignId("user_id")->constrained("user")->onDelete("cascade");
+            $table->string("comment", 500);
             $table->timestampsTZ();
 
-            $table->foreignId("rating_scale_point_id")->constrained("rating_scale_point");
+            $table
+                ->foreignId("interview_id")
+                ->constrained(table: "interview", indexName: "fk_interview_evaluation__interview")
+                ->onDelete("cascade");
+
+            $table
+                ->foreignId("created_by_user_id")
+                ->constrained(table: "user", indexName: "fk_interview_evaluation__created_by")
+                ->onDelete("cascade");
+
+            $table
+                ->foreignId("rating_scale_point_id")
+                ->constrained(table: "rating_scale_point", indexName: "fk_interview_evaluation__rating_scale_point");
 
             $table->unique(
                 columns: ["interview_id", "user_id"],
