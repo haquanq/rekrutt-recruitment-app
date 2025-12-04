@@ -12,8 +12,15 @@ abstract class BaseCandidateDocumentRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            "candidate_id" => ["required", "integer", "exists:candidate,id"],
+            /**
+             * Document file (.pdf, .docx, .doc).
+             * Max: 5MB
+             */
             "document" => ["required", FileRule::types(["pdf", "docx", "doc"])->max(5 * 1024)],
+            /**
+             * Description
+             * @example "CV - English"
+             */
             "description" => ["string", "max:500"],
         ];
     }
