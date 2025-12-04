@@ -19,6 +19,6 @@ class CandidateExperienceUpdateRequest extends BaseCandidateExperienceRequest
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-        $this->candidateExperience = CandidateExperience::findOrFail($this->route("id"));
+        $this->candidateExperience = CandidateExperience::with("candidate")->findOrFail($this->route("id"));
     }
 }
