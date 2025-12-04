@@ -3,11 +3,22 @@
 namespace App\Modules\Candidate\Requests;
 
 use App\Modules\Candidate\Abstracts\BaseCandidateExperienceRequest;
+use App\Modules\Candidate\Models\CandidateExperience;
+use Illuminate\Support\Facades\Gate;
 
 class CandidateExperienceUpdateRequest extends BaseCandidateExperienceRequest
 {
-    public function rules(): array
+    public CandidateExperience $candidateExperience;
+
+    public function authorize(): bool
     {
-        return array_merge(parent::rules(), []);
+        Gate::authorize("update", CandidateExperience::class);
+        return true;
+    }
+
+    public function prepareForValidation(): void
+    {
+        parent::prepareForValidation();
+        $this->candidateExperience = CandidateExperience::findOrFail($this->route("id"));
     }
 }

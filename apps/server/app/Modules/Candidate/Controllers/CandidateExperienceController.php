@@ -45,10 +45,9 @@ class CandidateExperienceController extends BaseController
         return $this->createdResponse(new CandidateExperienceResource($createdCandidateExperience));
     }
 
-    public function update(CandidateExperienceUpdateRequest $request, int $id)
+    public function update(CandidateExperienceUpdateRequest $request)
     {
-        Gate::authorize("update", CandidateExperience::class);
-        CandidateExperience::findOrFail($id)->update($request->validated());
+        $request->candidateExperience->update($request->validated());
         return $this->noContentResponse();
     }
 
