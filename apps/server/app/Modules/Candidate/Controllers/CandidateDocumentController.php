@@ -61,10 +61,9 @@ class CandidateDocumentController extends BaseController
         return $this->createdResponse(new CandidateDocumentResource($createdCandidateDocument));
     }
 
-    public function update(CandidateDocumentUpdateRequest $request, int $id)
+    public function update(CandidateDocumentUpdateRequest $request)
     {
-        Gate::authorize("update", CandidateDocument::class);
-        CandidateDocument::findOrFail($id)->update($request->validated());
+        $request->candidateDocument->update($request->validated());
         return $this->noContentResponse();
     }
 
