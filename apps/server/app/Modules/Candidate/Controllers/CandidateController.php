@@ -40,13 +40,13 @@ class CandidateController extends BaseController
             ->allowedIncludes(["hiringSource", "experiences", "documents"])
             ->findOrFail($id);
 
-        return $this->okResponse(new CandidateResource($candidate));
+        return CandidateResource::make($candidate);
     }
 
     public function store(CandidateStoreRequest $request)
     {
         $createdCandidate = Candidate::create($request->validated());
-        return $this->createdResponse(new CandidateResource($createdCandidate));
+        return $this->createdResponse(CandidateResource::make($createdCandidate));
     }
 
     public function update(CandidateUpdateRequest $request)
