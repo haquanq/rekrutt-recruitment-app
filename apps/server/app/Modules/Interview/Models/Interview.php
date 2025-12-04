@@ -13,6 +13,16 @@ class Interview extends BaseModel
 {
     protected $guarded = ["id", "created_at", "updated_at"];
 
+    public function isCreatedBy(User $user): bool
+    {
+        return $this->created_by_user_id === $user->id;
+    }
+
+    public function isInterviewedBy(User $user): bool
+    {
+        return $this->interviewers->pluck("id")->has($user->id);
+    }
+
     public function application(): BelongsTo
     {
         return $this->belongsTo(RecruitmentApplication::class);
