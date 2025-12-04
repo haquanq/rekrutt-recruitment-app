@@ -23,6 +23,7 @@ class CandidateExperienceController extends BaseController
             ->allowedFilters([
                 AllowedFilter::exact("candidateId", "candidate_id"),
                 AllowedFilter::partial("employerName", "employer_name"),
+                AllowedFilter::partial("positionTitle", "position_title"),
             ])
             ->autoPaginate();
 
