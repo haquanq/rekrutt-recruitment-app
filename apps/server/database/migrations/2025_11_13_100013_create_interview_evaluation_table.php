@@ -28,7 +28,7 @@ return new class extends Migration {
                 ->constrained(table: "rating_scale_point", indexName: "fk_interview_evaluation__rating_scale_point");
 
             $table->unique(
-                columns: ["interview_id", "user_id"],
+                columns: ["interview_id", "created_by_user_id"],
                 name: "uq_interview_evaluation__per_interview_by_user",
             );
         });
