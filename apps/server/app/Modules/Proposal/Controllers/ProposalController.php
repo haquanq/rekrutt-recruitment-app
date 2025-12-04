@@ -13,8 +13,6 @@ use App\Modules\Proposal\Resources\ProposalResource;
 use App\Modules\Proposal\Models\Proposal;
 use App\Modules\Proposal\Resources\ProposalResourceCollection;
 use Dedoc\Scramble\Attributes\QueryParameter;
-use Dedoc\Scramble\Attributes\Response as OpenApiResponse;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -131,8 +129,9 @@ class ProposalController extends BaseController
      *
      * Authorization rules:
      * - User with roles: MANAGER, HIRING_MANAGER.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
     public function store(ProposalStoreRequest $request)
     {
         $createdProposal = Proposal::create($request->validated());
@@ -147,8 +146,9 @@ class ProposalController extends BaseController
      * Authorization rules:
      * - User with roles: MANAGER, HIRING_MANAGER.
      * - User must be the author of the proposal.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
     public function update(ProposalUpdateRequest $request)
     {
         if ($request->proposal->status === ProposalStatus::PENDING) {
@@ -197,8 +197,9 @@ class ProposalController extends BaseController
      * Authorization rules:
      * - User with roles: MANAGER, HIRING_MANAGER.
      * - User must be the author of the proposal.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
     public function submit(ProposalSubmitRequest $request)
     {
         if ($request->proposal->status === ProposalStatus::PENDING) {
@@ -216,8 +217,9 @@ class ProposalController extends BaseController
      *
      * Authorization rules:
      * - User with roles: EXECUTIVE.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
     public function reject(ProposalRejectRequest $request)
     {
         if ($request->proposal->status === ProposalStatus::REJECTED) {
@@ -235,8 +237,9 @@ class ProposalController extends BaseController
      *
      * Authorization rules:
      * - User with roles: EXECUTIVE.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    #[OpenApiResponse(403, description: "Authorization error", type: AuthorizationException::class)]
     public function approve(ProposalApproveRequest $request)
     {
         if ($request->proposal->status === ProposalStatus::APPROVED) {
