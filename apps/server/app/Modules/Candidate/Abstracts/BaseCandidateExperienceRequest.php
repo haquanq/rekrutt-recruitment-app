@@ -44,11 +44,6 @@ abstract class BaseCandidateExperienceRequest extends BaseFormRequest
              * @example Need further background check
              */
             "note" => ["string", "max:500"],
-            /**
-             * Id of Candidate
-             * @example 1
-             */
-            "candidate_id" => ["required", "integer:strict", "exists:candidate,id"],
         ];
     }
 }
