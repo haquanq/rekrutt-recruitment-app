@@ -8,4 +8,14 @@ enum RecruitmentStatus: string
     case PUBLISHED = "PUBLISHED";
     case CLOSED = "CLOSED";
     case COMPLETED = "COMPLETED";
+
+    public function description(): string
+    {
+        return match ($this) {
+            self::DRAFT => "Recruitment is draft.",
+            self::PUBLISHED => "Recruitment is published.",
+            self::CLOSED => "Recruitment is closed.",
+            self::COMPLETED => "Recruitment is completed.",
+        };
+    }
 }
