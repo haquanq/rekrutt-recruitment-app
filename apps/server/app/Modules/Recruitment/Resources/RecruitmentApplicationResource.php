@@ -3,6 +3,7 @@
 namespace App\Modules\Recruitment\Resources;
 
 use App\Modules\Candidate\Resources\CandidateResource;
+use App\Modules\Interview\Resources\InterviewResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,6 +21,7 @@ class RecruitmentApplicationResource extends JsonResource
             "updated_at" => $this->updated_at,
             "recruitment" => RecruitmentResource::make($this->whenLoaded("recruitment")),
             "candidate" => CandidateResource::make($this->whenLoaded("candidate")),
+            "interviews" => InterviewResource::make($this->whenLoaded("interviews")),
         ];
     }
 }
