@@ -23,7 +23,7 @@ class CandidateExistsWithStatusRule implements ValidationRule
         }
 
         if ($this->candidate->status !== $this->requiredStatus) {
-            $fail("Candidate must have status: " . $this->requiredStatus->value);
+            $fail($this->candidate->status->description());
             return;
         }
     }
