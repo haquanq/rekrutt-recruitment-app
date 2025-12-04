@@ -19,7 +19,7 @@ class CandidateFactory extends Factory
             "address" => fake()->address(),
             "email" => fake()->unique()->safeEmail(),
             "phone_number" => fake()->unique()->numerify("##########"),
-            "status" => CandidateStatus::NEW,
+            "status" => CandidateStatus::PENDING,
             "hiring_source_id" => random_int(1, 9),
             "created_at" => Carbon::now(),
             "updated_at" => Carbon::now(),
