@@ -12,15 +12,18 @@ class CandidateExperienceStoreRequest extends BaseCandidateExperienceRequest
 {
     public function rules(): array
     {
-        return parent::rules() + [
-            /**
-             * Id of Candidate
-             * @example 1
-             */
-            "candidate_id" => [
-                "required",
-                "integer:strict",
-                new CandidateExistsWithStatusRule(CandidateStatus::PENDING),
+        return [
+            ...parent::rules(),
+            ...[
+                /**
+                 * Id of Candidate
+                 * @example 1
+                 */
+                "candidate_id" => [
+                    "required",
+                    "integer:strict",
+                    new CandidateExistsWithStatusRule(CandidateStatus::PENDING),
+                ],
             ],
         ];
     }
