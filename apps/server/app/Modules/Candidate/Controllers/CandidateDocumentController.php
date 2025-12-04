@@ -3,6 +3,7 @@
 namespace App\Modules\Candidate\Controllers;
 
 use App\Abstracts\BaseController;
+use App\Modules\Candidate\Enums\CandidateStatus;
 use App\Modules\Candidate\Models\CandidateDocument;
 use App\Modules\Candidate\Requests\CandidateDocumentDestroyRequest;
 use App\Modules\Candidate\Requests\CandidateDocumentStoreRequest;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class CandidateDocumentController extends BaseController
 {
@@ -65,12 +67,24 @@ class CandidateDocumentController extends BaseController
 
     public function update(CandidateDocumentUpdateRequest $request)
     {
+        $candidateStatus = $request->candidateExperience->candidate->status;
+
+        if ($candidateStatus !== CandidateStatus::PENDING) {
+            throw new ConflictHttpException("Cannot update. " . $candidateStatus->description());
+        }
+
         $request->candidateDocument->update($request->validated());
         return $this->noContentResponse();
     }
 
     public function destroy(CandidateDocumentDestroyRequest $request)
     {
+        $candidateStatus = $request->candidateExperience->candidate->status;
+
+        if ($candidateStatus !== CandidateStatus::PENDING) {
+            throw new ConflictHttpException("Cannot delete. " . $candidateStatus->description());
+        }
+
         $request->candidateDocument->delete();
         return $this->noContentResponse();
     }
