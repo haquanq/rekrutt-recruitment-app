@@ -40,8 +40,6 @@ class CandidateDocumentController extends BaseController
 
     public function store(CandidateDocumentStoreRequest $request)
     {
-        Gate::authorize("create", CandidateDocument::class);
-
         $file = $request->file("document");
         $fileExtension = $file->extension();
         $fileMimeType = $file->getClientMimeType();
