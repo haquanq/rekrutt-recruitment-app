@@ -11,6 +11,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Spatie\QueryBuilder\Exceptions\InvalidQuery as InvalidQueryException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -58,12 +59,12 @@ return Application::configure(basePath: dirname(__DIR__))
                 );
             }
 
-            if ($exception instanceof HttpException) {
+            if ($exception instanceof ConflictHttpException) {
                 return response()->json(
                     [
                         "message" => $exception->getMessage(),
                     ],
-                    Response::HTTP_BAD_REQUEST,
+                    Response::HTTP_CONFLICT,
                 );
             }
 
