@@ -6,7 +6,9 @@ enum RecruitmentApplicationStatus: string
 {
     case PENDING = "PENDING";
     case INTERVIEWING = "INTERVIEWING";
-    case OFFERING = "OFFERING";
-    case DECLINED = "DECLINED";
-    case ACCEPTED = "ACCEPTED";
+    case OFFER_PENDING = "OFFER_PENDING";
+    case OFFER_REJECTED = "OFFER_REJECTED";
+    case OFFER_ACCEPTED = "OFFER_ACCEPTED";
+    case WITHDRAWN = "WITHDRAWN";
+    case DISCARDED = "DISCARDED";
 }
