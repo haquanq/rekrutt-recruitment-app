@@ -4,6 +4,7 @@ namespace App\Modules\Interview\Models;
 
 use App\Abstracts\BaseModel;
 use App\Modules\Auth\Models\User;
+use App\Modules\RatingScale\Resources\RatingScaleResource;
 use App\Modules\Recruitment\Models\RecruitmentApplication;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -35,5 +36,10 @@ class Interview extends BaseModel
     public function interviewers(): HasMany
     {
         return $this->hasMany(InterviewInterviewer::class);
+    }
+
+    public function ratingScale(): BelongsTo
+    {
+        return $this->belongsTo(RatingScaleResource::class);
     }
 }
