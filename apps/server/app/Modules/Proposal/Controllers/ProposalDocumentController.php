@@ -11,6 +11,7 @@ use App\Modules\Proposal\Requests\ProposalDocumentUpdateRequest;
 use App\Modules\Proposal\Resources\ProposalDocumentResource;
 use App\Modules\Proposal\Resources\ProposalDocumentResourceCollection;
 use Dedoc\Scramble\Attributes\QueryParameter;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -147,12 +148,10 @@ class ProposalDocumentController extends BaseController
      */
     public function update(ProposalDocumentUpdateRequest $request)
     {
-        if ($request->proposalDocument->proposal->status === ProposalStatus::PENDING) {
-            throw new ConflictHttpException("Cannot update. Proposal of this document is pending for approval.");
-        }
+        $proposalStatus = $request->proposalDocument->proposal->status;
 
-        if ($request->proposalDocument->proposal->status === ProposalStatus::APPROVED) {
-            throw new ConflictHttpException("Cannot update. Proposal of this document is approved.");
+        if (!Collection::make([ProposalStatus::DRAFT, ProposalStatus::REJECTED])->contains($proposalStatus)) {
+            throw new ConflictHttpException("Cannot update. " . $proposalStatus->description());
         }
 
         $request->proposalDocument->update($request->validated());
@@ -172,12 +171,10 @@ class ProposalDocumentController extends BaseController
      */
     public function destroy(ProposalDocumentDestroyRequest $request)
     {
-        if ($request->proposalDocument->proposal->status === ProposalStatus::PENDING) {
-            throw new ConflictHttpException("Cannot delete. Proposal of this document is pending for approval.");
-        }
+        $proposalStatus = $request->proposalDocument->proposal->status;
 
-        if ($request->proposalDocument->proposal->status === ProposalStatus::APPROVED) {
-            throw new ConflictHttpException("Cannot delete. Proposal of this document is approved.");
+        if (!Collection::make([ProposalStatus::DRAFT, ProposalStatus::REJECTED])->contains($proposalStatus)) {
+            throw new ConflictHttpException("Cannot delete. " . $proposalStatus->description());
         }
 
         $request->proposalDocument->delete();
