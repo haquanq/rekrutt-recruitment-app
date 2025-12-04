@@ -147,7 +147,7 @@ class ProposalController extends BaseController
      *
      * Authorization rules:
      * - User with roles: MANAGER, HIRING_MANAGER.
-     * - User must be the author of the proposal.
+     * - User must be the creator of the proposal.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -170,7 +170,7 @@ class ProposalController extends BaseController
      *
      * Authorization rules:
      * - User with roles: MANAGER, HIRING_MANAGER.
-     * - User must be the author of the proposal.
+     * - User must be the creator of the proposal.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -193,7 +193,7 @@ class ProposalController extends BaseController
      *
      * Authorization rules:
      * - User with roles: MANAGER, HIRING_MANAGER.
-     * - User must be the author of the proposal.
+     * - User must be the creator of the proposal.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
