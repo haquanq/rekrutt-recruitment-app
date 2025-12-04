@@ -22,7 +22,7 @@ class ProposalPolicy
     public function create(User $user): Response
     {
         if (!$user->hasRole(UserRole::MANAGER, UserRole::HIRING_MANAGER)) {
-            return Response::deny("You are not allowed to create proposal");
+            return Response::deny("You are not allowed to create new proposal.");
         }
 
         return Response::allow();
@@ -31,9 +31,9 @@ class ProposalPolicy
     public function update(User $user, Proposal $proposal): Response
     {
         if (!$user->hasRole(UserRole::MANAGER, UserRole::HIRING_MANAGER)) {
-            return Response::deny("You are not allowed to update this proposal");
+            return Response::deny("You are not allowed to update any proposal.");
         } elseif ($user->id !== $proposal->created_by_user_id) {
-            return Response::deny("You are not the author of this proposal");
+            return Response::deny("You are not the author of this proposal.");
         }
 
         return Response::allow();
@@ -42,9 +42,9 @@ class ProposalPolicy
     public function delete(User $user, Proposal $proposal): Response
     {
         if (!$user->hasRole(UserRole::MANAGER, UserRole::HIRING_MANAGER)) {
-            return Response::deny("You are not allowed to delete this proposal");
+            return Response::deny("You are not allowed to delete any proposal.");
         } elseif ($user->id !== $proposal->created_by_user_id) {
-            return Response::deny("You are not the author of this proposal");
+            return Response::deny("You are not the author of this proposal.");
         }
 
         return Response::allow();
@@ -53,9 +53,9 @@ class ProposalPolicy
     public function submit(User $user, Proposal $proposal): Response
     {
         if (!$user->hasRole(UserRole::MANAGER, UserRole::HIRING_MANAGER)) {
-            return Response::deny("You are not allowed to submit this proposal");
+            return Response::deny("You are not allowed to submit any proposal.");
         } elseif ($user->id !== $proposal->created_by_user_id) {
-            return Response::deny("You are not the author of this proposal");
+            return Response::deny("You are not the author of this proposal.");
         }
 
         return Response::allow();
@@ -64,7 +64,7 @@ class ProposalPolicy
     public function reject(User $user): Response
     {
         if (!$user->hasRole(UserRole::EXECUTIVE)) {
-            return Response::deny("You are not allowed to reject proposal");
+            return Response::deny("You are not allowed to reject any proposal.");
         }
 
         return Response::allow();
@@ -73,7 +73,7 @@ class ProposalPolicy
     public function approve(User $user): Response
     {
         if (!$user->hasRole(UserRole::EXECUTIVE)) {
-            return Response::deny("You are not allowed to approve proposal");
+            return Response::deny("You are not allowed to approve any proposal.");
         }
 
         return Response::allow();
