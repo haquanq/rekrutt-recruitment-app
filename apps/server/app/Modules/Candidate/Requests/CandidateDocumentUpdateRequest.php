@@ -19,7 +19,7 @@ class CandidateDocumentUpdateRequest extends BaseCandidateDocumentRequest
 
     public function authorize(): bool
     {
-        Gate::authorize("create", CandidateDocument::class);
+        Gate::authorize("update", CandidateDocument::class);
         return true;
     }
 
