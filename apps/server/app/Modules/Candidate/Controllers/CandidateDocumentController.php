@@ -8,6 +8,7 @@ use App\Modules\Candidate\Requests\CandidateDocumentDestroyRequest;
 use App\Modules\Candidate\Requests\CandidateDocumentStoreRequest;
 use App\Modules\Candidate\Requests\CandidateDocumentUpdateRequest;
 use App\Modules\Candidate\Resources\CandidateDocumentResource;
+use App\Modules\Candidate\Resources\CandidateDocumentResourceCollection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -23,9 +24,9 @@ class CandidateDocumentController extends BaseController
         $candidateDocuments = QueryBuilder::for(CandidateDocument::class)
             ->allowedIncludes(["candidate"])
             ->allowedFilters([AllowedFilter::exact("candidateId", "candidate_id")])
-            ->get();
+            ->autoPaginate();
 
-        return $this->okResponse(CandidateDocumentResource::collection($candidateDocuments));
+        return CandidateDocumentResourceCollection::make($candidateDocuments);
     }
 
     public function show(int $id)
