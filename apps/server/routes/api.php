@@ -10,13 +10,12 @@ use App\Modules\Department\Controllers\DepartmentController;
 use App\Modules\EducationLevel\Controllers\EducationLevelController;
 use App\Modules\ExperienceLevel\Controllers\ExperienceLevelController;
 use App\Modules\HiringSource\Controllers\HiringSourceController;
+use App\Modules\Interview\Controllers\InterviewMethodController;
 use App\Modules\Position\Controllers\PositionController;
 use App\Modules\Proposal\Controllers\ProposalController;
 use App\Modules\Proposal\Controllers\ProposalDocumentController;
 use App\Modules\RatingScale\Controllers\RatingScaleController;
 use App\Modules\RatingScale\Controllers\RatingScalePointController;
-use App\Modules\Recruitment\Controllers\RecruitmentApplicationController;
-use App\Modules\Recruitment\Controllers\RecruitmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix("auth")->group(function () {
@@ -177,6 +176,16 @@ Route::middleware("protected")->group(function () {
             Route::get("/{id}", "show");
             Route::post("", "store");
             Route::patch("/{id}", "update");
+            Route::delete("/{id}", "destroy");
+        });
+
+    Route::prefix("interview-methods")
+        ->controller(InterviewMethodController::class)
+        ->group(function () {
+            Route::get("", "index");
+            Route::get("/{id}", "show");
+            Route::post("", "store");
+            Route::put("/{id}", "update");
             Route::delete("/{id}", "destroy");
         });
 });
