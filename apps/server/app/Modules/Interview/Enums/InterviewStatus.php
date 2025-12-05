@@ -10,4 +10,16 @@ enum InterviewStatus: string
     case CANCELLED = "CANCELLED";
     case COMPLETED = "COMPLETED";
     case EVALUATED = "EVALUATED";
+
+    public function description(): string
+    {
+        return match ($this) {
+            self::DRAFT => "Interview is draft.",
+            self::SCHEDULED => "Interview is scheduled.",
+            self::IN_PROGRESS => "Interview is in progress.",
+            self::CANCELLED => "Interview is cancelled.",
+            self::COMPLETED => "Interview is completed.",
+            self::EVALUATED => "Interview is evaluated.",
+        };
+    }
 }
