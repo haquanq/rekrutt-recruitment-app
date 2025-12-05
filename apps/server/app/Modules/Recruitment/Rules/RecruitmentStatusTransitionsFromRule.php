@@ -25,37 +25,27 @@ class RecruitmentStatusTransitionsFromRule implements ValidationRule
 
         $isDraft = $this->oldStatus === RecruitmentStatus::DRAFT;
         $isPublished = $this->oldStatus === RecruitmentStatus::PUBLISHED;
+        $isScheduled = $this->oldStatus === RecruitmentStatus::SCHEDULED;
         $isClosed = $this->oldStatus === RecruitmentStatus::CLOSED;
 
         $changesToDraft = $newStatus === RecruitmentStatus::PUBLISHED;
+        $changesToScheduled = $newStatus === RecruitmentStatus::SCHEDULED;
         $changesToPublished = $newStatus === RecruitmentStatus::PUBLISHED;
         $changesToClosed = $newStatus === RecruitmentStatus::CLOSED;
         $changesToCompleted = $newStatus === RecruitmentStatus::COMPLETED;
 
+        $failConditions = [
+            $changesToScheduled && !$isDraft,
+            $changesToPublished && !$isScheduled,
+            $changesToClosed && !$isPublished,
+            $changesToCompleted && $isClosed,
+            $changesToDraft,
+        ];
+
         $message = "Can't change recruitment status from {$this->oldStatus->value} to {$newStatus->value}.";
 
-        if ($changesToPublished && !$isDraft) {
-            $requiredStatus = RecruitmentStatus::DRAFT->value;
-            $fail("$message Required status: $requiredStatus");
-            return;
-        }
-
-        if ($changesToClosed && !$isPublished) {
-            $requiredStatus = RecruitmentStatus::PUBLISHED->value;
-            $fail("$message Required status: $requiredStatus");
-            return;
-        }
-
-        if ($changesToCompleted && !$isClosed) {
-            $requiredStatus = RecruitmentStatus::CLOSED->value;
-            $fail("$message Required status: $requiredStatus");
-            return;
-        }
-
-        if ($changesToDraft) {
-            $requiredStatus = RecruitmentStatus::PUBLISHED->value;
+        if (in_array(true, $failConditions)) {
             $fail($message);
-            return;
         }
     }
 }
