@@ -12,9 +12,9 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Spatie\QueryBuilder\Exceptions\InvalidQuery as InvalidQueryException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
+    ->withCommands([...glob(app_path("Modules/*/Commands"))])
     ->withRouting(api: __DIR__ . "/../routes/api.php", commands: __DIR__ . "/../routes/console.php", health: "/up")
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->prepend(JWTCookieMiddleware::class);
