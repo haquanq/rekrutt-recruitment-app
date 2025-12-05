@@ -136,7 +136,7 @@ class RecruitmentController extends BaseController
     public function update(RecruitmentUpdateRequest $request, int $id)
     {
         if ($request->recruitment->status !== RecruitmentStatus::DRAFT) {
-            throw new ConflictHttpException("Cannot delete. " . $request->recruitment->status->description());
+            throw new ConflictHttpException("Cannot update. " . $request->recruitment->status->description());
         }
 
         $request->recruitment->update($request->validated());
