@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->enum("status", RecruitmentStatus::cases())->default(RecruitmentStatus::DRAFT);
 
             $table->foreignId("created_by_user_id")->constrained("user", "id", "fk_recruitment__creator");
-            $table->foreignId("closed_by_user_id")->constrained("user", "id", "fk_recruitment__closer");
+            $table->foreignId("closed_by_user_id")->nullable()->constrained("user", "id", "fk_recruitment__closer");
             $table->foreignId("proposal_id")->constrained("proposal", "id", "fk_recruitment__proposal");
         });
 
