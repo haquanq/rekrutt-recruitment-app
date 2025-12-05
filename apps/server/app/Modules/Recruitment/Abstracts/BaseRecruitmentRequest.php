@@ -3,7 +3,6 @@
 namespace App\Modules\Recruitment\Abstracts;
 
 use App\Abstracts\BaseFormRequest;
-use Illuminate\Support\Facades\Auth;
 
 abstract class BaseRecruitmentRequest extends BaseFormRequest
 {
@@ -25,16 +24,6 @@ abstract class BaseRecruitmentRequest extends BaseFormRequest
              * @example Senior Software Engineer
              */
             "position_title" => ["required", "string", "max:100"],
-            /**
-             * Scheduled start timestamp
-             * @example 2025-08-10
-             */
-            "scheduled_start_at" => ["required", "date", "after:now"],
-            /**
-             * Scheduled end timestamp
-             * @example 2025-11-10
-             */
-            "scheduled_end_at" => ["required", "date", "after:scheduled_start_at"],
         ];
     }
 }
