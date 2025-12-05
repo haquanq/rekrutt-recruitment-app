@@ -199,6 +199,7 @@ Route::middleware("protected")->group(function () {
             Route::post("", "store");
             Route::put("/{id}", "update");
             Route::delete("/{id}", "destroy");
+            Route::post("/{id}/schedule", "schedule");
             Route::post("/{id}/publish", "publish");
             Route::post("/{id}/close", "close");
         });

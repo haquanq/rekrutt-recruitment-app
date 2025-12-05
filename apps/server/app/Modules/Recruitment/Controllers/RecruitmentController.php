@@ -8,6 +8,7 @@ use App\Modules\Recruitment\Models\Recruitment;
 use App\Modules\Recruitment\Requests\RecruitmentCloseRequest;
 use App\Modules\Recruitment\Requests\RecruitmentDestroyRequest;
 use App\Modules\Recruitment\Requests\RecruitmentPublishRequest;
+use App\Modules\Recruitment\Requests\RecruitmentScheduleRequest;
 use App\Modules\Recruitment\Requests\RecruitmentStoreRequest;
 use App\Modules\Recruitment\Requests\RecruitmentUpdateRequest;
 use App\Modules\Recruitment\Resources\RecruitmentResource;
@@ -169,6 +170,27 @@ class RecruitmentController extends BaseController
         }
 
         $request->recruitment->delete();
+        return $this->noContentResponse();
+    }
+
+    /**
+     * Schedule recruitment.
+     *
+     * Return no content.
+     *
+     * Authorization rules:
+     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be the creator of the recruitment.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function schedule(RecruitmentScheduleRequest $request)
+    {
+        if ($request->recruitment->status === RecruitmentStatus::SCHEDULED) {
+            throw new ConflictHttpException("Recruitment is already scheduled.");
+        }
+
+        $request->recruitment->update($request->validated());
         return $this->noContentResponse();
     }
 
