@@ -15,12 +15,10 @@ return new class extends Migration {
             $table->string("description", 500);
             $table->integer("round");
             $table->string("location", 300);
-            $table->timestampTZ("scheduled_start_at");
-            $table->timestampTZ("scheduled_end_at");
             $table->timestampTZ("started_at")->nullable();
             $table->timestampTZ("ended_at")->nullable();
             $table->timestampTZ("cancelled_at")->nullable();
-            $table->string("cancellation_note", 300)->nullable();
+            $table->string("cancellation_reason", 300)->nullable();
             $table->enum("status", InterviewStatus::cases())->default(InterviewStatus::DRAFT);
             $table->timestampsTZ();
 
