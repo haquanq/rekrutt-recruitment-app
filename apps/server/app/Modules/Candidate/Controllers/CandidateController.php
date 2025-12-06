@@ -23,7 +23,7 @@ class CandidateController extends BaseController
      *
      * Return a list of candidates. Allows pagination, relations and filters query.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: any.
      */
     #[
@@ -81,7 +81,7 @@ class CandidateController extends BaseController
      *
      * Return a unique candidate. Allows relations query.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: any.
      */
     #[
@@ -109,7 +109,7 @@ class CandidateController extends BaseController
      *
      * Return created candidate.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: RECRUITER, HIRING_MANAGER.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -125,7 +125,7 @@ class CandidateController extends BaseController
      *
      * Return no content.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: RECRUITER, HIRING_MANAGER.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -145,7 +145,7 @@ class CandidateController extends BaseController
      *
      * Permanently delete candidate. Return no content.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: RECRUITER, HIRING_MANAGER.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException

@@ -23,7 +23,7 @@ class CandidateExperienceController extends BaseController
      *
      * Return a list of candidate experiences. Allows pagination, relations and filters query.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: any.
      */
     #[
@@ -81,7 +81,7 @@ class CandidateExperienceController extends BaseController
      *
      * Return a unique candidate experience. Allows relations query.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: any.
      */
     #[
@@ -109,7 +109,7 @@ class CandidateExperienceController extends BaseController
      *
      * Return created candidate experience.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: RECRUITER, HIRING_MANAGER.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -125,7 +125,7 @@ class CandidateExperienceController extends BaseController
      *
      * Return no content.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: RECRUITER, HIRING_MANAGER.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -147,7 +147,7 @@ class CandidateExperienceController extends BaseController
      *
      * Permanently delete candidate experience. Return no content.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: RECRUITER, HIRING_MANAGER.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
