@@ -156,7 +156,7 @@ class ProposalController extends BaseController
         $proposalStatus = $request->proposal->status;
 
         if (!Collection::make([ProposalStatus::DRAFT, ProposalStatus::REJECTED])->contains($proposalStatus)) {
-            throw new ConflictHttpException("Cannot delete. " . $proposalStatus->description());
+            throw new ConflictHttpException("Cannot update. " . $proposalStatus->description());
         }
 
         $request->proposal->update($request->validated());
