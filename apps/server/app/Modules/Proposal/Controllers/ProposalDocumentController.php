@@ -26,7 +26,7 @@ class ProposalDocumentController extends BaseController
      *
      * Return a list of proposal documents. Allows pagination, relations and filter query.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: any.
      */
     #[
@@ -78,7 +78,7 @@ class ProposalDocumentController extends BaseController
      *
      * Return a unique proposal document. Allows relations query.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: any.
      */
     #[
@@ -106,7 +106,7 @@ class ProposalDocumentController extends BaseController
      *
      * Return a unique proposal document
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: MANAGER, HIRING_MANAGER.
      * - User must be the creator of the related proposal.
      *
@@ -140,7 +140,7 @@ class ProposalDocumentController extends BaseController
      *
      * Return no content
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: MANAGER, HIRING_MANAGER.
      * - User must be the creator of the related proposal.
      *
@@ -163,7 +163,7 @@ class ProposalDocumentController extends BaseController
      *
      * Permanently delete proposal document. Return no content
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: MANAGER, HIRING_MANAGER.
      * - User must be the creator of the related proposal.
      *

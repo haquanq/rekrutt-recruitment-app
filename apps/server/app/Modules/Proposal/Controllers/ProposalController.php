@@ -27,7 +27,7 @@ class ProposalController extends BaseController
      *
      * Return a list of proposals. Allows pagination, relations and filter query.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: any.
      */
     #[
@@ -94,7 +94,7 @@ class ProposalController extends BaseController
      *
      * Return a unique proposal. Allows relations query.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: any.
      */
     #[
@@ -129,7 +129,7 @@ class ProposalController extends BaseController
      *
      * Return a unique proposal
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: MANAGER, HIRING_MANAGER.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -145,7 +145,7 @@ class ProposalController extends BaseController
      *
      * Return no content
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: MANAGER, HIRING_MANAGER.
      * - User must be the creator of the proposal.
      *
@@ -168,7 +168,7 @@ class ProposalController extends BaseController
      *
      * Permanently delete proposal. Return no content.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: MANAGER, HIRING_MANAGER.
      * - User must be the creator of the proposal.
      *
@@ -191,7 +191,7 @@ class ProposalController extends BaseController
      *
      * Submit proposal for approval. Return no content.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: MANAGER, HIRING_MANAGER.
      * - User must be the creator of the proposal.
      *
@@ -212,7 +212,7 @@ class ProposalController extends BaseController
      *
      * Reject PENDING proposal. Return no content.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: EXECUTIVE.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -232,7 +232,7 @@ class ProposalController extends BaseController
      *
      * Approve PENDING proposal. Return no content.
      *
-     * Authorization rules:
+     * Authorization
      * - User with roles: EXECUTIVE.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
