@@ -28,7 +28,7 @@ class ScrambleServiceProvider extends ServiceProvider
 
     public function findAndRenameSchemaNames(string $name): string
     {
-        $name = str_replace(["Request", "ResourceCollection", "Resource"], ["Dto", "ListDto", "Dto"], $name);
+        $name = str_replace(["Request", "ResourceCollection", "Resource"], ["Dto", "PageDto", "Dto"], $name);
         $name = str_replace(["StoreDto"], "CreateDto", $name);
         return $name;
     }
