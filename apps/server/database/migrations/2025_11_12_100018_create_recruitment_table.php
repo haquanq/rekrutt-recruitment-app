@@ -14,10 +14,10 @@ return new class extends Migration {
             $table->string("title", 200);
             $table->string("description", 500);
             $table->string("position_title", 100);
-            $table->timestampTZ("scheduled_start_at");
-            $table->timestampTZ("scheduled_end_at");
-            $table->timestampTZ("published_at")->nullable();
-            $table->timestampTZ("closed_at")->nullable();
+            $table->timestampTZ("scheduled_publish_at")->nullable();
+            $table->timestampTZ("scheduled_close_at")->nullable();
+            $table->timestampTZ("actual_published_at")->nullable();
+            $table->timestampTZ("actual_closed_at")->nullable();
             $table->timestampTZ("completed_at")->nullable();
             $table->timestampsTZ();
 

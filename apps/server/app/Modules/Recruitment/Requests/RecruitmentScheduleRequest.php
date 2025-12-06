@@ -30,12 +30,12 @@ class RecruitmentScheduleRequest extends BaseRecruitmentRequest
              * Scheduled start time
              * @example 2025-08-10
              */
-            "scheduled_start_at" => ["required", "date", "after:now"],
+            "scheduled_publish_at" => ["required", "date", "after:now"],
             /**
              * Scheduled end time
              * @example 2025-11-10
              */
-            "scheduled_end_at" => ["required", "date", "after:scheduled_start_at"],
+            "scheduled_close_at" => ["required", "date", "after:scheduled_publish_at"],
         ];
     }
 
