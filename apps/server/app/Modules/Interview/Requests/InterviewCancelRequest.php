@@ -5,6 +5,7 @@ namespace App\Modules\Interview\Requests;
 use App\Modules\Interview\Abstracts\BaseInterviewRequest;
 use App\Modules\Interview\Enums\InterviewStatus;
 use App\Modules\Interview\Models\Interview;
+use App\Modules\Interview\Rules\InterviewStatusTransitionsFromRule;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -17,11 +18,6 @@ class InterviewCancelRequest extends BaseInterviewRequest
     public function rules(): array
     {
         return [
-            /**
-             * Status === CANCELLED
-             * @ignoreParam
-             */
-            "status" => ["required", Rule::enum(InterviewStatus::class)->only(InterviewStatus::CANCELLED)],
             /**
              * Cancel timestamp
              * @ignoreParam
@@ -37,6 +33,15 @@ class InterviewCancelRequest extends BaseInterviewRequest
              * @example The candidate did not show up
              */
             "cancellation_reason" => ["required", "string", "max:300"],
+            /**
+             * Status === CANCELLED
+             * @ignoreParam
+             */
+            "status" => [
+                "required",
+                Rule::enum(InterviewStatus::class)->only(InterviewStatus::CANCELLED),
+                new InterviewStatusTransitionsFromRule($this->interview->status),
+            ],
         ];
     }
 

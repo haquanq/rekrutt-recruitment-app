@@ -5,6 +5,7 @@ namespace App\Modules\Interview\Requests;
 use App\Modules\Interview\Abstracts\BaseInterviewRequest;
 use App\Modules\Interview\Enums\InterviewStatus;
 use App\Modules\Interview\Models\Interview;
+use App\Modules\Interview\Rules\InterviewStatusTransitionsFromRule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
@@ -19,7 +20,11 @@ class InterviewScheduleRequest extends BaseInterviewRequest
              * Status === SCHEDULED
              * @ignoreParam
              */
-            "status" => ["required", Rule::enum(InterviewStatus::class)->only(InterviewStatus::SCHEDULED)],
+            "status" => [
+                "required",
+                Rule::enum(InterviewStatus::class)->only(InterviewStatus::SCHEDULED),
+                new InterviewStatusTransitionsFromRule($this->interview->status),
+            ],
         ];
     }
 
