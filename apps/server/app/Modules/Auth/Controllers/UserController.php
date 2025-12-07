@@ -118,9 +118,8 @@ class UserController extends BaseController
      */
     public function store(UserStoreRequest $request)
     {
-        Gate::authorize("create", User::class);
-        $user = User::create($request->validated());
-        return new UserResource($user);
+        $createdUser = User::create($request->validated());
+        return new UserResource($createdUser);
     }
 
     /**
@@ -135,8 +134,7 @@ class UserController extends BaseController
      */
     public function update(UserUpdateRequest $request, int $id)
     {
-        Gate::authorize("update", User::class);
-        User::findOrFail($id)->update($request->validated());
+        $request->user->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -152,8 +150,7 @@ class UserController extends BaseController
      */
     public function suspend(UserSuspendRequest $request, User $id)
     {
-        Gate::authorize("update", User::class);
-        User::findOrFail($id)->update($request->validated());
+        $request->user->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -169,8 +166,7 @@ class UserController extends BaseController
      */
     public function retire(UserRetireRequest $request, int $id)
     {
-        Gate::authorize("update", User::class);
-        User::findOrFail($id)->update($request->validated());
+        $request->user->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -186,8 +182,7 @@ class UserController extends BaseController
      */
     public function activate(UserActivateRequest $request, int $id)
     {
-        Gate::authorize("update", User::class);
-        User::findOrFail($id)->update($request->validated());
+        $request->user->update($request->validated());
         return $this->noContentResponse();
     }
 
