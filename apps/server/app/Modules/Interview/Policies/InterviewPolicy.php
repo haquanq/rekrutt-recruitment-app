@@ -32,7 +32,7 @@ class InterviewPolicy
     {
         if ($user->hasRole(UserRole::HIRING_MANAGER, UserRole::RECRUITER)) {
             Response::deny("You are not allowed to update any interview");
-        } elseif ($user->id !== $interview->created_by_user_id) {
+        } elseif (!$interview->isCreatedBy($user)) {
             Response::deny("You are not the creator of this interview");
         }
 
@@ -43,7 +43,7 @@ class InterviewPolicy
     {
         if ($user->hasRole(UserRole::HIRING_MANAGER, UserRole::RECRUITER)) {
             Response::deny("You are not allowed to delete any interview");
-        } elseif ($user->id !== $interview->created_by_user_id) {
+        } elseif (!$interview->isCreatedBy($user)) {
             Response::deny("You are not the creator of this interview");
         }
 
@@ -54,7 +54,7 @@ class InterviewPolicy
     {
         if ($user->hasRole(UserRole::HIRING_MANAGER, UserRole::RECRUITER)) {
             Response::deny("You are not allowed to schedule any interview");
-        } elseif ($user->id !== $interview->created_by_user_id) {
+        } elseif (!$interview->isCreatedBy($user)) {
             Response::deny("You are not the creator of this interview");
         }
 
