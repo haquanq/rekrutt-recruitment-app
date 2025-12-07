@@ -69,4 +69,13 @@ class InterviewPolicy
 
         return Response::allow();
     }
+
+    public function complete(User $user): Response
+    {
+        if ($user->hasRole(UserRole::HIRING_MANAGER, UserRole::RECRUITER)) {
+            Response::deny("You are not allowed to complete any interview");
+        }
+
+        return Response::allow();
+    }
 }

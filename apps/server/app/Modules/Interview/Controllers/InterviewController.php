@@ -6,6 +6,7 @@ use App\Abstracts\BaseController;
 use App\Modules\Interview\Enums\InterviewStatus;
 use App\Modules\Interview\Models\Interview;
 use App\Modules\Interview\Requests\InterviewCancelRequest;
+use App\Modules\Interview\Requests\InterviewCompleteRequest;
 use App\Modules\Interview\Requests\InterviewDestroyRequest;
 use App\Modules\Interview\Requests\InterviewScheduleRequest;
 use App\Modules\Interview\Requests\InterviewStoreRequest;
@@ -213,6 +214,24 @@ class InterviewController extends BaseController
     {
         if ($request->interview->status === InterviewStatus::CANCELLED) {
             throw new ConflictHttpException("Interview is already cancelled.");
+        }
+
+        $request->interview->update($request->validated());
+        return $this->noContentResponse();
+    }
+
+    /**
+     * Complete interview
+     *
+     * Return no content.
+     *
+     * Authorization
+     * - User with roles: HIRING_MANAGER, RECRUITER.
+     */
+    public function complete(InterviewCompleteRequest $request)
+    {
+        if ($request->interview->status === InterviewStatus::COMPLETED) {
+            throw new ConflictHttpException("Interview is already completed.");
         }
 
         $request->interview->update($request->validated());
