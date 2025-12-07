@@ -6,21 +6,23 @@ use App\Modules\Recruitment\Enums\RecruitmentStatus;
 use App\Modules\Recruitment\Models\Recruitment;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ProcessScheduledRecruitmentCommand extends Command
 {
-    protected $signature = "recruitment:process-sheduled";
+    protected $signature = "recruitment:process-scheduled";
     protected $description = "Process scheduled recruitment statuses.";
 
     public function handle(): void
     {
-        Recruitment::where("status", RecruitmentStatus::SCHEDULED->value)
-            ->where("scheduled_publish_at", "<=", Carbon::now())
+        Recruitment::query()
             ->where("status", "=", RecruitmentStatus::SCHEDULED->value)
+            ->where("scheduled_publish_at", ">=", Carbon::now())
             ->update(["status" => RecruitmentStatus::PUBLISHED->value, "actual_published_at" => Carbon::now()]);
 
-        Recruitment::where("status", RecruitmentStatus::PUBLISHED->value)
-            ->where("scheduled_close_at", "<=", Carbon::now())
+        Recruitment::query()
+            ->where("status", "=", RecruitmentStatus::PUBLISHED->value)
+            ->where("scheduled_close_at", ">=", Carbon::now())
             ->update(["status" => RecruitmentStatus::CLOSED->value, "actual_closed_at" => Carbon::now()]);
     }
 }
