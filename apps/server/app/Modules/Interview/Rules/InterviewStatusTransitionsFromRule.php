@@ -23,8 +23,8 @@ class InterviewStatusTransitionsFromRule implements ValidationRule
             InterviewStatus::DRAFT->value => [InterviewStatus::SCHEDULED],
             InterviewStatus::SCHEDULED->value => [InterviewStatus::CANCELLED, InterviewStatus::IN_PROGRESS],
             InterviewStatus::IN_PROGRESS->value => [InterviewStatus::COMPLETED, InterviewStatus::CANCELLED],
-            InterviewStatus::COMPLETED->value => [InterviewStatus::EVALUATED],
-            InterviewStatus::EVALUATED->value => [],
+            InterviewStatus::UNDER_EVALUATION->value => [InterviewStatus::COMPLETED],
+            InterviewStatus::COMPLETED->value => [],
             InterviewStatus::CANCELLED->value => [],
         ];
 
