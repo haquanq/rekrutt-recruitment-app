@@ -5,9 +5,6 @@ namespace App\Modules\Interview\Requests;
 use App\Modules\Interview\Abstracts\BaseInterviewRequest;
 use App\Modules\Interview\Enums\InterviewStatus;
 use App\Modules\Interview\Models\Interview;
-use App\Modules\RatingScale\Rules\RatingScaleExistsAndIsActiveRule;
-use App\Modules\Recruitment\Enums\RecruitmentApplicationStatus;
-use App\Modules\Recruitment\Rules\RecruitmentApplicationExistsWithStatusRule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -33,11 +30,7 @@ class InterviewStoreRequest extends BaseInterviewRequest
                  * Id of RecruitmentApplication
                  * @example 1
                  */
-                "recruitment_applicant_id" => [
-                    "required",
-                    "integer:strict",
-                    new RecruitmentApplicationExistsWithStatusRule(RecruitmentApplicationStatus::INTERVIEWING),
-                ],
+                "recruitment_applicant_id" => ["required", "integer:strict"],
             ],
         ];
     }
