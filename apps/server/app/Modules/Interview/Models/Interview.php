@@ -18,9 +18,9 @@ class Interview extends BaseModel
         return $this->created_by_user_id === $user->id;
     }
 
-    public function isInterviewedBy(User $user): bool
+    public function hasParticipant(User $user): bool
     {
-        return $this->interviewers->pluck("id")->has($user->id);
+        return $this->participants->pluck("id")->has($user->id);
     }
 
     public function application(): BelongsTo
