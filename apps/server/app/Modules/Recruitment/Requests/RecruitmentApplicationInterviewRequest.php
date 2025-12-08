@@ -29,11 +29,11 @@ class RecruitmentApplicationInterviewRequest extends BaseRecruitmentApplicationR
                 new RecruitmentApplicationStatusTransitionsFromRule($this->recruitmentApplication->status),
             ],
             /**
-             * Number of rounds (include when status is INTERVIEW_PLANNING)
+             * Number of interviews (include when status is INTERVIEW_PLANNING)
              * @example 4
              * @default 1
              */
-            "number_of_rounds" => [
+            "number_of_interviews" => [
                 Rule::excludeIf($this->input("status") !== RecruitmentApplicationStatus::INTERVIEW_PLANNING->value),
                 "required",
                 "integer",
