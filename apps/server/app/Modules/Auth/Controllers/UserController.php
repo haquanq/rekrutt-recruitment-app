@@ -133,7 +133,7 @@ class UserController extends BaseController
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(UserUpdateRequest $request, int $id)
+    public function update(UserUpdateRequest $request)
     {
         $request->user->update($request->validated());
         return $this->noContentResponse();
@@ -149,7 +149,7 @@ class UserController extends BaseController
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function suspend(UserSuspendRequest $request, User $id)
+    public function suspend(UserSuspendRequest $request)
     {
         $request->user->update($request->validated());
         return $this->noContentResponse();
@@ -165,7 +165,7 @@ class UserController extends BaseController
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function retire(UserRetireRequest $request, int $id)
+    public function retire(UserRetireRequest $request)
     {
         $request->user->update($request->validated());
         return $this->noContentResponse();
@@ -181,7 +181,7 @@ class UserController extends BaseController
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function activate(UserActivateRequest $request, int $id)
+    public function activate(UserActivateRequest $request)
     {
         $request->user->update($request->validated());
         return $this->noContentResponse();
