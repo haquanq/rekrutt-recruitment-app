@@ -4,6 +4,7 @@ namespace App\Modules\Interview\Models;
 
 use App\Abstracts\BaseModel;
 use App\Modules\Auth\Models\User;
+use App\Modules\Interview\Enums\InterviewStatus;
 use App\Modules\RatingScale\Resources\RatingScaleResource;
 use App\Modules\Recruitment\Models\RecruitmentApplication;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Interview extends BaseModel
 {
     protected $guarded = ["id", "created_at", "updated_at"];
+
+    protected $casts = [
+        "status" => InterviewStatus::class,
+    ];
 
     public function isCreatedBy(User $user): bool
     {
