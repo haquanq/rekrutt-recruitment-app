@@ -8,6 +8,7 @@ use App\Modules\Interview\Models\Interview;
 use App\Modules\Interview\Rules\InterviewStatusTransitionsFromRule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class InterviewScheduleRequest extends BaseInterviewRequest
 {
@@ -28,6 +29,15 @@ class InterviewScheduleRequest extends BaseInterviewRequest
         ];
     }
 
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            if ($this->interview->participants_count === 0) {
+                $validator->errors()->add("participants", "Interview must have at least one participant.");
+            }
+        });
+    }
+
     public function authorize(): bool
     {
         Gate::authorize("schedule", $this->interview);
@@ -38,7 +48,7 @@ class InterviewScheduleRequest extends BaseInterviewRequest
     {
         parent::prepareForValidation();
 
-        $this->interview = Interview::findOrFail($this->route("id"));
+        $this->interview = Interview::withCount("participants")->findOrFail($this->route("id"));
 
         $this->merge([
             "status" => InterviewStatus::SCHEDULED->value,
