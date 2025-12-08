@@ -16,13 +16,14 @@ class UpdateScheduledInterviewsCommand extends Command
     public function handle(): void
     {
         $currentTimeText = Carbon::now()->toDateTimeString();
+        $scheduledStatus = InterviewStatus::SCHEDULED->value;
         $underEvaluationStatus = InterviewStatus::UNDER_EVALUATION->value;
         $inProgressStatus = InterviewStatus::IN_PROGRESS->value;
 
         Interview::query()->update([
             "status" => DB::raw(
-                "CASE WHEN started_at <= '$currentTimeText' THEN '$inProgressStatus' " .
-                    " WHEN ended_at <= '$currentTimeText' THEN '$underEvaluationStatus' END",
+                "CASE WHEN started_at <= '$currentTimeText' and status = '$scheduledStatus' THEN '$inProgressStatus' " .
+                    " WHEN ended_at <= '$currentTimeText' and status = '$inProgressStatus' THEN '$underEvaluationStatus' ELSE status END",
             ),
         ]);
     }
