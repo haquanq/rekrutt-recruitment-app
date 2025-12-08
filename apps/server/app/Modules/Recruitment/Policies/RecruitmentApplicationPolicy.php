@@ -30,16 +30,25 @@ class RecruitmentApplicationPolicy
     public function updatePriority(User $user): Response
     {
         if (!$user->hasRole(UserRole::HIRING_MANAGER, UserRole::RECRUITER)) {
-            return Response::deny("You are not allowed to update any recruitment application's priority.");
+            return Response::deny("You are not allowed to update any recruitment application priority status.");
         }
 
         return Response::allow();
     }
 
-    public function updateStatus(User $user): Response
+    public function updateInterviewStatus(User $user): Response
     {
         if (!$user->hasRole(UserRole::HIRING_MANAGER, UserRole::RECRUITER)) {
-            return Response::deny("You are not allowed to update any recruitment application's status.");
+            return Response::deny("You are not allowed to update any recruitment application interview status.");
+        }
+
+        return Response::allow();
+    }
+
+    public function updateOfferStatus(User $user): Response
+    {
+        if (!$user->hasRole(UserRole::HIRING_MANAGER, UserRole::RECRUITER)) {
+            return Response::deny("You are not allowed to update any recruitment application offer status.");
         }
 
         return Response::allow();
@@ -49,6 +58,24 @@ class RecruitmentApplicationPolicy
     {
         if (!$user->hasRole(UserRole::HIRING_MANAGER, UserRole::RECRUITER)) {
             return Response::deny("You are not allowed to delete any recruitment application.");
+        }
+
+        return Response::allow();
+    }
+
+    public function discard(User $user): Response
+    {
+        if (!$user->hasRole(UserRole::HIRING_MANAGER, UserRole::RECRUITER)) {
+            return Response::deny("You are not allowed to discard any recruitment application.");
+        }
+
+        return Response::allow();
+    }
+
+    public function withdraw(User $user): Response
+    {
+        if (!$user->hasRole(UserRole::HIRING_MANAGER, UserRole::RECRUITER)) {
+            return Response::deny("You are not allowed to withdraw any recruitment application.");
         }
 
         return Response::allow();
