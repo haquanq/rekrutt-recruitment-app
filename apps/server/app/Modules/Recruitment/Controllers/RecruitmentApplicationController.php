@@ -3,16 +3,22 @@
 namespace App\Modules\Recruitment\Controllers;
 
 use App\Abstracts\BaseController;
+use App\Modules\Recruitment\Enums\RecruitmentApplicationStatus;
 use App\Modules\Recruitment\Models\RecruitmentApplication;
 use App\Modules\Recruitment\Requests\RecruitmentApplicationDestroyRequest;
+use App\Modules\Recruitment\Requests\RecruitmentApplicationDiscardRequest;
+use App\Modules\Recruitment\Requests\RecruitmentApplicationInterviewRequest;
+use App\Modules\Recruitment\Requests\RecruitmentApplicationOfferRequest;
 use App\Modules\Recruitment\Requests\RecruitmentApplicationStoreRequest;
 use App\Modules\Recruitment\Requests\RecruitmentApplicationUpdatePriorityRequest;
+use App\Modules\Recruitment\Requests\RecruitmentApplicationWithdrawRequest;
 use App\Modules\Recruitment\Resources\RecruitmentApplicationResource;
 use App\Modules\Recruitment\Resources\RecruitmentApplicationResourceCollection;
 use Dedoc\Scramble\Attributes\QueryParameter;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class RecruitmentApplicationController extends BaseController
 {
@@ -45,7 +51,7 @@ class RecruitmentApplicationController extends BaseController
             name: "include",
             type: "string",
             description: "Include nested relations </br>" .
-                " Allow relations: recruitment, candidate, interviews </br>" .
+                " Allow relations: recruitment, candidate, interviews, discardedBy </br>" .
                 "Example: include=recruitment,candidate",
         ),
     ]
@@ -63,7 +69,7 @@ class RecruitmentApplicationController extends BaseController
         Gate::authorize("viewAny", RecruitmentApplication::class);
 
         $recruitmentApplications = QueryBuilder::for(RecruitmentApplication::class)
-            ->allowedIncludes(["recrtuitment", "candidate", "interviews"])
+            ->allowedIncludes(["recrtuitment", "candidate", "interviews", "discardedBy"])
             ->allowedFilters([
                 AllowedFilter::exact("status"),
                 AllowedFilter::exact("priority"),
@@ -88,7 +94,7 @@ class RecruitmentApplicationController extends BaseController
             name: "include",
             type: "string",
             description: "Include nested relations </br>" .
-                " Allow relations: recruitment, candidate, interviews </br>" .
+                " Allow relations: recruitment, candidate, interviews, discardedBy </br>" .
                 "Example: include=recruitment,candidate",
         ),
     ]
@@ -97,7 +103,7 @@ class RecruitmentApplicationController extends BaseController
         Gate::authorize("view", RecruitmentApplication::class);
 
         $recruitmentApplication = QueryBuilder::for(RecruitmentApplication::class)
-            ->allowedIncludes(["recrtuitment", "candidate", "interviews"])
+            ->allowedIncludes(["recrtuitment", "candidate", "interviews", "discardedBy"])
             ->findOrFail($id);
 
         return RecruitmentApplicationResource::make($recruitmentApplication);
@@ -120,22 +126,6 @@ class RecruitmentApplicationController extends BaseController
     }
 
     /**
-     * Update priority status of recruitment application
-     *
-     * Return no content.
-     *
-     * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
-     *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function updatePriority(RecruitmentApplicationUpdatePriorityRequest $request, int $id)
-    {
-        $request->recruitmentApplication->update($request->validated());
-        return $this->noContentResponse();
-    }
-
-    /**
      * Delete recruitment application by Id
      *
      * Permanently delete recruitment application. Return no content.
@@ -148,6 +138,102 @@ class RecruitmentApplicationController extends BaseController
     public function destroy(RecruitmentApplicationDestroyRequest $request)
     {
         $request->recruitmentApplication->delete();
+        return $this->noContentResponse();
+    }
+
+    /**
+     * Update recruitment application priority
+     *
+     * Return no content.
+     *
+     * Authorization
+     * - User with roles: RECRUITER, HIRING_MANAGER.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function priority(RecruitmentApplicationUpdatePriorityRequest $request)
+    {
+        $request->recruitmentApplication->update($request->validated());
+        return $this->noContentResponse();
+    }
+
+    /**
+     * Update recuitment application interview status
+     *
+     * Return no content.
+     *
+     * Authorization
+     * - User with roles: RECRUITER, HIRING_MANAGER.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function interview(RecruitmentApplicationInterviewRequest $request)
+    {
+        $request->recruitmentApplication->update($request->validated());
+        return $this->noContentResponse();
+    }
+
+    /**
+     * Update recuitment application offer status
+     *
+     * Return no content.
+     *
+     * Authorization
+     * - User with roles: RECUITER, HIRING_MANAGER.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function offer(RecruitmentApplicationOfferRequest $request)
+    {
+        $request->recruitmentApplication->update($request->validated());
+        return $this->noContentResponse();
+    }
+
+    /**
+     * Discard recuitment application
+     *
+     * This is final decision made by organization. Return no content.
+     *
+     * Reasons often are:
+     * - Candidates did not move to the interview stage (ex: background check failed).
+     * - Candidates did not pass one of the interviews.
+     *
+     * Authorization
+     * - User with roles: RCRUITER, HIRING_MANAGER.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function discard(RecruitmentApplicationDiscardRequest $request)
+    {
+        if ($request->recruitmentApplication->status === RecruitmentApplicationStatus::DISCARDED->value) {
+            throw new ConflictHttpException("Recruitment application is already discarded.");
+        }
+
+        $request->recruitmentApplication->update($request->validated());
+        return $this->noContentResponse();
+    }
+
+    /**
+     * Withdraw recuitment application
+     *
+     * This is final decision made by candidate. Return no content.
+     *
+     * Reasons often are:
+     * - Candidates changed their mind, got a better offer.
+     * - Candidates didn't like the recruitment process, work conditions, etc.
+     *
+     * Authorization
+     * - User with roles: RECUITER, HIRING_MANAGER.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function withdraw(RecruitmentApplicationWithdrawRequest $request)
+    {
+        if ($request->recruitmentApplication->status === RecruitmentApplicationStatus::DISCARDED->value) {
+            throw new ConflictHttpException("Recruitment application is already withdrawn.");
+        }
+
+        $request->recruitmentApplication->update($request->validated());
         return $this->noContentResponse();
     }
 }
