@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-class RecruitmentApplicationOfferRequest extends BaseRecruitmentApplicationRequest
+class RecruitmentApplicationUpdateOfferStatusRequest extends BaseRecruitmentApplicationRequest
 {
     public RecruitmentApplication $recruitmentApplication;
 

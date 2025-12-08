@@ -9,7 +9,7 @@ use App\Modules\Recruitment\Rules\RecruitmentApplicationStatusTransitionsFromRul
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-class RecruitmentApplicationInterviewRequest extends BaseRecruitmentApplicationRequest
+class RecruitmentApplicationUpdateInterviewStatusRequest extends BaseRecruitmentApplicationRequest
 {
     public RecruitmentApplication $recruitmentApplication;
 

@@ -7,8 +7,8 @@ use App\Modules\Recruitment\Enums\RecruitmentApplicationStatus;
 use App\Modules\Recruitment\Models\RecruitmentApplication;
 use App\Modules\Recruitment\Requests\RecruitmentApplicationDestroyRequest;
 use App\Modules\Recruitment\Requests\RecruitmentApplicationDiscardRequest;
-use App\Modules\Recruitment\Requests\RecruitmentApplicationInterviewRequest;
-use App\Modules\Recruitment\Requests\RecruitmentApplicationOfferRequest;
+use App\Modules\Recruitment\Requests\RecruitmentApplicationUpdateInterviewStatusRequest;
+use App\Modules\Recruitment\Requests\RecruitmentApplicationUpdateOfferStatusRequest;
 use App\Modules\Recruitment\Requests\RecruitmentApplicationStoreRequest;
 use App\Modules\Recruitment\Requests\RecruitmentApplicationUpdatePriorityRequest;
 use App\Modules\Recruitment\Requests\RecruitmentApplicationWithdrawRequest;
@@ -167,7 +167,7 @@ class RecruitmentApplicationController extends BaseController
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function interview(RecruitmentApplicationInterviewRequest $request)
+    public function interview(RecruitmentApplicationUpdateInterviewStatusRequest $request)
     {
         $request->recruitmentApplication->update($request->validated());
         return $this->noContentResponse();
@@ -183,7 +183,7 @@ class RecruitmentApplicationController extends BaseController
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function offer(RecruitmentApplicationOfferRequest $request)
+    public function offer(RecruitmentApplicationUpdateOfferStatusRequest $request)
     {
         $request->recruitmentApplication->update($request->validated());
         return $this->noContentResponse();
