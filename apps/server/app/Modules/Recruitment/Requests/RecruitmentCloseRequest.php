@@ -54,7 +54,7 @@ class RecruitmentCloseRequest extends BaseRecruitmentRequest
 
         $this->merge([
             "status" => RecruitmentStatus::CLOSED->value,
-            "closed_at" => Carbon::now(),
+            "actual_closed_at" => Carbon::now(),
             "closed_by_user_id" => Auth::user()->id,
         ]);
     }
