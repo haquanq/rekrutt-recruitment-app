@@ -23,7 +23,7 @@ class UserSuspendRequest extends BaseUserRequest
              */
             "status" => [
                 "required",
-                Rule::enum(UserStatus::class)->only(UserStatus::RETIRED),
+                Rule::enum(UserStatus::class)->only(UserStatus::SUSPENDED),
                 new UserStatusTransitionsFromRule($this->user->status),
             ],
             /**
