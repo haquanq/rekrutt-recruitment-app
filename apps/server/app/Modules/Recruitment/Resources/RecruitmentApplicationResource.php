@@ -30,7 +30,7 @@ class RecruitmentApplicationResource extends JsonResource
             "updated_at" => $this->updated_at,
             "recruitment" => RecruitmentResource::make($this->whenLoaded("recruitment")),
             "candidate" => CandidateResource::make($this->whenLoaded("candidate")),
-            "interviews" => InterviewResource::make($this->whenLoaded("interviews")),
+            "interviews" => InterviewResource::collection($this->whenLoaded("interviews")),
         ];
     }
 }
