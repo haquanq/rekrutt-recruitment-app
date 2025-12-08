@@ -10,6 +10,11 @@ class InterviewMethodDestroyRequest extends BaseInterviewMethodRequest
 {
     public InterviewMethod $interviewMethod;
 
+    public function rules(): array
+    {
+        return [];
+    }
+
     public function authorize(): bool
     {
         Gate::authorize("delete", InterviewMethod::class);
