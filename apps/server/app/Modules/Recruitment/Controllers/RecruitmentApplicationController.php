@@ -69,7 +69,7 @@ class RecruitmentApplicationController extends BaseController
         Gate::authorize("viewAny", RecruitmentApplication::class);
 
         $recruitmentApplications = QueryBuilder::for(RecruitmentApplication::class)
-            ->allowedIncludes(["recrtuitment", "candidate", "interviews", "discardedBy"])
+            ->allowedIncludes(["recruitment", "candidate", "interviews", "discardedBy"])
             ->allowedFilters([
                 AllowedFilter::exact("status"),
                 AllowedFilter::exact("priority"),
@@ -103,7 +103,7 @@ class RecruitmentApplicationController extends BaseController
         Gate::authorize("view", RecruitmentApplication::class);
 
         $recruitmentApplication = QueryBuilder::for(RecruitmentApplication::class)
-            ->allowedIncludes(["recrtuitment", "candidate", "interviews", "discardedBy"])
+            ->allowedIncludes(["recruitment", "candidate", "interviews", "discardedBy"])
             ->findOrFail($id);
 
         return RecruitmentApplicationResource::make($recruitmentApplication);
