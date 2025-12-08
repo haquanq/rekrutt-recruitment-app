@@ -33,6 +33,11 @@ class RecruitmentApplicationStatusTransitionsFromRule implements ValidationRule
                 RecruitmentApplicationStatus::DISCARDED,
                 RecruitmentApplicationStatus::WITHDRAWN,
             ],
+            RecruitmentApplicationStatus::INTERVIEW_COMPLETED->value => [
+                RecruitmentApplicationStatus::OFFER_PENDING,
+                RecruitmentApplicationStatus::DISCARDED,
+                RecruitmentApplicationStatus::WITHDRAWN,
+            ],
             RecruitmentApplicationStatus::OFFER_PENDING->value => [
                 RecruitmentApplicationStatus::OFFER_ACCEPTED,
                 RecruitmentApplicationStatus::OFFER_REJECTED,
