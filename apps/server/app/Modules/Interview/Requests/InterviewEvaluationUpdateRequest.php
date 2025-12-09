@@ -39,6 +39,6 @@ class InterviewEvaluationUpdateRequest extends BaseInterviewEvaluationRequest
     {
         parent::prepareForValidation();
 
-        $this->interviewEvaluation = InterviewEvaluation::with("inteview.ratingScale")->findOrFail($this->input("id"));
+        $this->interviewEvaluation = InterviewEvaluation::with("interview.ratingScale")->findOrFail($this->route("id"));
     }
 }
