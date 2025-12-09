@@ -3,15 +3,18 @@
 namespace App\Modules\Interview\Requests;
 
 use App\Modules\Interview\Abstracts\BaseInterviewEvaluationRequest;
+use App\Modules\Interview\Enums\InterviewStatus;
 use App\Modules\Interview\Models\Interview;
 use App\Modules\Interview\Models\InterviewEvaluation;
+use App\Modules\Interview\Rules\InterviewExistsWithStatusRule;
 use App\Modules\RatingScale\Rules\RatingScalePointBelongsToScaleRule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Validator;
 
 class InterviewEvaluationStoreRequest extends BaseInterviewEvaluationRequest
 {
-    public Interview $interview;
+    public ?Interview $interview = null;
 
     public function rules(): array
     {
@@ -32,13 +35,26 @@ class InterviewEvaluationStoreRequest extends BaseInterviewEvaluationRequest
                  * Id of RatingScalePoint (belongs to RatingScale selected for this Interview)
                  * @example 1
                  */
-                "rating_scale_point_id" => [
-                    "required",
-                    "integer:strict",
-                    new RatingScalePointBelongsToScaleRule($this->interview->ratingScale),
-                ],
+                "rating_scale_point_id" => ["required", "integer:strict"],
             ],
         ];
+    }
+
+    public function withValidator(Validator $validator)
+    {
+        $validator->addRules([
+            "interview_id" => [
+                InterviewExistsWithStatusRule::create(InterviewStatus::UNDER_EVALUATION)->withInterview(
+                    $this->interview,
+                ),
+            ],
+        ]);
+
+        if ($this->interview) {
+            $validator->addRules([
+                "rating_scale_point_id" => [new RatingScalePointBelongsToScaleRule($this->interview->ratingScale)],
+            ]);
+        }
     }
 
     public function authorize(): bool
@@ -51,7 +67,7 @@ class InterviewEvaluationStoreRequest extends BaseInterviewEvaluationRequest
     {
         parent::prepareForValidation();
 
-        $this->interview = Interview::with("ratingScale")->findOrFail($this->input("interview_id"));
+        $this->interview = Interview::with("ratingScale")->find($this->input("interview_id"));
 
         $this->merge([
             "created_by_user_id" => Auth::user()->id,

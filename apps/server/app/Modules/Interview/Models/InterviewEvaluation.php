@@ -11,6 +11,8 @@ class InterviewEvaluation extends BaseModel
 {
     protected $guarded = ["id", "created_at", "updated_at"];
 
+    protected $with = ["ratingScalePoint"];
+
     public function isCreatedBy(User $user): bool
     {
         return $this->created_by_user_id === $user->id;
