@@ -24,7 +24,7 @@ class ProposalDocumentPolicy
     {
         if (!$user->hasRole(UserRole::MANAGER, UserRole::HIRING_MANAGER)) {
             return Response::deny("You are not allowed to create new proposal document.");
-        } elseif (!$proposal->isCreatedBy($user)) {
+        } elseif ($proposal && !$proposal->isCreatedBy($user)) {
             return Response::deny("You are not the creator of the selected proposal.");
         }
         return Response::allow();
