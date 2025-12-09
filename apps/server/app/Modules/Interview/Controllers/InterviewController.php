@@ -245,25 +245,7 @@ class InterviewController extends BaseController
             throw new ConflictHttpException("Interview is already completed.");
         }
 
-        DB::transaction(function () use ($request) {
-            $request->interview->update($request->validated());
-
-            $applicationInterviews = Interview::where(
-                "recruitment_application_id",
-                $request->interview->recruitment_application_id,
-            )->get();
-
-            $allInterviewsCompleted = $applicationInterviews->every(function (Interview $interview) {
-                return \in_array($interview->status, [InterviewStatus::COMPLETED, InterviewStatus::CANCELLED]);
-            });
-
-            if ($allInterviewsCompleted) {
-                RecruitmentApplication::where("id", $request->interview->recruitment_application_id)->update([
-                    "status" => RecruitmentApplicationStatus::INTERVIEW_COMPLETED,
-                ]);
-            }
-        });
-
+        $request->interview->update($request->validated());
         return $this->noContentResponse();
     }
 }
