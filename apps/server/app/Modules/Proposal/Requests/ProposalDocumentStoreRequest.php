@@ -8,6 +8,7 @@ use App\Modules\Proposal\Models\Proposal;
 use App\Modules\Proposal\Models\ProposalDocument;
 use App\Modules\Proposal\Rules\ProposalExistsWithStatusRule;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Validator;
 
 class ProposalDocumentStoreRequest extends BaseProposalDocumentRequest
 {
@@ -15,15 +16,21 @@ class ProposalDocumentStoreRequest extends BaseProposalDocumentRequest
 
     public function rules(): array
     {
-        $rules = parent::rules();
-
-        $rules["proposal_id"] = [
-            "required",
-            "integer",
-            new ProposalExistsWithStatusRule(ProposalStatus::DRAFT, $this->proposal),
+        return [
+            ...parent::rules(),
+            ...[
+                /**
+                 * Id of Proposal to which the document belongs
+                 * @example 1
+                 */
+                "proposal_id" => ["required", "integer"],
+            ],
         ];
+    }
 
-        return $rules;
+    public function withValidator(Validator $validator): void
+    {
+        $validator->addRules(["proposal_id" => [new ProposalExistsWithStatusRule(ProposalStatus::DRAFT)]]);
     }
 
     public function authorize(): bool
