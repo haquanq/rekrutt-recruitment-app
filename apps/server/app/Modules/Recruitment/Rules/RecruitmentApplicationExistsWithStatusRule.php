@@ -9,24 +9,36 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class RecruitmentApplicationExistsWithStatusRule implements ValidationRule
 {
-    public function __construct(
-        protected RecruitmentApplicationStatus $requiredStatus,
-        protected ?RecruitmentApplication $recruitmentApplication = null,
-    ) {}
+    private ?RecruitmentApplication $recruitmentApplication = null;
+    private bool $withRecruitmentApplication = false;
+
+    public function __construct(protected RecruitmentApplicationStatus $requiredStatus) {}
+
+    public static function create(RecruitmentApplicationStatus $requiredStatus): self
+    {
+        return new self($requiredStatus);
+    }
+
+    public function withRecruitmentApplication(?RecruitmentApplication $recruitmentApplication): self
+    {
+        $this->withRecruitmentApplication = true;
+        $this->recruitmentApplication = $recruitmentApplication;
+        return $this;
+    }
 
     public function validate(string $attribute, mixed $id, Closure $fail): void
     {
-        if (!$this->recruitmentApplication) {
+        if (!$this->recruitmentApplication && !$this->withRecruitmentApplication) {
             $this->recruitmentApplication = RecruitmentApplication::find($id);
         }
 
         if (!$this->recruitmentApplication) {
-            $fail("Recruitment application does not exist");
+            $fail("Recruitment application does not exist.");
             return;
         }
 
         if ($this->recruitmentApplication->status !== $this->requiredStatus) {
-            $fail("Recruitment application must have status: " . $this->requiredStatus->value);
+            $fail("Recruitment application must have status of {$this->requiredStatus->value}.");
             return;
         }
     }
