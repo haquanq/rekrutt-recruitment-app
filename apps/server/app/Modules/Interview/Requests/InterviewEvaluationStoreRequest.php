@@ -60,9 +60,7 @@ class InterviewEvaluationStoreRequest extends BaseInterviewEvaluationRequest
 
         $validator->after(function (Validator $validator) {
             $userHasAlreadyEvaluated = InterviewEvaluation::where("interview_id", $this->interview->id)
-                ->whereHas("createdBy", function ($query) {
-                    $query->where("created_by_user_id", Auth::user()->id);
-                })
+                ->where("created_by_user_id", Auth::user()->id)
                 ->exists();
 
             if ($userHasAlreadyEvaluated) {
