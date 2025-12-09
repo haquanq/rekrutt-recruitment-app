@@ -12,7 +12,7 @@ use Illuminate\Validation\Validator;
 
 class ProposalDocumentStoreRequest extends BaseProposalDocumentRequest
 {
-    public $proposal;
+    public ?Proposal $proposal = null;
 
     public function rules(): array
     {
@@ -30,7 +30,11 @@ class ProposalDocumentStoreRequest extends BaseProposalDocumentRequest
 
     public function withValidator(Validator $validator): void
     {
-        $validator->addRules(["proposal_id" => [new ProposalExistsWithStatusRule(ProposalStatus::DRAFT)]]);
+        $validator->addRules([
+            "proposal_id" => [
+                ProposalExistsWithStatusRule::create(ProposalStatus::DRAFT)->withProposal($this->proposal),
+            ],
+        ]);
     }
 
     public function authorize(): bool
@@ -42,6 +46,6 @@ class ProposalDocumentStoreRequest extends BaseProposalDocumentRequest
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-        $this->proposal = Proposal::findOrFail($this->input("proposal_id"));
+        $this->proposal = Proposal::find($this->input("proposal_id"));
     }
 }
