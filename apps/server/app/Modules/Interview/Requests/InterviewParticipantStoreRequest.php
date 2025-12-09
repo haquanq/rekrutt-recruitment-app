@@ -12,7 +12,7 @@ use Illuminate\Validation\Validator;
 
 class InterviewParticipantStoreRequest extends BaseInterviewParticipantRequest
 {
-    public Interview $interview;
+    public ?Interview $interview = null;
 
     public function rules(): array
     {
@@ -42,6 +42,10 @@ class InterviewParticipantStoreRequest extends BaseInterviewParticipantRequest
     public function withValidator(Validator $validator)
     {
         $validator->after(function (Validator $validator) {
+            if (!$this->interview) {
+                return;
+            }
+
             if ($this->interview->participants()->where("user_id", $this->input("user_id"))->exists()) {
                 $validator->errors()->add("user_id", "User is already scheduled for this interview.");
                 return;
@@ -81,6 +85,6 @@ class InterviewParticipantStoreRequest extends BaseInterviewParticipantRequest
     {
         parent::prepareForValidation();
 
-        $this->interview = Interview::findOrFail($this->input("interview_id"));
+        $this->interview = Interview::find($this->input("interview_id"));
     }
 }
