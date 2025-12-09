@@ -40,7 +40,7 @@ class InterviewEvaluationStoreRequest extends BaseInterviewEvaluationRequest
         ];
     }
 
-    public function withValidator(Validator $validator)
+    public function withValidator(Validator $validator): void
     {
         $validator->addRules([
             "interview_id" => [
@@ -50,11 +50,25 @@ class InterviewEvaluationStoreRequest extends BaseInterviewEvaluationRequest
             ],
         ]);
 
-        if ($this->interview) {
-            $validator->addRules([
-                "rating_scale_point_id" => [new RatingScalePointBelongsToScaleRule($this->interview->ratingScale)],
-            ]);
+        if (!$this->interview) {
+            return;
         }
+
+        $validator->addRules([
+            "rating_scale_point_id" => [new RatingScalePointBelongsToScaleRule($this->interview->ratingScale)],
+        ]);
+
+        $validator->after(function (Validator $validator) {
+            $userHasAlreadyEvaluated = InterviewEvaluation::where("interview_id", $this->interview->id)
+                ->whereHas("createdBy", function ($query) {
+                    $query->where("created_by_user_id", Auth::user()->id);
+                })
+                ->exists();
+
+            if ($userHasAlreadyEvaluated) {
+                $validator->errors()->add("interview_id", "You have already evaluated this interview.");
+            }
+        });
     }
 
     public function authorize(): bool
