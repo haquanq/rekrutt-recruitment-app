@@ -40,7 +40,7 @@ class Interview extends BaseModel
 
     public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "created_by_user_id", "id");
     }
 
     public function cancelledBy(): BelongsTo
