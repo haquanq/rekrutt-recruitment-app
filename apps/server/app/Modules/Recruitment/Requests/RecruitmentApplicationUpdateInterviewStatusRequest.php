@@ -2,12 +2,15 @@
 
 namespace App\Modules\Recruitment\Requests;
 
+use App\Modules\Interview\Enums\InterviewStatus;
+use App\Modules\Interview\Models\Interview;
 use App\Modules\Recruitment\Abstracts\BaseRecruitmentApplicationRequest;
 use App\Modules\Recruitment\Enums\RecruitmentApplicationStatus;
 use App\Modules\Recruitment\Models\RecruitmentApplication;
 use App\Modules\Recruitment\Rules\RecruitmentApplicationStatusTransitionsFromRule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class RecruitmentApplicationUpdateInterviewStatusRequest extends BaseRecruitmentApplicationRequest
 {
@@ -29,6 +32,26 @@ class RecruitmentApplicationUpdateInterviewStatusRequest extends BaseRecruitment
                 new RecruitmentApplicationStatusTransitionsFromRule($this->recruitmentApplication->status),
             ],
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            if ($this->input("status") === RecruitmentApplicationStatus::INTERVIEW_COMPLETED->value) {
+                $interviews = Interview::where("recruitment_application_id", $this->recruitmentApplication->id)->get();
+
+                $allInterviewsAreCompleted = $interviews->every(fn(Interview $interview) => $interview->isCompleted());
+
+                if (!$allInterviewsAreCompleted) {
+                    $validator
+                        ->errors()
+                        ->add(
+                            "interviews",
+                            "All interviews must be completed. Please complete or cancel all interviews.",
+                        );
+                }
+            }
+        });
     }
 
     public function authorize(): bool
