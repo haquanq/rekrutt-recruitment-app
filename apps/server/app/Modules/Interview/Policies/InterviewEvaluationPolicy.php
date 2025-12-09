@@ -19,9 +19,9 @@ class InterviewEvaluationPolicy
         return true;
     }
 
-    public function create(User $user, Interview $interview): Response
+    public function create(User $user, ?Interview $interview): Response
     {
-        if (!$interview->hasParticipant($user)) {
+        if ($interview && !$interview->hasParticipant($user)) {
             return Response::deny("You are not participating in this interview");
         }
 
