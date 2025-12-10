@@ -28,7 +28,7 @@ class RecruitmentController extends BaseController
      * Return a list of recruitments. Allows pagination, relations and filters query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -87,7 +87,7 @@ class RecruitmentController extends BaseController
      * Return a unique recruitment. Allow relations query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -115,7 +115,7 @@ class RecruitmentController extends BaseController
      * Return created recruitment.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      */
     public function store(RecruitmentStoreRequest $request)
     {
@@ -129,7 +129,7 @@ class RecruitmentController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      * - User must be the creator of the recruitment.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -151,10 +151,10 @@ class RecruitmentController extends BaseController
     /**
      * Delete recruitment by Id.
      *
-     * Permanently delete recruitment. Return no content.
+     * Permanently delete recruitment. * Return no content.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      * - User must be the creator of the recruitment.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -179,7 +179,7 @@ class RecruitmentController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      * - User must be the creator of the recruitment.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -197,10 +197,10 @@ class RecruitmentController extends BaseController
     /**
      * Publish recruitment.
      *
-     * Only hiring managers can publish recruitment before schedule. Return no content.
+     * Only hiring managers can publish recruitment before schedule. * Return no content.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER.
+     * - User must be hiring manager.
      * - User must be the creator of the recruitment.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -218,10 +218,10 @@ class RecruitmentController extends BaseController
     /**
      * Close recruitment.
      *
-     * Only hiring managers can close recruitment before schedule. Return no content.
+     * Only hiring managers can close recruitment before schedule. * Return no content.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER.
+     * - User must be hiring manager.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

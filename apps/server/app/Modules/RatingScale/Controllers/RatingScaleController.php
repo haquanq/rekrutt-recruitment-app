@@ -19,6 +19,9 @@ class RatingScaleController extends BaseController
      * Find all rating scales
      *
      * Return a list of rating scales. Allows pagination, relations and filter query.
+     *
+     * Authorization
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -69,7 +72,10 @@ class RatingScaleController extends BaseController
     /**
      * Find rating scale by Id
      *
-     * Return a unique rating scale. Allow relations query
+     * Return a unique rating scale. Allow relations query.
+     *
+     * Authorization
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -94,7 +100,12 @@ class RatingScaleController extends BaseController
     /**
      * Create rating scale
      *
-     * Return created rating scale
+     * Return created rating scale.
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(RatingScaleStoreRequest $request)
     {
@@ -106,7 +117,12 @@ class RatingScaleController extends BaseController
     /**
      * Update rating scale
      *
-     *  Return no content
+     * Return no content.
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(RatingScaleUpdateRequest $request, int $id)
     {
@@ -119,6 +135,11 @@ class RatingScaleController extends BaseController
      * Delete rating scale by Id
      *
      * Permanently delete rating scale. Return no content
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(int $id)
     {

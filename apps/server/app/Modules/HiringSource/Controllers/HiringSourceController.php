@@ -20,6 +20,9 @@ class HiringSourceController extends BaseController
      * Find all hiring sources
      *
      * Return a list of hiring sources. Allows pagination and filter query.
+     *
+     * Authorization
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -59,6 +62,9 @@ class HiringSourceController extends BaseController
      * Find hiring source by Id
      *
      * Return a unique hiring source.
+     *
+     * Authorization
+     * - User can be anyone.
      */
     public function show(int $id)
     {
@@ -73,7 +79,7 @@ class HiringSourceController extends BaseController
      * Return created hiring source.
      *
      * Authorization
-     * - User must be hiring manager or recruiter
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -86,10 +92,10 @@ class HiringSourceController extends BaseController
     /**
      * Update hiring source
      *
-     * Return no content
+     * Return no content.
      *
      * Authorization
-     * - User must be hiring manager or recruiter
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -105,7 +111,7 @@ class HiringSourceController extends BaseController
      * Permanently delete hiring source. Return no content
      *
      * Authorization
-     * - User must be hiring manager or recruiter
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

@@ -28,7 +28,7 @@ class RecruitmentApplicationController extends BaseController
      * Return a list of recruitment applications. Allows pagination, relations and filter query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -87,7 +87,7 @@ class RecruitmentApplicationController extends BaseController
      * Return a unique recruitment application. Allow relations query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -115,7 +115,7 @@ class RecruitmentApplicationController extends BaseController
      * Return created recruitment application.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -128,10 +128,10 @@ class RecruitmentApplicationController extends BaseController
     /**
      * Delete recruitment application by Id
      *
-     * Permanently delete recruitment application. Return no content.
+     * Permanently delete recruitment application. * Return no content.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -147,7 +147,7 @@ class RecruitmentApplicationController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -163,7 +163,7 @@ class RecruitmentApplicationController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -179,7 +179,7 @@ class RecruitmentApplicationController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: RECUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -192,14 +192,14 @@ class RecruitmentApplicationController extends BaseController
     /**
      * Discard recuitment application
      *
-     * This is final decision made by organization. Return no content.
+     * This is final decision made by organization. * Return no content.
      *
      * Reasons often are:
      * - Candidates did not move to the interview stage (ex: background check failed).
      * - Candidates did not pass one of the interviews.
      *
      * Authorization
-     * - User with roles: RCRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -216,14 +216,14 @@ class RecruitmentApplicationController extends BaseController
     /**
      * Withdraw recuitment application
      *
-     * This is final decision made by candidate. Return no content.
+     * This is final decision made by candidate. * Return no content.
      *
      * Reasons often are:
      * - Candidates changed their mind, got a better offer.
      * - Candidates didn't like the recruitment process, work conditions, etc.
      *
      * Authorization
-     * - User with roles: RECUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

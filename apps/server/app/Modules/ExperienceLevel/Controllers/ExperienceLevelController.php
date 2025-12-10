@@ -20,6 +20,9 @@ class ExperienceLevelController extends BaseController
      * Find all experience levels
      *
      * Return a list of experience levels. Allows pagination and filter query.
+     *
+     * Authorization
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -58,6 +61,9 @@ class ExperienceLevelController extends BaseController
      * Find experience level by Id
      *
      * Return a unique experience level.
+     *
+     * Authorization
+     * - User can be anyone.
      */
     public function show(int $id)
     {
@@ -72,7 +78,7 @@ class ExperienceLevelController extends BaseController
      * Return created experience level.
      *
      * Authorization
-     * - User must be hiring manager or recruiter
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -88,7 +94,7 @@ class ExperienceLevelController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User must be hiring manager or recruiter
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -104,7 +110,7 @@ class ExperienceLevelController extends BaseController
      * Permanently delete experience level. Return no content
      *
      * Authorization
-     * - User must be hiring manager or recruiter
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

@@ -24,7 +24,7 @@ class InterviewParticipantController extends BaseController
      * Return a list of interview participants. Allows pagination and filter query.
      *
      * Authorization
-     * - User with roles: any
+     * - User can be anyone
      */
     #[
         QueryParameter(
@@ -72,7 +72,7 @@ class InterviewParticipantController extends BaseController
      * Return a unique interview participant.
      *
      * Authorization
-     * - User with roles: any
+     * - User can be anyone
      */
     public function show(int $id)
     {
@@ -91,7 +91,7 @@ class InterviewParticipantController extends BaseController
      * Return created interview.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER, RECRUITER.
+     * - User must be hiring manager or recruiter.
      * - User must be the creator of the interview.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -108,7 +108,7 @@ class InterviewParticipantController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER, RECRUITER.
+     * - User must be hiring manager or recruiter.
      * - User must be the creator of the interview.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -128,10 +128,10 @@ class InterviewParticipantController extends BaseController
     /**
      * Delete interview participant by Id
      *
-     * Permanently delete interview participant. Return no content.
+     * Permanently delete interview participant. * Return no content.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER, RECRUITER.
+     * - User must be hiring manager or recruiter.
      * - User must be the creator of the interview.
      */
     public function destroy(InterviewParticipantDestroyRequest $request)

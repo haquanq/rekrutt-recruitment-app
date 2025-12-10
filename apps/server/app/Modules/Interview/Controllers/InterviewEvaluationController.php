@@ -24,7 +24,7 @@ class InterviewEvaluationController extends BaseController
      * Return a list of interview evaluations. Allows pagination, relations and filters query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -81,7 +81,7 @@ class InterviewEvaluationController extends BaseController
      * Return a unique interview evaluation. Allow relations query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -109,8 +109,8 @@ class InterviewEvaluationController extends BaseController
      * Return created interview evaluation.
      *
      * Authorization
-     * - User with roles: any
-     * - User must be participating in the interview
+     * - User can be anyone
+     * - User must be participating in the interview.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -126,8 +126,8 @@ class InterviewEvaluationController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: any
-     * - User must be the creator of the interview evaluation
+     * - User can be anyone
+     * - User must be the creator of the interview evaluation.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -146,11 +146,11 @@ class InterviewEvaluationController extends BaseController
     /**
      * Delete interview evaluation by Id
      *
-     * Permanently delete interview evaluation. Return no content.
+     * Permanently delete interview evaluation. * Return no content.
      *
      * Authorization
-     * - User with roles: any
-     * - User must be the creator of the interview evaluation
+     * - User can be anyone
+     * - User must be the creator of the interview evaluation.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

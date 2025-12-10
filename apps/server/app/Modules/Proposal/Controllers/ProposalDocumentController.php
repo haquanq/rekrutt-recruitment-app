@@ -27,7 +27,7 @@ class ProposalDocumentController extends BaseController
      * Return a list of proposal documents. Allows pagination, relations and filter query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -79,7 +79,7 @@ class ProposalDocumentController extends BaseController
      * Return a unique proposal document. Allows relations query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -104,10 +104,10 @@ class ProposalDocumentController extends BaseController
     /**
      * Create proposal document
      *
-     * Return a unique proposal document
+     * Return a unique proposal document.
      *
      * Authorization
-     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be hiring manager or just manager.
      * - User must be the creator of the related proposal.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -138,10 +138,10 @@ class ProposalDocumentController extends BaseController
     /**
      * Update proposal document description
      *
-     * Return no content
+     * Return no content.
      *
      * Authorization
-     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be hiring manager or just manager.
      * - User must be the creator of the related proposal.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -164,7 +164,7 @@ class ProposalDocumentController extends BaseController
      * Permanently delete proposal document. Return no content
      *
      * Authorization
-     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be hiring manager or just manager.
      * - User must be the creator of the related proposal.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException

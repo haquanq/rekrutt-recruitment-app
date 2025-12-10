@@ -25,9 +25,6 @@ class UserController extends BaseController
      * Find all users
      *
      * Retrive a list of users. Allows pagination, relations and filter query.
-     *
-     * Authorization
-     * - User with roles: any
      */
     #[
         QueryParameter(
@@ -85,9 +82,6 @@ class UserController extends BaseController
      * Find user by Id
      *
      * Return a unique user. Allow relations query.
-     *
-     * Authorization
-     * - User with roles: any
      */
     #[
         QueryParameter(
@@ -113,7 +107,7 @@ class UserController extends BaseController
      * Return created user.
      *
      * Authorization
-     * - User with roles: ADMIN
+     * - User must be administrator.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -129,7 +123,7 @@ class UserController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: ADMIN
+     * - User must be administrator.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -145,7 +139,7 @@ class UserController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: ADMIN
+     * - User must be administrator.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -161,7 +155,7 @@ class UserController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: ADMIN
+     * - User must be administrator.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -177,7 +171,7 @@ class UserController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: ADMIN
+     * - User must be administrator.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -190,10 +184,10 @@ class UserController extends BaseController
     /**
      * Delete user by Id
      *
-     * Permanently delete user. Return no content.
+     * Permanently delete user. * Return no content.
      *
      * Authorization
-     * - User with roles: ADMIN
+     * - User must be administrator.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

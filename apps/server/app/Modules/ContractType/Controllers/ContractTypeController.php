@@ -20,6 +20,9 @@ class ContractTypeController extends BaseController
      * Find all contract types
      *
      * Return a list of contract types. Allows pagination and filter query.
+     *
+     * Authorization
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -59,6 +62,9 @@ class ContractTypeController extends BaseController
      * Find contract type by Id
      *
      * Return a unique contract type.
+     *
+     * Authorization
+     * - User can be anyone.
      */
     public function show(int $id)
     {
@@ -73,7 +79,7 @@ class ContractTypeController extends BaseController
      * Return created contract type.
      *
      * Authorization
-     * - User must be hiring manager or recruiter
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -89,7 +95,7 @@ class ContractTypeController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User must be hiring manager or recruiter
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -102,10 +108,10 @@ class ContractTypeController extends BaseController
     /**
      * Delete contract type by Id
      *
-     * Permanently delete contract type. Return no content.
+     * Permanently delete contract type. * Return no content.
      *
      * Authorization
-     * - User must be hiring manager or recruiter
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

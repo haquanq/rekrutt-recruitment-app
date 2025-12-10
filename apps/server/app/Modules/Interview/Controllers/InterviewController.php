@@ -31,7 +31,7 @@ class InterviewController extends BaseController
      * Return a list of interviews. Allows pagination, relations and filter query.
      *
      * Authorization
-     * - User with roles: any
+     * - User can be anyone
      */
     #[
         QueryParameter(
@@ -99,7 +99,7 @@ class InterviewController extends BaseController
      * Return a unique interview. Allow relations query.
      *
      * Authorization
-     * - User with roles: any
+     * - User can be anyone
      */
     #[
         QueryParameter(
@@ -135,7 +135,7 @@ class InterviewController extends BaseController
      * Return created interview.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER, RECRUITER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -151,7 +151,7 @@ class InterviewController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER, RECRUITER.
+     * - User must be hiring manager or recruiter.
      * - User must be the creator of the interview.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -171,10 +171,10 @@ class InterviewController extends BaseController
     /**
      * Delete interview by Id
      *
-     * Permanently delete interview. Return no content.
+     * Permanently delete interview. * Return no content.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER, RECRUITER.
+     * - User must be hiring manager or recruiter.
      * - User must be the creator of the interview.
      */
     public function destroy(InterviewDestroyRequest $request)
@@ -195,7 +195,7 @@ class InterviewController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER, RECRUITER.
+     * - User must be hiring manager or recruiter.
      * - User must be the creator of the interview.
      */
     public function schedule(InterviewScheduleRequest $request)
@@ -214,7 +214,7 @@ class InterviewController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER, RECRUITER.
+     * - User must be hiring manager or recruiter.
      */
     public function cancel(InterviewCancelRequest $request)
     {
@@ -232,7 +232,7 @@ class InterviewController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: HIRING_MANAGER, RECRUITER.
+     * - User must be hiring manager or recruiter.
      */
     public function complete(InterviewCompleteRequest $request)
     {

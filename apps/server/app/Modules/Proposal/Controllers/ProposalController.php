@@ -28,7 +28,7 @@ class ProposalController extends BaseController
      * Return a list of proposals. Allows pagination, relations and filter query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -95,7 +95,7 @@ class ProposalController extends BaseController
      * Return a unique proposal. Allows relations query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -127,10 +127,10 @@ class ProposalController extends BaseController
     /**
      * Create proposal
      *
-     * Return a unique proposal
+     * Return a unique proposal.
      *
      * Authorization
-     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be hiring manager or just manager.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -143,10 +143,10 @@ class ProposalController extends BaseController
     /**
      * Update proposal
      *
-     * Return no content
+     * Return no content.
      *
      * Authorization
-     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be hiring manager or just manager.
      * - User must be the creator of the proposal.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -166,10 +166,10 @@ class ProposalController extends BaseController
     /**
      * Detele proposal
      *
-     * Permanently delete proposal. Return no content.
+     * Permanently delete proposal. * Return no content.
      *
      * Authorization
-     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be hiring manager or just manager.
      * - User must be the creator of the proposal.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -189,10 +189,10 @@ class ProposalController extends BaseController
     /**
      * Submit proposal
      *
-     * Submit proposal for approval. Return no content.
+     * Submit proposal for approval. * Return no content.
      *
      * Authorization
-     * - User with roles: MANAGER, HIRING_MANAGER.
+     * - User must be hiring manager or just manager.
      * - User must be the creator of the proposal.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -210,10 +210,10 @@ class ProposalController extends BaseController
     /**
      * Reject proposal
      *
-     * Reject PENDING proposal. Return no content.
+     * Reject PENDING proposal. * Return no content.
      *
      * Authorization
-     * - User with roles: EXECUTIVE.
+     * - User must be executive.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -230,10 +230,10 @@ class ProposalController extends BaseController
     /**
      * Approve proposal
      *
-     * Approve PENDING proposal. Return no content.
+     * Approve PENDING proposal. * Return no content.
      *
      * Authorization
-     * - User with roles: EXECUTIVE.
+     * - User must be executive.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

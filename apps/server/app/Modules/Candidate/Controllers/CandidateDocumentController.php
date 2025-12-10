@@ -26,7 +26,7 @@ class CandidateDocumentController extends BaseController
      * Return a list of candidate documents. Allows pagination, relations and filters query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -80,7 +80,7 @@ class CandidateDocumentController extends BaseController
      * Return a unique candidate document. Allows relations query.
      *
      * Authorization
-     * - User with roles: any.
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -108,7 +108,7 @@ class CandidateDocumentController extends BaseController
      * Return created candidate document.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -141,7 +141,7 @@ class CandidateDocumentController extends BaseController
      * Return no content.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -160,10 +160,10 @@ class CandidateDocumentController extends BaseController
     /**
      * Delete candidate document
      *
-     * Permanently delete candidate document. Return no content.
+     * Permanently delete candidate document. * Return no content.
      *
      * Authorization
-     * - User with roles: RECRUITER, HIRING_MANAGER.
+     * - User must be hiring manager or recruiter.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

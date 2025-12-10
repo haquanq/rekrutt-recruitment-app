@@ -15,7 +15,7 @@ class AuthController extends BaseController
     /**
      * Login
      *
-     * Return authenticated user with cookies
+     * Return authenticated user with cookies.
      */
     public function login(UserLoginRequest $request)
     {
@@ -32,7 +32,7 @@ class AuthController extends BaseController
     /**
      * Logout
      *
-     * Return no content
+     * Return no content.
      */
     public function logout()
     {
@@ -43,7 +43,7 @@ class AuthController extends BaseController
     /**
      * Refresh access token
      *
-     * Return no content
+     * Return no content.
      */
     public function refresh(Request $request)
     {
@@ -53,9 +53,9 @@ class AuthController extends BaseController
     }
 
     /**
-     * Me
+     * Get authenticated user (me)
      *
-     * Return authenticated user
+     * Return authenticated user.
      */
     public function me()
     {

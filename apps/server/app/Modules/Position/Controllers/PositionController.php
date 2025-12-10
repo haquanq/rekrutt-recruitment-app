@@ -19,6 +19,9 @@ class PositionController extends BaseController
      * Find all positions
      *
      * Return a list of positions. Allows pagination, relations and filter query.
+     *
+     * Authorization
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -69,7 +72,10 @@ class PositionController extends BaseController
     /**
      * Find position by Id
      *
-     * Return a unique position. Allow relations query
+     * Return a unique position. Allow relations query.
+     *
+     * Authorization
+     * - User can be anyone.
      */
     #[
         QueryParameter(
@@ -94,7 +100,12 @@ class PositionController extends BaseController
     /**
      * Create position
      *
-     * Return created position
+     * Return created position.
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(PositionStoreRequest $request)
     {
@@ -106,7 +117,12 @@ class PositionController extends BaseController
     /**
      * Update position
      *
-     *  Return no content
+     * Return no content.
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(PositionUpdateRequest $request, int $id)
     {
@@ -119,6 +135,11 @@ class PositionController extends BaseController
      * Delete position by Id
      *
      * Permanently delete position. Return no content
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(int $id)
     {
