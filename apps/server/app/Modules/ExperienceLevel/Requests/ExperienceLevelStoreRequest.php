@@ -3,11 +3,14 @@
 namespace App\Modules\ExperienceLevel\Requests;
 
 use App\Modules\ExperienceLevel\Abstracts\BaseExperienceLevelRequest;
+use App\Modules\ExperienceLevel\Models\ExperienceLevel;
+use Illuminate\Support\Facades\Gate;
 
 class ExperienceLevelStoreRequest extends BaseExperienceLevelRequest
 {
-    public function rules(): array
+    public function authorize(): bool
     {
-        return array_merge(parent::rules(), []);
+        Gate::authorize("create", ExperienceLevel::class);
+        return true;
     }
 }

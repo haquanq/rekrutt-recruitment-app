@@ -4,6 +4,7 @@ namespace App\Modules\ExperienceLevel\Controllers;
 
 use App\Abstracts\BaseController;
 use App\Modules\ExperienceLevel\Models\ExperienceLevel;
+use App\Modules\ExperienceLevel\Requests\ExperienceLevelDestroyRequest;
 use App\Modules\ExperienceLevel\Requests\ExperienceLevelStoreRequest;
 use App\Modules\ExperienceLevel\Requests\ExperienceLevelUpdateRequest;
 use App\Modules\ExperienceLevel\Resources\ExperienceLevelResource;
@@ -56,7 +57,7 @@ class ExperienceLevelController extends BaseController
     /**
      * Find experience level by Id
      *
-     * Return a unique experience level
+     * Return a unique experience level.
      */
     public function show(int $id)
     {
@@ -68,24 +69,32 @@ class ExperienceLevelController extends BaseController
     /**
      * Create experience level
      *
-     * Return created experience level
+     * Return created experience level.
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(ExperienceLevelStoreRequest $request)
     {
-        Gate::authorize("create", ExperienceLevel::class);
         $createdExperienceLevel = ExperienceLevel::create($request->validated());
-        return response()->json($createdExperienceLevel);
+        return response()->json(ExperienceLevelResource::make($createdExperienceLevel));
     }
 
     /**
      * Update experience level
      *
-     * Return no content
+     * Return no content.
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(ExperienceLevelUpdateRequest $request, int $id)
+    public function update(ExperienceLevelUpdateRequest $request)
     {
-        Gate::authorize("update", ExperienceLevel::class);
-        ExperienceLevel::findOrFail($id)->update($request->validated());
+        $request->getExperienceLevelOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -93,11 +102,15 @@ class ExperienceLevelController extends BaseController
      * Delete experience level by Id
      *
      * Permanently delete experience level. Return no content
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(int $id)
+    public function destroy(ExperienceLevelDestroyRequest $request)
     {
-        Gate::authorize("delete", ExperienceLevel::class);
-        ExperienceLevel::findOrFail($id)->delete();
+        $request->getExperienceLevelOrFail()->delete();
         return $this->noContentResponse();
     }
 }

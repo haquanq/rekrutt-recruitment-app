@@ -6,11 +6,16 @@ use App\Modules\ExperienceLevel\Abstracts\BaseExperienceLevelRequest;
 use App\Modules\ExperienceLevel\Models\ExperienceLevel;
 use Illuminate\Support\Facades\Gate;
 
-class ExperienceLevelUpdateRequest extends BaseExperienceLevelRequest
+class ExperienceLevelDestroyRequest extends BaseExperienceLevelRequest
 {
+    public function rules(): array
+    {
+        return [];
+    }
+
     public function authorize(): bool
     {
-        Gate::authorize("update", ExperienceLevel::class);
+        Gate::authorize("delete", ExperienceLevel::class);
         return true;
     }
 }
