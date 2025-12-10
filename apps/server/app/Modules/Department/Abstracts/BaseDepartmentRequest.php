@@ -25,7 +25,7 @@ abstract class BaseDepartmentRequest extends BaseFormRequest
         ];
     }
 
-    public function getDepartmentOrFail(string $param = null): ?Department
+    public function getDepartmentOrFail(string $param = null): Department
     {
         if ($this->department === null) {
             $this->department = Department::findOrFail($this->route($param ?? "id"));
