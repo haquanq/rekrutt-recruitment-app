@@ -3,6 +3,7 @@
 namespace App\Modules\EducationLevel\Controllers;
 
 use App\Abstracts\BaseController;
+use App\Modules\EducationLevel\Requests\EducationLevelDestroyRequest;
 use App\Modules\EducationLevel\Requests\EducationLevelStoreRequest;
 use App\Modules\EducationLevel\Requests\EducationLevelUpdateRequest;
 use App\Modules\EducationLevel\Models\EducationLevel;
@@ -19,6 +20,9 @@ class EducationLevelController extends BaseController
      * Find all education levels
      *
      * Return a list of education levels. Allows pagination and filter query.
+     *
+     * Authorization
+     * - User with roles: any
      */
     #[
         QueryParameter(
@@ -57,7 +61,10 @@ class EducationLevelController extends BaseController
     /**
      * Find education level by Id
      *
-     * Return a unique education level
+     * Return a unique education level.
+     *
+     * Authorization
+     * - User with roles: any
      */
     public function show(int $id)
     {
@@ -69,36 +76,48 @@ class EducationLevelController extends BaseController
     /**
      * Create education level
      *
-     * Return created education level
+     * Return created education level.
+     *
+     * Authorization
+     * - User with roles: HIRING_MANAGER, RECRUITER
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(EducationLevelStoreRequest $request)
     {
-        Gate::authorize("create", EducationLevel::class);
         $createdEducationlevel = EducationLevel::create($request->validated());
-        return $this->createdResponse(new EducationLevelResource($createdEducationlevel));
+        return $this->createdResponse(EducationLevelResource::make($createdEducationlevel));
     }
 
     /**
      * Update education level
      *
-     * Return no content
+     * Return no content.
+     *
+     * Authorization
+     * - User with roles: HIRING_MANAGER, RECRUITER
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(EducationLevelUpdateRequest $request, int $id)
+    public function update(EducationLevelUpdateRequest $request)
     {
-        Gate::authorize("update", EducationLevel::class);
-        EducationLevel::findOrFail($id)->update($request->validated());
+        $request->getEducationLevelOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
     /**
      * Delete education level by Id
      *
-     * Permanently delete education level. Return no content
+     * Permanently delete education level. Return no content.
+     *
+     * Authorization
+     * - User with roles: HIRING_MANAGER, RECRUITER
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(int $id)
+    public function destroy(EducationLevelDestroyRequest $request)
     {
-        Gate::authorize("delete", EducationLevel::class);
-        EducationLevel::findOrFail($id)->delete();
+        $request->getEducationLevelOrFail()->delete();
         return $this->noContentResponse();
     }
 }

@@ -3,11 +3,14 @@
 namespace App\Modules\EducationLevel\Requests;
 
 use App\Modules\EducationLevel\Abstracts\BaseEducationLevelRequest;
+use App\Modules\EducationLevel\Models\EducationLevel;
+use Illuminate\Support\Facades\Gate;
 
 class EducationLevelUpdateRequest extends BaseEducationLevelRequest
 {
-    public function rules(): array
+    public function authorize(): bool
     {
-        return array_merge(parent::rules(), []);
+        Gate::authorize("update", EducationLevel::class);
+        return true;
     }
 }

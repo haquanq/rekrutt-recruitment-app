@@ -6,11 +6,16 @@ use App\Modules\EducationLevel\Abstracts\BaseEducationLevelRequest;
 use App\Modules\EducationLevel\Models\EducationLevel;
 use Illuminate\Support\Facades\Gate;
 
-class EducationLevelStoreRequest extends BaseEducationLevelRequest
+class EducationLevelDestroyRequest extends BaseEducationLevelRequest
 {
+    public function rules(): array
+    {
+        return [];
+    }
+
     public function authorize(): bool
     {
-        Gate::authorize("create", EducationLevel::class);
+        Gate::authorize("delete", EducationLevel::class);
         return true;
     }
 }
