@@ -3,6 +3,7 @@
 namespace App\Modules\HiringSource\Controllers;
 
 use App\Abstracts\BaseController;
+use App\Modules\HiringSource\Requests\HiringSourceDestroyRequest;
 use App\Modules\HiringSource\Requests\HiringSourceStoreRequest;
 use App\Modules\HiringSource\Requests\HiringSourceUpdateRequest;
 use App\Modules\HiringSource\Models\HiringSource;
@@ -57,7 +58,7 @@ class HiringSourceController extends BaseController
     /**
      * Find hiring source by Id
      *
-     * Return a unique hiring source
+     * Return a unique hiring source.
      */
     public function show(int $id)
     {
@@ -69,11 +70,15 @@ class HiringSourceController extends BaseController
     /**
      * Create hiring source
      *
-     * Return created hiring source
+     * Return created hiring source.
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(HiringSourceStoreRequest $request)
     {
-        Gate::authorize("create", HiringSource::class);
         $createdHiringSource = HiringSource::create($request->validated());
         return $this->createdResponse(new HiringSourceResource($createdHiringSource));
     }
@@ -82,11 +87,15 @@ class HiringSourceController extends BaseController
      * Update hiring source
      *
      * Return no content
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(HiringSourceUpdateRequest $request, int $id)
+    public function update(HiringSourceUpdateRequest $request)
     {
-        Gate::authorize("update", HiringSource::class);
-        HiringSource::findOrFail($id)->update($request->validated());
+        $request->getHiringSourceOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -94,11 +103,15 @@ class HiringSourceController extends BaseController
      * Delete hiring source by Id
      *
      * Permanently delete hiring source. Return no content
+     *
+     * Authorization
+     * - User must be hiring manager or recruiter
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(int $id)
+    public function destroy(HiringSourceDestroyRequest $request)
     {
-        Gate::authorize("delete", HiringSource::class);
-        HiringSource::findOrFail($id)->delete();
+        $request->getHiringSourceOrFail()->delete();
         return $this->noContentResponse();
     }
 }
