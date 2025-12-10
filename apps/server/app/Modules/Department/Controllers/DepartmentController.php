@@ -3,6 +3,7 @@
 namespace App\Modules\Department\Controllers;
 
 use App\Abstracts\BaseController;
+use App\Modules\Department\Requests\DepartmentDestroyRequest;
 use App\Modules\Department\Requests\DepartmentStoreRequest;
 use App\Modules\Department\Requests\DepartmentUpdateRequest;
 use App\Modules\Department\Models\Department;
@@ -116,10 +117,9 @@ class DepartmentController extends BaseController
      *
      * Permanently delete department. Return no content
      */
-    public function destroy(int $id)
+    public function destroy(DepartmentDestroyRequest $request)
     {
-        Gate::authorize("delete", Department::class);
-        Department::findOrFail($id)->delete();
+        $request->getDepartment()->delete();
         return $this->noContentResponse();
     }
 }
