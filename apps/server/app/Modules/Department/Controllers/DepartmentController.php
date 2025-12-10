@@ -20,6 +20,9 @@ class DepartmentController extends BaseController
      * Find all departments
      *
      * Return a list of departments. Allows pagination, relations and filter query.
+     *
+     * Authorization
+     * - User with roles: any
      */
     #[
         QueryParameter(
@@ -68,7 +71,10 @@ class DepartmentController extends BaseController
     /**
      * Find department by Id
      *
-     * Return a unique department
+     * Return a unique department. Allows relations query.
+     *
+     * Authorization
+     * - User with roles: any
      */
     #[
         QueryParameter(
@@ -93,7 +99,12 @@ class DepartmentController extends BaseController
     /**
      * Create department
      *
-     * Return created department
+     * Return created department.
+     *
+     * Authorization
+     * - User with roles: HIRING_MANAGER, RECRUITER
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(DepartmentStoreRequest $request)
     {
@@ -104,7 +115,12 @@ class DepartmentController extends BaseController
     /**
      * Update department
      *
-     * Return no content
+     * Return no content.
+     *
+     * Authorization
+     * - User with roles: HIRING_MANAGER, RECRUITER
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(DepartmentUpdateRequest $request)
     {
@@ -115,7 +131,12 @@ class DepartmentController extends BaseController
     /**
      * Delete department by Id
      *
-     * Permanently delete department. Return no content
+     * Permanently delete department. Return no content.
+     *
+     * Authorization
+     * - User with roles: HIRING_MANAGER, RECRUITER
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(DepartmentDestroyRequest $request)
     {
