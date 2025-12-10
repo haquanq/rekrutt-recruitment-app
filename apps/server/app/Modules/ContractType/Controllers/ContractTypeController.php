@@ -3,6 +3,7 @@
 namespace App\Modules\ContractType\Controllers;
 
 use App\Abstracts\BaseController;
+use App\Modules\ContractType\Requests\ContractTypeDestroyRequest;
 use App\Modules\ContractType\Requests\ContractTypeStoreRequest;
 use App\Modules\ContractType\Requests\ContractTypeUpdateRequest;
 use App\Modules\ContractType\Models\ContractType;
@@ -78,9 +79,8 @@ class ContractTypeController extends BaseController
      */
     public function store(ContractTypeStoreRequest $request)
     {
-        Gate::authorize("create", ContractType::class);
         $createdContractType = ContractType::create($request->validated());
-        return $this->okResponse(new ContractTypeResource($createdContractType));
+        return $this->okResponse(ContractTypeResource::make($createdContractType));
     }
 
     /**
@@ -95,8 +95,7 @@ class ContractTypeController extends BaseController
      */
     public function update(ContractTypeUpdateRequest $request, int $id)
     {
-        Gate::authorize("update", ContractType::class);
-        ContractType::findOrFail($id)->update($request->validated());
+        $request->getContractTypeOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -110,10 +109,9 @@ class ContractTypeController extends BaseController
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(int $id)
+    public function destroy(ContractTypeDestroyRequest $request)
     {
-        Gate::authorize("delete", ContractType::class);
-        ContractType::findOrFail($id)->delete();
+        $request->getContractTypeOrFail()->delete();
         return $this->noContentResponse();
     }
 }

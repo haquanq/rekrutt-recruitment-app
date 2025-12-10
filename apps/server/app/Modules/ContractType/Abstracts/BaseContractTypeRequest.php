@@ -2,14 +2,12 @@
 
 namespace App\Modules\ContractType\Abstracts;
 
+use App\Modules\ContractType\Models\ContractType;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class BaseContractTypeRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
+    protected ?ContractType $contractType;
 
     public function rules(): array
     {
@@ -23,7 +21,16 @@ abstract class BaseContractTypeRequest extends FormRequest
              * Description
              * @example 6 month remote work with in-house team
              */
-            "description" => ["string", "max:500"],
+            "description" => ["nullable", "string", "max:500"],
         ];
+    }
+
+    public function getContractTypeOrFail(string $param = null): ContractType
+    {
+        if ($this->contractType === null) {
+            $this->contractType = ContractType::findOrFail($this->route($param ?? "id"));
+        }
+
+        return $this->contractType;
     }
 }

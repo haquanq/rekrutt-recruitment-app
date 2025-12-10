@@ -3,11 +3,14 @@
 namespace App\Modules\ContractType\Requests;
 
 use App\Modules\ContractType\Abstracts\BaseContractTypeRequest;
+use App\Modules\ContractType\Models\ContractType;
+use Illuminate\Support\Facades\Gate;
 
 class ContractTypeUpdateRequest extends BaseContractTypeRequest
 {
-    public function rules(): array
+    public function authorize(): bool
     {
-        return array_merge(parent::rules(), []);
+        Gate::authorize("update", ContractType::class);
+        return true;
     }
 }
