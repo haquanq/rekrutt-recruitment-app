@@ -115,21 +115,14 @@ class CandidateDocumentController extends BaseController
     public function store(CandidateDocumentStoreRequest $request)
     {
         $file = $request->file("document");
-        $fileExtension = $file->extension();
-        $fileMimeType = $file->getClientMimeType();
-        $fileInternalName = Str::uuid() . "." . $fileExtension;
-        $fileOriginalName = $file->getClientOriginalName();
-        $filePath = Storage::disk("public")->putFileAs("/", $file, $fileInternalName);
-        $fileUrl = Storage::url($filePath);
+        $filePath = Storage::disk("public")->putFile("/candidate_documents", $file);
 
         $createdCandidateDocument = CandidateDocument::create([
-            "file_id" => $fileInternalName,
-            "file_name" => $fileOriginalName,
-            "file_url" => $fileUrl,
-            "file_extension" => $fileExtension,
-            "mime_type" => $fileMimeType,
-            "candidate_id" => $request->validated()["candidate_id"],
-            "note" => $request->validated()["note"] ?? null,
+            ...$request->validated(),
+            "file_path" => $filePath,
+            "file_name" => $file->getClientOriginalName(),
+            "file_extension" => $file->extension(),
+            "mime_type" => $file->getClientMimeType(),
         ]);
 
         return $this->createdResponse(CandidateDocumentResource::make($createdCandidateDocument));

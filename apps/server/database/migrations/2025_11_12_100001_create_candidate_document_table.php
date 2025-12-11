@@ -10,9 +10,8 @@ return new class extends Migration {
     {
         Schema::create("candidate_document", function (Blueprint $table) {
             $table->bigInteger("id")->generatedAs()->always();
-            $table->string("file_id", 256);
+            $table->text("file_path");
             $table->string("file_name", 256);
-            $table->string("file_url", 500)->nullable();
             $table->string("file_extension", 50)->nullable();
             $table->string("mime_type", 300);
             $table->string("notes", 500)->nullable();
