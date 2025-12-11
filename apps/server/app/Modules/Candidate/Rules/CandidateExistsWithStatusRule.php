@@ -18,12 +18,12 @@ class CandidateExistsWithStatusRule implements ValidationRule
         }
 
         if (!$this->candidate) {
-            $fail("Candidate does not exist");
+            $fail("Candidate does not exist.");
             return;
         }
 
         if ($this->candidate->status !== $this->requiredStatus) {
-            $fail("Candidate must have status: " . $this->requiredStatus->value);
+            $fail("Candidate must have status of {$this->requiredStatus->value}.");
             return;
         }
     }
