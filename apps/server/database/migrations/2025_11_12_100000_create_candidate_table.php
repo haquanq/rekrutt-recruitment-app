@@ -19,14 +19,27 @@ return new class extends Migration {
             $table->string("phone_number", 15);
             $table->enum("status", CandidateStatus::cases())->default(CandidateStatus::READY->value);
 
+            // ARCHIVE
             $table->timestampTZ("archived_at")->nullable();
+
+            // EMPLOY
             $table->timestampTZ("employed_at")->nullable();
+
+            // BLACKLIST
             $table->timestampTZ("blacklisted_at")->nullable();
             $table->string("blacklisted_reason", 500)->nullable();
             $table
                 ->foreignId("blacklisted_by_user_id")
                 ->nullable()
                 ->constrained(table: "user", indexName: "fk_candidate__blacklisted_by_user");
+
+            // REACTIVATE
+            $table->timestampTZ("reactivated_at")->nullable();
+            $table->string("reactivated_reason", 500)->nullable();
+            $table
+                ->foreignId("reactivated_by_user_id")
+                ->nullable()
+                ->constrained(table: "user", indexName: "fk_candidate__reactivated_by_user");
 
             $table
                 ->foreignId("hiring_source_id")
