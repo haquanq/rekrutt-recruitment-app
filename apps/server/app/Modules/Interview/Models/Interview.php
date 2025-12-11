@@ -43,7 +43,7 @@ class Interview extends BaseModel
 
     public function application(): BelongsTo
     {
-        return $this->belongsTo(RecruitmentApplication::class);
+        return $this->belongsTo(RecruitmentApplication::class, "recruitment_application_id", "id");
     }
 
     public function method(): BelongsTo
