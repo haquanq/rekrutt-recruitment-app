@@ -17,6 +17,7 @@ use App\Modules\Recruitment\Requests\RecruitmentApplicationWithdrawRequest;
 use App\Modules\Recruitment\Resources\RecruitmentApplicationResource;
 use App\Modules\Recruitment\Resources\RecruitmentApplicationResourceCollection;
 use Dedoc\Scramble\Attributes\QueryParameter;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -199,7 +200,24 @@ class RecruitmentApplicationController extends BaseController
      */
     public function offer(RecruitmentApplicationUpdateOfferStatusRequest $request)
     {
-        $request->getRecruitmentApplicationOrFail()->update($request->validated());
+        $recruitmentApplication = $request->getRecruitmentApplicationOrFail();
+
+        DB::transaction(function () use ($request, $recruitmentApplication) {
+            $recruitmentApplication->update($request->validated());
+
+            if ($recruitmentApplication->status === RecruitmentApplicationStatus::OFFER_ACCEPTED) {
+                Candidate::where("id", $recruitmentApplication->candidate_id)->update([
+                    "status" => CandidateStatus::EMPLOYED->value,
+                    "employed_at" => Carbon::now(),
+                ]);
+            } elseif ($recruitmentApplication->status === RecruitmentApplicationStatus::OFFER_REJECTED) {
+                Candidate::where("id", $recruitmentApplication->candidate_id)->update([
+                    "status" => CandidateStatus::ARCHIVED->value,
+                    "archived_at" => Carbon::now(),
+                ]);
+            }
+        });
+
         return $this->noContentResponse();
     }
 
@@ -225,7 +243,14 @@ class RecruitmentApplicationController extends BaseController
             throw new ConflictHttpException("Recruitment application is already discarded.");
         }
 
-        $recruitmentApplication->update($request->validated());
+        DB::transaction(function () use ($recruitmentApplication, $request) {
+            $recruitmentApplication->update($request->validated());
+            Candidate::where("id", $recruitmentApplication->candidate_id)->update([
+                "status" => CandidateStatus::ARCHIVED->value,
+                "archived_at" => Carbon::now(),
+            ]);
+        });
+
         return $this->noContentResponse();
     }
 
@@ -251,7 +276,14 @@ class RecruitmentApplicationController extends BaseController
             throw new ConflictHttpException("Recruitment application is already withdrawn.");
         }
 
-        $recruitmentApplication->update($request->validated());
+        DB::transaction(function () use ($recruitmentApplication, $request) {
+            $recruitmentApplication->update($request->validated());
+            Candidate::where("id", $recruitmentApplication->candidate_id)->update([
+                "status" => CandidateStatus::ARCHIVED->value,
+                "archived_at" => Carbon::now(),
+            ]);
+        });
+
         return $this->noContentResponse();
     }
 }
