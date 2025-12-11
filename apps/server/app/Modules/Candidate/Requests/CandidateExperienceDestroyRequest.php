@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Gate;
 
 class CandidateExperienceDestroyRequest extends BaseCandidateExperienceRequest
 {
-    public CandidateExperience $candidateExperience;
-
     public function rules(): array
     {
         return [];
@@ -19,11 +17,5 @@ class CandidateExperienceDestroyRequest extends BaseCandidateExperienceRequest
     {
         Gate::authorize("delete", CandidateExperience::class);
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        parent::prepareForValidation();
-        $this->candidateExperience = CandidateExperience::with("candidate")->findOrFail($this->route("id"));
     }
 }

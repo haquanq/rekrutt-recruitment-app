@@ -132,13 +132,14 @@ class CandidateExperienceController extends BaseController
      */
     public function update(CandidateExperienceUpdateRequest $request)
     {
-        $candidateStatus = $request->candidateExperience->candidate->status;
+        $candidateExperience = $request->getCandidateExperienceOrFail();
+        $candidate = $candidateExperience->candidate;
 
-        if ($candidateStatus !== CandidateStatus::PENDING) {
-            throw new ConflictHttpException("Cannot update. " . $candidateStatus->description());
+        if ($candidate->status !== CandidateStatus::PENDING) {
+            throw new ConflictHttpException("Cannot update. " . $candidate->status->description());
         }
 
-        $request->candidateExperience->update($request->validated());
+        $candidateExperience->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -154,13 +155,14 @@ class CandidateExperienceController extends BaseController
      */
     public function destroy(CandidateExperienceDestroyRequest $request)
     {
-        $candidateStatus = $request->candidateExperience->candidate->status;
+        $candidateExperience = $request->getCandidateExperienceOrFail();
+        $candidate = $candidateExperience->candidate;
 
-        if ($candidateStatus !== CandidateStatus::PENDING) {
-            throw new ConflictHttpException("Cannot delete. " . $candidateStatus->description());
+        if ($candidate->status !== CandidateStatus::PENDING) {
+            throw new ConflictHttpException("Cannot delete. " . $candidate->status->description());
         }
 
-        $request->candidateExperience->delete();
+        $candidateExperience->delete();
         return $this->noContentResponse();
     }
 }

@@ -3,9 +3,21 @@
 namespace App\Modules\Candidate\Abstracts;
 
 use App\Abstracts\BaseFormRequest;
+use App\Modules\Candidate\Models\CandidateExperience;
 
 abstract class BaseCandidateExperienceRequest extends BaseFormRequest
 {
+    protected ?CandidateExperience $candidateExperience = null;
+
+    public function getCandidateExperienceOrFail(string $param = "id"): CandidateExperience
+    {
+        if ($this->candidateExperience === null) {
+            $this->candidateExperience = CandidateExperience::findOrFail($this->route($param));
+        }
+
+        return $this->candidateExperience;
+    }
+
     public function rules(): array
     {
         return [
