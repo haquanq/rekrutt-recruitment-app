@@ -13,11 +13,14 @@ class CandidateStoreRequest extends BaseCandidateRequest
     public function rules(): array
     {
         return [
-            /**
-             * Initial status (generated automatically)
-             * @ignoreParam
-             */
-            "status" => ["required", Rule::enum(CandidateStatus::class)->only(CandidateStatus::READY)],
+            ...parent::rules(),
+            ...[
+                /**
+                 * Initial status (generated automatically)
+                 * @ignoreParam
+                 */
+                "status" => ["required", Rule::enum(CandidateStatus::class)->only(CandidateStatus::READY)],
+            ],
         ];
     }
 
@@ -29,6 +32,8 @@ class CandidateStoreRequest extends BaseCandidateRequest
 
     public function prepareForValidation(): void
     {
+        parent::prepareForValidation();
+
         $this->merge([
             "status" => CandidateStatus::READY->value,
         ]);
