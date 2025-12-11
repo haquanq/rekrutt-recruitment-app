@@ -17,7 +17,7 @@ class CandidateDocumentResource extends JsonResource
             "file_url" => URL::to("/") . $this->file_url,
             "file_exension" => $this->file_extension,
             "mime_type" => $this->mime_type,
-            "note" => $this->note,
+            "notes" => $this->notes,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
             "candidate" => new CandidateResource($this->whenLoaded("candidate")),

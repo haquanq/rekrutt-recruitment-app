@@ -15,15 +15,13 @@ return new class extends Migration {
             $table->string("file_url", 500)->nullable();
             $table->string("file_extension", 50)->nullable();
             $table->string("mime_type", 300);
-            $table->string("description", 500)->nullable();
+            $table->string("notes", 500)->nullable();
             $table->timestampsTZ();
 
             $table
                 ->foreignId("candidate_id")
                 ->constrained(table: "candidate", indexName: "fk_candidate_document__candidate")
                 ->onDelete("cascade");
-
-            $table->unique(columns: ["file_id", "candidate_id"], name: "uq_candidate_document__file");
         });
 
         DB::statement("ALTER TABLE public.candidate_document ADD CONSTRAINT pk_candidate_document PRIMARY KEY (id)");
