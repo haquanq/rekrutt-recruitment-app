@@ -11,7 +11,7 @@ abstract class BaseCandidateRequest extends BaseFormRequest
 {
     protected ?Candidate $candidate = null;
 
-    public function getCandidateOrFail(string $param = "id"): Candidate
+    public function getQueriedCandidateOrFail(string $param = "id"): Candidate
     {
         if ($this->candidate === null) {
             $this->candidate = Candidate::findOrFail($this->route($param));

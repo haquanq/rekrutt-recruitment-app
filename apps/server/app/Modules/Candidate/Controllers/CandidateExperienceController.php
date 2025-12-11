@@ -132,7 +132,7 @@ class CandidateExperienceController extends BaseController
      */
     public function update(CandidateExperienceUpdateRequest $request)
     {
-        $candidateExperience = $request->getCandidateExperienceOrFail();
+        $candidateExperience = $request->getQueriedCandidateExperienceOrFail();
         $candidate = $candidateExperience->candidate;
 
         if ($candidate->status !== CandidateStatus::READY) {
@@ -155,7 +155,7 @@ class CandidateExperienceController extends BaseController
      */
     public function destroy(CandidateExperienceDestroyRequest $request)
     {
-        $candidateExperience = $request->getCandidateExperienceOrFail();
+        $candidateExperience = $request->getQueriedCandidateExperienceOrFail();
         $candidate = $candidateExperience->candidate;
 
         if ($candidate->status !== CandidateStatus::READY) {

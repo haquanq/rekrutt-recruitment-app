@@ -24,7 +24,7 @@ class CandidateBlacklistRequest extends BaseCandidateRequest
                 "bail",
                 "required",
                 Rule::enum(CandidateStatus::class)->only(CandidateStatus::BLACKLISTED),
-                new CandidateStatusTransitionsFromRule($this->getCandidateOrFail()->status),
+                new CandidateStatusTransitionsFromRule($this->getQueriedCandidateOrFail()->status),
             ],
             /**
              * Timestamp

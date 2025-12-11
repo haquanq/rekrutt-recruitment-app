@@ -9,7 +9,7 @@ abstract class BaseCandidateExperienceRequest extends BaseFormRequest
 {
     protected ?CandidateExperience $candidateExperience = null;
 
-    public function getCandidateExperienceOrFail(string $param = "id"): CandidateExperience
+    public function getQueriedCandidateExperienceOrFail(string $param = "id"): CandidateExperience
     {
         if ($this->candidateExperience === null) {
             $this->candidateExperience = CandidateExperience::findOrFail($this->route($param));

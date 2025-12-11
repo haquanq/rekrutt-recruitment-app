@@ -140,7 +140,7 @@ class CandidateDocumentController extends BaseController
      */
     public function update(CandidateDocumentUpdateRequest $request)
     {
-        $candidateDocument = $request->getCandidateDocumentOrFail();
+        $candidateDocument = $request->getQueriedCandidateDocumentOrFail();
         $candidate = $candidateDocument->candidate;
 
         if ($candidate->status !== CandidateStatus::READY) {
@@ -163,7 +163,7 @@ class CandidateDocumentController extends BaseController
      */
     public function destroy(CandidateDocumentDestroyRequest $request)
     {
-        $candidateDocument = $request->getCandidateDocumentOrFail();
+        $candidateDocument = $request->getQueriedCandidateDocumentOrFail();
         $candidate = $candidateDocument->candidate;
 
         if ($candidate->status !== CandidateStatus::READY) {

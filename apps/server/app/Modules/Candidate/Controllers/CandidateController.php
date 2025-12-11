@@ -134,7 +134,7 @@ class CandidateController extends BaseController
      */
     public function update(CandidateUpdateRequest $request)
     {
-        $candidate = $request->getCandidateOrFail();
+        $candidate = $request->getQueriedCandidateOrFail();
 
         if ($candidate->status !== CandidateStatus::READY) {
             throw new ConflictHttpException("Cannot update. " . $candidate->status->description());
@@ -156,7 +156,7 @@ class CandidateController extends BaseController
      */
     public function destroy(CandidateDestroyRequest $request)
     {
-        $candidate = $request->getCandidateOrFail();
+        $candidate = $request->getQueriedCandidateOrFail();
 
         if ($candidate->status !== CandidateStatus::READY) {
             throw new ConflictHttpException("Cannot delete. " . $candidate->status->description());
@@ -178,7 +178,7 @@ class CandidateController extends BaseController
      */
     public function blacklist(CandidateBlacklistRequest $request)
     {
-        $candidate = $request->getCandidateOrFail();
+        $candidate = $request->getQueriedCandidateOrFail();
 
         if ($candidate->status === CandidateStatus::BLACKLISTED) {
             throw new ConflictHttpException("Cannot blacklist. Candidate is already blacklisted.");
@@ -200,7 +200,7 @@ class CandidateController extends BaseController
      */
     public function reactivate(CandidateReactivateRequest $request)
     {
-        $candidate = $request->getCandidateOrFail();
+        $candidate = $request->getQueriedCandidateOrFail();
 
         if ($candidate->status === CandidateStatus::READY) {
             throw new ConflictHttpException("Cannot reactivate. Candidate is already active.");

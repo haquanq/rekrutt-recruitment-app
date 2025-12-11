@@ -10,7 +10,7 @@ abstract class BaseCandidateDocumentRequest extends BaseFormRequest
 {
     protected ?CandidateDocument $candidateDocument = null;
 
-    public function getCandidateDocumentOrFail(string $param = "id"): CandidateDocument
+    public function getQueriedCandidateDocumentOrFail(string $param = "id"): CandidateDocument
     {
         if ($this->candidateDocument === null) {
             $this->candidateDocument = CandidateDocument::findOrFail($this->route($param));
