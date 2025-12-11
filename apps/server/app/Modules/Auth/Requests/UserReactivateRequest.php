@@ -28,7 +28,7 @@ class UserReactivateRequest extends BaseUserRequest
 
     public function authorize(): bool
     {
-        Gate::authorize("update", User::class);
+        Gate::authorize("reactivate", User::class);
         return true;
     }
 

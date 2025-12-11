@@ -45,7 +45,7 @@ class UserSuspendRequest extends BaseUserRequest
 
     public function authorize(): bool
     {
-        Gate::authorize("update", User::class);
+        Gate::authorize("suspend", User::class);
         return true;
     }
 

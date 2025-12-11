@@ -44,4 +44,31 @@ class UserPolicy
 
         return Response::allow();
     }
+
+    public function suspend(User $user): Response
+    {
+        if (!$user->hasRole(UserRole::ADMIN)) {
+            return Response::deny("You are not allowed to suspend this user.");
+        }
+
+        return Response::allow();
+    }
+
+    public function retire(User $user): Response
+    {
+        if (!$user->hasRole(UserRole::ADMIN)) {
+            return Response::deny("You are not allowed to retire this user.");
+        }
+
+        return Response::allow();
+    }
+
+    public function reactivate(User $user): Response
+    {
+        if (!$user->hasRole(UserRole::ADMIN)) {
+            return Response::deny("You are not allowed to reactivate this user.");
+        }
+
+        return Response::allow();
+    }
 }

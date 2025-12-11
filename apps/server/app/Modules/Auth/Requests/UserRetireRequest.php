@@ -34,7 +34,7 @@ class UserRetireRequest extends BaseUserRequest
 
     public function authorize(): bool
     {
-        Gate::authorize("update", User::class);
+        Gate::authorize("retire", User::class);
         return true;
     }
 
