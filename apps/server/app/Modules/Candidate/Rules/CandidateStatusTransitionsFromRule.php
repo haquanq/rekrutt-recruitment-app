@@ -25,11 +25,7 @@ class CandidateStatusTransitionsFromRule implements ValidationRule
 
         $transitions = [
             CandidateStatus::READY->value => [CandidateStatus::APPLYING, CandidateStatus::BLACKLISTED],
-            CandidateStatus::APPLYING->value => [
-                CandidateStatus::ARCHIVED,
-                CandidateStatus::EMPLOYED,
-                CandidateStatus::BLACKLISTED,
-            ],
+            CandidateStatus::APPLYING->value => [CandidateStatus::ARCHIVED, CandidateStatus::EMPLOYED],
             CandidateStatus::ARCHIVED->value => [CandidateStatus::READY, CandidateStatus::BLACKLISTED],
             CandidateStatus::EMPLOYED->value => [CandidateStatus::READY],
             CandidateStatus::BLACKLISTED->value => [CandidateStatus::READY],
