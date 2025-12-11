@@ -9,11 +9,26 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class CandidateExistsWithStatusRule implements ValidationRule
 {
-    public function __construct(protected CandidateStatus $requiredStatus, protected ?Candidate $candidate = null) {}
+    private ?Candidate $candidate = null;
+    private bool $withCandidate = false;
+
+    public function __construct(protected CandidateStatus $requiredStatus) {}
+
+    public static function create(CandidateStatus $requiredStatus): self
+    {
+        return new self($requiredStatus);
+    }
+
+    public function withCandidate(?Candidate $candidate): self
+    {
+        $this->candidate = $candidate;
+        $this->withCandidate = true;
+        return $this;
+    }
 
     public function validate(string $attribute, mixed $id, Closure $fail): void
     {
-        if (!$this->candidate) {
+        if (!$this->candidate && !$this->withCandidate) {
             $this->candidate = Candidate::find($id);
         }
 
