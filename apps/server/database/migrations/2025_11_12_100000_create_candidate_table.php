@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string("address", 256);
             $table->string("email", 256);
             $table->string("phone_number", 15);
-            $table->enum("status", CandidateStatus::cases())->default(CandidateStatus::PENDING);
+            $table->enum("status", CandidateStatus::cases())->default(CandidateStatus::READY->value);
             $table->timestampsTZ();
 
             $table
