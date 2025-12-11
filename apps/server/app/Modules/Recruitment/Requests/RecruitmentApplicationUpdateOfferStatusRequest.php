@@ -12,8 +12,6 @@ use Illuminate\Validation\Rule;
 
 class RecruitmentApplicationUpdateOfferStatusRequest extends BaseRecruitmentApplicationRequest
 {
-    public RecruitmentApplication $recruitmentApplication;
-
     public function rules(): array
     {
         return [
@@ -22,13 +20,14 @@ class RecruitmentApplicationUpdateOfferStatusRequest extends BaseRecruitmentAppl
              * @example OFFER_PENDING
              */
             "status" => [
+                "bail",
                 "required",
                 Rule::enum(RecruitmentApplicationStatus::class)->only([
                     RecruitmentApplicationStatus::OFFER_PENDING,
                     RecruitmentApplicationStatus::OFFER_ACCEPTED,
                     RecruitmentApplicationStatus::OFFER_REJECTED,
                 ]),
-                new RecruitmentApplicationStatusTransitionsFromRule($this->recruitmentApplication->status),
+                new RecruitmentApplicationStatusTransitionsFromRule($this->getRecruitmentApplicationOrFail()->status),
             ],
             /**
              * Offer started at timestamp === now
@@ -82,8 +81,6 @@ class RecruitmentApplicationUpdateOfferStatusRequest extends BaseRecruitmentAppl
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-
-        $this->recruitmentApplication = RecruitmentApplication::findOrFail($this->route("id"));
 
         $this->merge([
             "offer_started_at" => Carbon::now(),

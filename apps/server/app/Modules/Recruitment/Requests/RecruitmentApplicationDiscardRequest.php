@@ -13,8 +13,6 @@ use Illuminate\Validation\Rule;
 
 class RecruitmentApplicationDiscardRequest extends BaseRecruitmentApplicationRequest
 {
-    public RecruitmentApplication $recruitmentApplication;
-
     public function rules(): array
     {
         return [
@@ -23,9 +21,10 @@ class RecruitmentApplicationDiscardRequest extends BaseRecruitmentApplicationReq
              * @ignoreParam
              */
             "status" => [
+                "bail",
                 "required",
                 Rule::enum(RecruitmentApplicationStatus::class)->only([RecruitmentApplicationStatus::DISCARDED]),
-                new RecruitmentApplicationStatusTransitionsFromRule($this->recruitmentApplication->status),
+                new RecruitmentApplicationStatusTransitionsFromRule($this->getRecruitmentApplicationOrFail()->status),
             ],
             /**
              * Discarded at timestamp === now
@@ -54,8 +53,6 @@ class RecruitmentApplicationDiscardRequest extends BaseRecruitmentApplicationReq
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-
-        $this->recruitmentApplication = RecruitmentApplication::findOrFail($this->route("id"));
 
         $this->merge([
             "discarded_by_user_id" => Auth::user()->id,

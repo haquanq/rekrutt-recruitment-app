@@ -10,8 +10,6 @@ use Illuminate\Validation\Rule;
 
 class RecruitmentApplicationUpdatePriorityRequest extends BaseRecruitmentApplicationRequest
 {
-    public RecruitmentApplication $recruitmentApplication;
-
     public function rules(): array
     {
         return [
@@ -23,12 +21,5 @@ class RecruitmentApplicationUpdatePriorityRequest extends BaseRecruitmentApplica
     {
         Gate::authorize("updatePriority", RecruitmentApplication::class);
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        parent::prepareForValidation();
-
-        $this->recruitmentApplication = RecruitmentApplication::findOrFail($this->route("id"));
     }
 }

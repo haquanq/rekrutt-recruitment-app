@@ -145,11 +145,13 @@ class RecruitmentApplicationController extends BaseController
      */
     public function destroy(RecruitmentApplicationDestroyRequest $request)
     {
-        if ($request->recruitmentApplication->status !== RecruitmentApplicationStatus::PENDING->value) {
+        $recruitmentApplication = $request->getRecruitmentApplicationOrFail();
+
+        if ($recruitmentApplication->status !== RecruitmentApplicationStatus::PENDING->value) {
             throw new ConflictHttpException("Cannot delete. Recruitment application is processed.");
         }
 
-        $request->recruitmentApplication->delete();
+        $recruitmentApplication->delete();
         return $this->noContentResponse();
     }
 
@@ -165,7 +167,7 @@ class RecruitmentApplicationController extends BaseController
      */
     public function priority(RecruitmentApplicationUpdatePriorityRequest $request)
     {
-        $request->recruitmentApplication->update($request->validated());
+        $request->getRecruitmentApplicationOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -181,7 +183,7 @@ class RecruitmentApplicationController extends BaseController
      */
     public function interview(RecruitmentApplicationUpdateInterviewStatusRequest $request)
     {
-        $request->recruitmentApplication->update($request->validated());
+        $request->getRecruitmentApplicationOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -197,7 +199,7 @@ class RecruitmentApplicationController extends BaseController
      */
     public function offer(RecruitmentApplicationUpdateOfferStatusRequest $request)
     {
-        $request->recruitmentApplication->update($request->validated());
+        $request->getRecruitmentApplicationOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -217,11 +219,13 @@ class RecruitmentApplicationController extends BaseController
      */
     public function discard(RecruitmentApplicationDiscardRequest $request)
     {
-        if ($request->recruitmentApplication->status === RecruitmentApplicationStatus::DISCARDED->value) {
+        $recruitmentApplication = $request->getRecruitmentApplicationOrFail();
+
+        if ($recruitmentApplication->status === RecruitmentApplicationStatus::DISCARDED->value) {
             throw new ConflictHttpException("Recruitment application is already discarded.");
         }
 
-        $request->recruitmentApplication->update($request->validated());
+        $recruitmentApplication->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -241,11 +245,13 @@ class RecruitmentApplicationController extends BaseController
      */
     public function withdraw(RecruitmentApplicationWithdrawRequest $request)
     {
-        if ($request->recruitmentApplication->status === RecruitmentApplicationStatus::DISCARDED->value) {
+        $recruitmentApplication = $request->getRecruitmentApplicationOrFail();
+
+        if ($recruitmentApplication->status === RecruitmentApplicationStatus::DISCARDED->value) {
             throw new ConflictHttpException("Recruitment application is already withdrawn.");
         }
 
-        $request->recruitmentApplication->update($request->validated());
+        $recruitmentApplication->update($request->validated());
         return $this->noContentResponse();
     }
 }

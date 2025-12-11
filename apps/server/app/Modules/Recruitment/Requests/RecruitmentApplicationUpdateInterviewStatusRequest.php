@@ -14,8 +14,6 @@ use Illuminate\Validation\Validator;
 
 class RecruitmentApplicationUpdateInterviewStatusRequest extends BaseRecruitmentApplicationRequest
 {
-    public RecruitmentApplication $recruitmentApplication;
-
     public function rules(): array
     {
         return [
@@ -24,12 +22,13 @@ class RecruitmentApplicationUpdateInterviewStatusRequest extends BaseRecruitment
              * @example INTERVIEW_PENDING
              */
             "status" => [
+                "bail",
                 "required",
                 Rule::enum(RecruitmentApplicationStatus::class)->only([
                     RecruitmentApplicationStatus::INTERVIEW_PENDING,
                     RecruitmentApplicationStatus::INTERVIEW_COMPLETED,
                 ]),
-                new RecruitmentApplicationStatusTransitionsFromRule($this->recruitmentApplication->status),
+                new RecruitmentApplicationStatusTransitionsFromRule($this->getRecruitmentApplicationOrFail()->status),
             ],
         ];
     }
@@ -37,12 +36,19 @@ class RecruitmentApplicationUpdateInterviewStatusRequest extends BaseRecruitment
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
+            if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
+
             if ($this->input("status") === RecruitmentApplicationStatus::INTERVIEW_COMPLETED->value) {
-                $interviews = Interview::where("recruitment_application_id", $this->recruitmentApplication->id)->get();
+                $hasInProgressInterview = Interview::where(
+                    "recruitment_application_id",
+                    $this->recruitmentApplication->id,
+                )
+                    ->whereNotIn("status", [InterviewStatus::COMPLETED->value, InterviewStatus::CANCELLED->value])
+                    ->exists();
 
-                $allInterviewsAreCompleted = $interviews->every(fn(Interview $interview) => $interview->isCompleted());
-
-                if (!$allInterviewsAreCompleted) {
+                if ($hasInProgressInterview) {
                     $validator
                         ->errors()
                         ->add(
@@ -58,12 +64,5 @@ class RecruitmentApplicationUpdateInterviewStatusRequest extends BaseRecruitment
     {
         Gate::authorize("updateInterviewStatus", RecruitmentApplication::class);
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        parent::prepareForValidation();
-
-        $this->recruitmentApplication = RecruitmentApplication::findOrFail($this->route("id"));
     }
 }

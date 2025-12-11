@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Gate;
 
 class RecruitmentApplicationDestroyRequest extends BaseRecruitmentApplicationRequest
 {
-    public RecruitmentApplication $recruitmentApplication;
-
     public function rules(): array
     {
         return [];
@@ -19,12 +17,5 @@ class RecruitmentApplicationDestroyRequest extends BaseRecruitmentApplicationReq
     {
         Gate::authorize("delete", RecruitmentApplication::class);
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        parent::prepareForValidation();
-
-        $this->recruitmentApplication = RecruitmentApplication::findOrFail($this->route("id"));
     }
 }

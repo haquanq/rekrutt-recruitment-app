@@ -12,8 +12,6 @@ use Illuminate\Validation\Rule;
 
 class RecruitmentApplicationWithdrawRequest extends BaseRecruitmentApplicationRequest
 {
-    public RecruitmentApplication $recruitmentApplication;
-
     public function rules(): array
     {
         return [
@@ -22,9 +20,10 @@ class RecruitmentApplicationWithdrawRequest extends BaseRecruitmentApplicationRe
              * @ignoreParam
              */
             "status" => [
+                "bail",
                 "required",
                 Rule::enum(RecruitmentApplicationStatus::class)->only([RecruitmentApplicationStatus::WITHDRAWN]),
-                new RecruitmentApplicationStatusTransitionsFromRule($this->recruitmentApplication->status),
+                new RecruitmentApplicationStatusTransitionsFromRule($this->getRecruitmentApplicationOrFail()->status),
             ],
 
             /**
@@ -49,8 +48,6 @@ class RecruitmentApplicationWithdrawRequest extends BaseRecruitmentApplicationRe
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-
-        $this->recruitmentApplication = RecruitmentApplication::findOrFail($this->route("id"));
 
         $this->merge([
             "withdrawn_at" => Carbon::now(),
