@@ -16,7 +16,6 @@ class RecruitmentApplicationResource extends JsonResource
             "id" => $this->id,
             "status" => $this->status,
             "priority" => $this->priority,
-            "number_of_interviews" => $this->number_of_interviews,
             "offer_started_at" => $this->offer_started_at,
             "offer_expired_at" => $this->offer_expired_at,
             "offer_responded_at" => $this->offer_responded_at,
