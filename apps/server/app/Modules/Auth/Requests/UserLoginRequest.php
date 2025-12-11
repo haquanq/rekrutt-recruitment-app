@@ -2,9 +2,9 @@
 
 namespace App\Modules\Auth\Requests;
 
-use App\Abstracts\BaseFormRequest;
+use App\Modules\Auth\Abstracts\BaseUserRequest;
 
-class UserLoginRequest extends BaseFormRequest
+class UserLoginRequest extends BaseUserRequest
 {
     public function authorize(): bool
     {

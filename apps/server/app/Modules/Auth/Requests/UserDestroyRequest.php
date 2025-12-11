@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Gate;
 
 class UserDestroyRequest extends BaseUserRequest
 {
-    public User $user;
-
     public function rules(): array
     {
         return [];
@@ -19,12 +17,5 @@ class UserDestroyRequest extends BaseUserRequest
     {
         Gate::authorize("delete", User::class);
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        parent::prepareForValidation();
-
-        $this->user = User::findOrFail($this->route("id"));
     }
 }

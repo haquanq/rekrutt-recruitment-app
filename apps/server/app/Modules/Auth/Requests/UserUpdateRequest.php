@@ -8,18 +8,9 @@ use Illuminate\Support\Facades\Gate;
 
 class UserUpdateRequest extends BaseUserRequest
 {
-    public User $user;
-
     public function authorize(): bool
     {
         Gate::authorize("update", User::class);
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        parent::prepareForValidation();
-
-        $this->user = User::findOrFail($this->route("id"));
     }
 }

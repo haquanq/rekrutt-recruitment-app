@@ -129,7 +129,7 @@ class UserController extends BaseController
      */
     public function update(UserUpdateRequest $request)
     {
-        $request->user->update($request->validated());
+        $request->getQueriedUserOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -145,7 +145,7 @@ class UserController extends BaseController
      */
     public function suspend(UserSuspendRequest $request)
     {
-        $request->user->update($request->validated());
+        $request->getQueriedUserOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -161,7 +161,7 @@ class UserController extends BaseController
      */
     public function retire(UserRetireRequest $request)
     {
-        $request->user->update($request->validated());
+        $request->getQueriedUserOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -177,7 +177,7 @@ class UserController extends BaseController
      */
     public function reactivate(UserReactivateRequest $request)
     {
-        $request->user->update($request->validated());
+        $request->getQueriedUserOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -193,7 +193,7 @@ class UserController extends BaseController
      */
     public function destroy(UserDestroyRequest $request)
     {
-        $request->user->delete();
+        $request->getQueriedUserOrFail()->delete();
         return $this->noContentResponse();
     }
 }

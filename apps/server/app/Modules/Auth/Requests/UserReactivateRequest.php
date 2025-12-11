@@ -11,8 +11,6 @@ use Illuminate\Validation\Rule;
 
 class UserReactivateRequest extends BaseUserRequest
 {
-    public User $user;
-
     public function rules(): array
     {
         return [
@@ -23,7 +21,7 @@ class UserReactivateRequest extends BaseUserRequest
             "status" => [
                 "required",
                 Rule::enum(UserStatus::class)->only(UserStatus::ACTIVE),
-                new UserStatusTransitionsFromRule($this->user->status),
+                new UserStatusTransitionsFromRule($this->getQueriedUserOrFail()->status),
             ],
         ];
     }
@@ -37,8 +35,6 @@ class UserReactivateRequest extends BaseUserRequest
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-
-        $this->user = User::findOrFail($this->route("id"));
 
         $this->merge([
             "status" => UserStatus::ACTIVE->value,
