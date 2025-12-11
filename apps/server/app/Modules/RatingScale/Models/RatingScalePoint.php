@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RatingScalePoint extends BaseModel
 {
+    protected $guarded = ["id", "created_at", "updated_at"];
+
     public function ratingScale(): BelongsTo
     {
         return $this->belongsTo(RatingScale::class);
