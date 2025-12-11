@@ -4,13 +4,20 @@ namespace App\Modules\Proposal\Abstracts;
 
 use App\Abstracts\BaseFormRequest;
 use App\Modules\Position\Rules\PositionExistsInCurrentUserDepartmentRule;
+use App\Modules\Proposal\Models\Proposal;
 use Illuminate\Validation\Rule;
 
 abstract class BaseProposalRequest extends BaseFormRequest
 {
-    public function authorize(): bool
+    protected ?Proposal $proposal = null;
+
+    public function getQueriedProposalOrFail(string $param = "id"): Proposal
     {
-        return true;
+        if ($this->proposal === null) {
+            $this->proposal = Proposal::findOrFail($this->route($param));
+        }
+
+        return $this->proposal;
     }
 
     public function rules(): array

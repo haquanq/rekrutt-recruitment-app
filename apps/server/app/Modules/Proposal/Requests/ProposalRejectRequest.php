@@ -4,7 +4,6 @@ namespace App\Modules\Proposal\Requests;
 
 use App\Modules\Proposal\Abstracts\BaseProposalRequest;
 use App\Modules\Proposal\Enums\ProposalStatus;
-use App\Modules\Proposal\Models\Proposal;
 use App\Modules\Proposal\Rules\ProposalStatusTransitionsFromRule;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +12,6 @@ use Illuminate\Validation\Rule;
 
 class ProposalRejectRequest extends BaseProposalRequest
 {
-    public Proposal $proposal;
-
     public function authorize(): bool
     {
         Gate::authorize("reject", $this->proposal);
@@ -31,7 +28,7 @@ class ProposalRejectRequest extends BaseProposalRequest
             "status" => [
                 "required",
                 Rule::enum(ProposalStatus::class)->only(ProposalStatus::REJECTED),
-                new ProposalStatusTransitionsFromRule($this->proposal->status),
+                new ProposalStatusTransitionsFromRule($this->getQueriedProposalOrFail()->status),
             ],
             /**
              * Review timestamp (generated automatically)
@@ -49,8 +46,6 @@ class ProposalRejectRequest extends BaseProposalRequest
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-
-        $this->proposal = Proposal::findOrFail($this->route("id"));
 
         $this->merge([
             "status" => ProposalStatus::REJECTED->value,

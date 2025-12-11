@@ -14,7 +14,6 @@ use App\Modules\Proposal\Resources\ProposalResource;
 use App\Modules\Proposal\Models\Proposal;
 use App\Modules\Proposal\Resources\ProposalResourceCollection;
 use Dedoc\Scramble\Attributes\QueryParameter;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -153,13 +152,13 @@ class ProposalController extends BaseController
      */
     public function update(ProposalUpdateRequest $request)
     {
-        $proposalStatus = $request->proposal->status;
+        $proposal = $request->getQueriedProposalOrFail();
 
-        if (!Collection::make([ProposalStatus::DRAFT, ProposalStatus::REJECTED])->contains($proposalStatus)) {
-            throw new ConflictHttpException("Cannot update. " . $proposalStatus->description());
+        if ($proposal->status !== ProposalStatus::DRAFT) {
+            throw new ConflictHttpException("Cannot update. " . $proposal->status->description());
         }
 
-        $request->proposal->update($request->validated());
+        $proposal->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -176,13 +175,13 @@ class ProposalController extends BaseController
      */
     public function destroy(ProposalDestroyRequest $request)
     {
-        $proposalStatus = $request->proposal->status;
+        $proposal = $request->getQueriedProposalOrFail();
 
-        if (!Collection::make([ProposalStatus::DRAFT, ProposalStatus::REJECTED])->contains($proposalStatus)) {
-            throw new ConflictHttpException("Cannot delete. " . $proposalStatus->description());
+        if ($proposal->status !== ProposalStatus::DRAFT) {
+            throw new ConflictHttpException("Cannot delete. Proposal is processed.");
         }
 
-        $request->proposal->delete();
+        $proposal->delete();
         return $this->noContentResponse();
     }
 
@@ -199,11 +198,13 @@ class ProposalController extends BaseController
      */
     public function submit(ProposalSubmitRequest $request)
     {
-        if ($request->proposal->status === ProposalStatus::PENDING) {
+        $proposal = $request->getQueriedProposalOrFail();
+
+        if ($proposal->status === ProposalStatus::PENDING) {
             throw new ConflictHttpException("Cannot submit. Proposal is already submitted.");
         }
 
-        $request->proposal->update($request->validated());
+        $proposal->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -219,11 +220,13 @@ class ProposalController extends BaseController
      */
     public function reject(ProposalRejectRequest $request)
     {
-        if ($request->proposal->status === ProposalStatus::REJECTED) {
+        $proposal = $request->getQueriedProposalOrFail();
+
+        if ($proposal->status === ProposalStatus::REJECTED) {
             throw new ConflictHttpException("Cannot reject. Proposal is already rejected.");
         }
 
-        $request->proposal->update($request->validated());
+        $proposal->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -239,11 +242,13 @@ class ProposalController extends BaseController
      */
     public function approve(ProposalApproveRequest $request)
     {
-        if ($request->proposal->status === ProposalStatus::APPROVED) {
+        $proposal = $request->getQueriedProposalOrFail();
+
+        if ($proposal->status === ProposalStatus::APPROVED) {
             throw new ConflictHttpException("Cannot approve. Proposal is already approved.");
         }
 
-        $request->proposal->update($request->validated());
+        $proposal->update($request->validated());
         return $this->noContentResponse();
     }
 }

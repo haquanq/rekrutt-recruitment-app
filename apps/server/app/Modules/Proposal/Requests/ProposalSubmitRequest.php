@@ -4,15 +4,12 @@ namespace App\Modules\Proposal\Requests;
 
 use App\Modules\Proposal\Abstracts\BaseProposalRequest;
 use App\Modules\Proposal\Enums\ProposalStatus;
-use App\Modules\Proposal\Models\Proposal;
 use App\Modules\Proposal\Rules\ProposalStatusTransitionsFromRule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class ProposalSubmitRequest extends BaseProposalRequest
 {
-    public Proposal $proposal;
-
     public function authorize(): bool
     {
         Gate::authorize("submit", $this->proposal);
@@ -29,7 +26,7 @@ class ProposalSubmitRequest extends BaseProposalRequest
             "status" => [
                 "required",
                 Rule::enum(ProposalStatus::class)->only(ProposalStatus::PENDING),
-                new ProposalStatusTransitionsFromRule($this->proposal->status),
+                new ProposalStatusTransitionsFromRule($this->getQueriedProposalOrFail()->status),
             ],
         ];
     }
@@ -37,8 +34,6 @@ class ProposalSubmitRequest extends BaseProposalRequest
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-
-        $this->proposal = Proposal::findOrFail($this->route("id"));
 
         $this->merge([
             "status" => ProposalStatus::PENDING->value,
