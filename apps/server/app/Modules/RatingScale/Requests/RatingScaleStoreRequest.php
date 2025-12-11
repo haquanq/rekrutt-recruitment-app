@@ -3,11 +3,14 @@
 namespace App\Modules\RatingScale\Requests;
 
 use App\Modules\RatingScale\Abstracts\BaseRatingScaleRequest;
+use App\Modules\RatingScale\Models\RatingScale;
+use Illuminate\Support\Facades\Gate;
 
 class RatingScaleStoreRequest extends BaseRatingScaleRequest
 {
-    public function rules(): array
+    public function authorize(): bool
     {
-        return array_merge(parent::rules(), []);
+        Gate::authorize("create", RatingScale::class);
+        return true;
     }
 }

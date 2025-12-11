@@ -3,6 +3,7 @@
 namespace App\Modules\RatingScale\Controllers;
 
 use App\Abstracts\BaseController;
+use App\Modules\RatingScale\Requests\RatingScaleDestroyRequest;
 use App\Modules\RatingScale\Requests\RatingScaleStoreRequest;
 use App\Modules\RatingScale\Requests\RatingScaleUpdateRequest;
 use App\Modules\RatingScale\Models\RatingScale;
@@ -109,7 +110,6 @@ class RatingScaleController extends BaseController
      */
     public function store(RatingScaleStoreRequest $request)
     {
-        Gate::authorize("create", RatingScale::class);
         $createdRatingScale = RatingScale::create($request->validated());
         return $this->createdResponse(new RatingScaleResource($createdRatingScale));
     }
@@ -126,8 +126,7 @@ class RatingScaleController extends BaseController
      */
     public function update(RatingScaleUpdateRequest $request, int $id)
     {
-        Gate::authorize("update", RatingScale::class);
-        RatingScale::findOrFail($id)->update($request->validated());
+        $request->getRatingScaleOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -141,10 +140,9 @@ class RatingScaleController extends BaseController
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(int $id)
+    public function destroy(RatingScaleDestroyRequest $request)
     {
-        Gate::authorize("delete", RatingScale::class);
-        RatingScale::findOrFail($id)->delete();
+        $request->getRatingScaleOrFail()->delete();
         return $this->noContentResponse();
     }
 }

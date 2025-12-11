@@ -3,12 +3,20 @@
 namespace App\Modules\RatingScale\Abstracts;
 
 use App\Abstracts\BaseFormRequest;
+use App\Modules\RatingScale\Models\RatingScale;
+use Illuminate\Validation\Rule;
 
 abstract class BaseRatingScaleRequest extends BaseFormRequest
 {
-    public function authorize(): bool
+    protected ?RatingScale $ratingScale = null;
+
+    public function getRatingScaleOrFail(string $param = "id"): RatingScale
     {
-        return true;
+        if ($this->ratingScale === null) {
+            $this->ratingScale = RatingScale::findOrFail($this->route($param));
+        }
+
+        return $this->ratingScale;
     }
 
     public function rules(): array
@@ -18,12 +26,18 @@ abstract class BaseRatingScaleRequest extends BaseFormRequest
              * Name
              * @example 10-Point Numerical Scale
              */
-            "name" => ["required", "string", "max:100"],
+            "name" => [
+                "bail",
+                "required",
+                "string",
+                "max:100",
+                Rule::unique("rating_scales", "name")->ignore($this->route("id")),
+            ],
             /**
              * Description
              * @example The 10-Point Numerical Scale is a rating scale that ranges from 0 to 10, with 0 being the lowest rating and 10 being the highest rating.
              */
-            "description" => ["string", "max:500"],
+            "description" => ["nullable", "string", "max:500"],
             /**
              * Whether the rating scale is active
              * @example true
