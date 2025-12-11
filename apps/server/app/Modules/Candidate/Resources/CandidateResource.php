@@ -4,6 +4,7 @@ namespace App\Modules\Candidate\Resources;
 
 use App\Modules\Auth\Resources\UserResource;
 use App\Modules\HiringSource\Resources\HiringSourceResource;
+use App\Modules\Recruitment\Resources\RecruitmentApplicationResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -33,6 +34,7 @@ class CandidateResource extends JsonResource
             "hiringSource" => new HiringSourceResource($this->whenLoaded("hiringSource")),
             "experiences" => CandidateExperienceResource::collection($this->whenLoaded("experiences")),
             "documents" => CandidateDocumentResource::collection($this->whenLoaded("documents")),
+            "applications" => RecruitmentApplicationResource::collection($this->whenLoaded("applications")),
         ];
     }
 }
