@@ -4,6 +4,7 @@ namespace App\Modules\Proposal\Requests;
 
 use App\Modules\Proposal\Abstracts\BaseProposalRequest;
 use App\Modules\Proposal\Enums\ProposalStatus;
+use App\Modules\Proposal\Models\Proposal;
 use App\Modules\Proposal\Rules\ProposalStatusTransitionsFromRule;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ class ProposalApproveRequest extends BaseProposalRequest
 {
     public function authorize(): bool
     {
-        Gate::authorize("approve", $this->proposal);
+        Gate::authorize("approve", Proposal::class);
         return true;
     }
 

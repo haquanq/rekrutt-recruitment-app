@@ -12,7 +12,7 @@ class ProposalSubmitRequest extends BaseProposalRequest
 {
     public function authorize(): bool
     {
-        Gate::authorize("submit", $this->proposal);
+        Gate::authorize("submit", $this->getQueriedProposalOrFail());
         return true;
     }
 

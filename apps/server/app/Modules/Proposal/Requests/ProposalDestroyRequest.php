@@ -14,7 +14,7 @@ class ProposalDestroyRequest extends BaseProposalRequest
 
     public function authorize(): bool
     {
-        Gate::authorize("delete", $this->proposal);
+        Gate::authorize("delete", $this->getQueriedProposalOrFail());
         return true;
     }
 }
