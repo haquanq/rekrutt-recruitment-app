@@ -1,7 +1,7 @@
 <?php
 
 use App\Middlewares\GlobalResponseWrapperMiddleware;
-use App\Middlewares\JWTCookieMiddleware;
+use App\Middlewares\CookieMiddleware;
 use App\Middlewares\ProtectedRouteMiddleware;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -17,7 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withCommands([...glob(app_path("Modules/*/Commands"))])
     ->withRouting(api: __DIR__ . "/../routes/api.php", commands: __DIR__ . "/../routes/console.php", health: "/up")
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->prepend(JWTCookieMiddleware::class);
+        $middleware->prepend(CookieMiddleware::class);
         $middleware->alias(["protected" => ProtectedRouteMiddleware::class]);
         $middleware->append(GlobalResponseWrapperMiddleware::class);
     })
