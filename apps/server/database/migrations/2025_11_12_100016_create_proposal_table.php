@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->string("title", 200);
             $table->string("description", 500);
             $table->integer("target_hires");
-            $table->integer("total_hired")->nullable();
+            $table->integer("total_hires")->default(0);
             $table->integer("min_salary");
             $table->integer("max_salary");
             $table->enum("status", ProposalStatus::cases())->default(ProposalStatus::DRAFT);
