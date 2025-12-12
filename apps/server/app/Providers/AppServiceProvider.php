@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,5 +30,14 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function boot(): void {}
+    public function boot(): void
+    {
+        if ($this->app->environment("local")) {
+            DB::listen(function ($query) {
+                Log::info(
+                    "SQL ___ " . $query->sql . " ___ " . json_encode($query->bindings) . " ___ " . $query->time . "ms",
+                );
+            });
+        }
+    }
 }
