@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Route;
 Route::prefix("auth")->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::post("login", "login")->name("login");
-        Route::post("refresh", "refresh");
     });
 
     Route::middleware("auth:sanctum")
