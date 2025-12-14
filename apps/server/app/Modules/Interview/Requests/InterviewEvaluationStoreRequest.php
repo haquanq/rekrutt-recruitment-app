@@ -6,16 +6,13 @@ use App\Modules\Interview\Abstracts\BaseInterviewEvaluationRequest;
 use App\Modules\Interview\Enums\InterviewStatus;
 use App\Modules\Interview\Models\Interview;
 use App\Modules\Interview\Models\InterviewEvaluation;
-use App\Modules\Interview\Rules\InterviewExistsWithStatusRule;
-use App\Modules\RatingScale\Rules\RatingScalePointBelongsToScaleRule;
+use App\Modules\RatingScale\Models\RatingScalePoint;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Validator;
 
 class InterviewEvaluationStoreRequest extends BaseInterviewEvaluationRequest
 {
-    public ?Interview $interview = null;
-
     public function rules(): array
     {
         return [
@@ -42,29 +39,39 @@ class InterviewEvaluationStoreRequest extends BaseInterviewEvaluationRequest
 
     public function withValidator(Validator $validator): void
     {
-        $validator->addRules([
-            "interview_id" => [
-                InterviewExistsWithStatusRule::create(InterviewStatus::UNDER_EVALUATION)->withInterview(
-                    $this->interview,
-                ),
-            ],
-        ]);
-
-        if (!$this->interview) {
-            return;
-        }
-
-        $validator->addRules([
-            "rating_scale_point_id" => [new RatingScalePointBelongsToScaleRule($this->interview->ratingScale)],
-        ]);
-
         $validator->after(function (Validator $validator) {
-            $userHasAlreadyEvaluated = InterviewEvaluation::where("interview_id", $this->interview->id)
+            if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
+
+            $interview = Interview::with("ratingScale")->find($this->input("interview_id"));
+
+            if (!$interview) {
+                $validator->errors()->add("interview_id", "Interview does not exist.");
+            } elseif ($interview->status !== InterviewStatus::UNDER_EVALUATION) {
+                $validator->errors()->add("interview_id", "Interview is not under evaluation.");
+            }
+
+            $userHasAlreadyEvaluated = InterviewEvaluation::where("interview_id", $this->input("interview_id"))
                 ->where("created_by_user_id", Auth::user()->id)
                 ->exists();
 
             if ($userHasAlreadyEvaluated) {
                 $validator->errors()->add("interview_id", "You have already evaluated this interview.");
+                return;
+            }
+
+            $ratingScalePoint = RatingScalePoint::find($this->input("rating_scale_point_id"));
+
+            if (!$ratingScalePoint) {
+                $validator->errors()->add("rating_scale_point_id", "Rating scale point does not exist.");
+            } elseif ($ratingScalePoint->rating_scale_id !== $interview->ratingScale->id) {
+                $validator
+                    ->errors()
+                    ->add(
+                        "rating_scale_point_id",
+                        "Rating scale point does not belong to this interview rating scale.",
+                    );
             }
         });
     }
@@ -78,8 +85,6 @@ class InterviewEvaluationStoreRequest extends BaseInterviewEvaluationRequest
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-
-        $this->interview = Interview::with("ratingScale")->find($this->input("interview_id"));
 
         $this->merge([
             "created_by_user_id" => Auth::user()->id,

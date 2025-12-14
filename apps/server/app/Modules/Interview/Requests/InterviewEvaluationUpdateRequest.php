@@ -3,15 +3,12 @@
 namespace App\Modules\Interview\Requests;
 
 use App\Modules\Interview\Abstracts\BaseInterviewEvaluationRequest;
-use App\Modules\Interview\Models\InterviewEvaluation;
 use App\Modules\RatingScale\Rules\RatingScalePointBelongsToScaleRule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Validator;
 
 class InterviewEvaluationUpdateRequest extends BaseInterviewEvaluationRequest
 {
-    public InterviewEvaluation $interviewEvaluation;
-
     public function rules(): array
     {
         return [
@@ -30,21 +27,16 @@ class InterviewEvaluationUpdateRequest extends BaseInterviewEvaluationRequest
     {
         $validator->addRules([
             "rating_scale_point_id" => [
-                new RatingScalePointBelongsToScaleRule($this->interviewEvaluation->interview->ratingScale),
+                new RatingScalePointBelongsToScaleRule(
+                    $this->getQueriedInterviewEvaluationOrFail()->interview->ratingScale,
+                ),
             ],
         ]);
     }
 
     public function authorize(): bool
     {
-        Gate::authorize("update", $this->interviewEvaluation);
+        Gate::authorize("update", $this->getQueriedInterviewEvaluationOrFail());
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        parent::prepareForValidation();
-
-        $this->interviewEvaluation = InterviewEvaluation::with("interview.ratingScale")->findOrFail($this->route("id"));
     }
 }

@@ -133,13 +133,14 @@ class InterviewEvaluationController extends BaseController
      */
     public function update(InterviewEvaluationUpdateRequest $request)
     {
-        $interviewStatus = $request->interviewEvaluation->interview->status;
+        $interviewEvaluation = $request->getQueriedInterviewEvaluationOrFail();
+        $interview = $interviewEvaluation->interview;
 
-        if ($interviewStatus !== InterviewStatus::UNDER_EVALUATION) {
-            throw new ConflictHttpException("Cannot update. " . $interviewStatus->description());
+        if ($interview->status !== InterviewStatus::UNDER_EVALUATION) {
+            throw new ConflictHttpException("Cannot update. " . $interview->status->description());
         }
 
-        $request->interviewEvaluation->update($request->validated());
+        $interviewEvaluation->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -156,13 +157,14 @@ class InterviewEvaluationController extends BaseController
      */
     public function destroy(InterviewEvaluationDestroyRequest $request)
     {
-        $interviewStatus = $request->interviewEvaluation->interview->status;
+        $interviewEvaluation = $request->getQueriedInterviewEvaluationOrFail();
+        $interview = $interviewEvaluation->interview;
 
-        if ($interviewStatus !== InterviewStatus::UNDER_EVALUATION) {
-            throw new ConflictHttpException("Cannot delete. " . $interviewStatus->description());
+        if ($interview->status !== InterviewStatus::UNDER_EVALUATION) {
+            throw new ConflictHttpException("Cannot delete. " . $interview->status->description());
         }
 
-        $request->interviewEvaluation->delete();
+        $interviewEvaluation->delete();
         return $this->noContentResponse();
     }
 }
