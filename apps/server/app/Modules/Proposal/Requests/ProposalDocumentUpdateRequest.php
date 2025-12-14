@@ -3,13 +3,10 @@
 namespace App\Modules\Proposal\Requests;
 
 use App\Modules\Proposal\Abstracts\BaseProposalDocumentRequest;
-use App\Modules\Proposal\Models\ProposalDocument;
 use Illuminate\Support\Facades\Gate;
 
 class ProposalDocumentUpdateRequest extends BaseProposalDocumentRequest
 {
-    public ProposalDocument $proposalDocument;
-
     public function rules(): array
     {
         return [
@@ -23,13 +20,7 @@ class ProposalDocumentUpdateRequest extends BaseProposalDocumentRequest
 
     public function authorize(): bool
     {
-        Gate::authorize("update", $this->proposalDocument);
+        Gate::authorize("update", $this->getQueriedProposalDocumentOrFail());
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        parent::prepareForValidation();
-        $this->proposalDocument = ProposalDocument::with("proposal")->findOrFail($this->route("id"));
     }
 }

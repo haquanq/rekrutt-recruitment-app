@@ -6,7 +6,6 @@ use App\Modules\Proposal\Abstracts\BaseProposalDocumentRequest;
 use App\Modules\Proposal\Enums\ProposalStatus;
 use App\Modules\Proposal\Models\Proposal;
 use App\Modules\Proposal\Models\ProposalDocument;
-use App\Modules\Proposal\Rules\ProposalExistsWithStatusRule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Validator;
 
@@ -30,11 +29,17 @@ class ProposalDocumentStoreRequest extends BaseProposalDocumentRequest
 
     public function withValidator(Validator $validator): void
     {
-        $validator->addRules([
-            "proposal_id" => [
-                ProposalExistsWithStatusRule::create(ProposalStatus::DRAFT)->withProposal($this->proposal),
-            ],
-        ]);
+        $validator->after(function (Validator $validator) {
+            if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
+
+            if (!$this->proposal) {
+                $validator->errors()->add("proposal_id", "Proposal does not exist.");
+            } elseif (!collect([ProposalStatus::DRAFT, ProposalStatus::REJECTED])->contains($this->proposal->status)) {
+                $validator->errors()->add("proposal_id", "Cannot add document to this proposal.");
+            }
+        });
     }
 
     public function authorize(): bool

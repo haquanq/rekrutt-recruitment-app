@@ -11,10 +11,8 @@ use App\Modules\Proposal\Requests\ProposalDocumentUpdateRequest;
 use App\Modules\Proposal\Resources\ProposalDocumentResource;
 use App\Modules\Proposal\Resources\ProposalDocumentResourceCollection;
 use Dedoc\Scramble\Attributes\QueryParameter;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -115,21 +113,14 @@ class ProposalDocumentController extends BaseController
     public function store(ProposalDocumentStoreRequest $request)
     {
         $file = $request->file("document");
-        $fileExtension = $file->extension();
-        $fileMimeType = $file->getClientMimeType();
-        $fileInternalName = Str::uuid() . "." . $fileExtension;
-        $fileOriginalName = $file->getClientOriginalName();
-        $filePath = Storage::disk("public")->putFileAs("/", $file, $fileInternalName);
-        $fileUrl = Storage::url($filePath);
+        $filePath = Storage::put("/proposal_documents", $file);
 
         $createdProposalDocument = ProposalDocument::create([
-            "file_id" => $fileInternalName,
-            "file_name" => $fileOriginalName,
-            "file_url" => $fileUrl,
-            "file_extension" => $fileExtension,
-            "mime_type" => $fileMimeType,
-            "proposal_id" => $request->validated()["proposal_id"],
-            "note" => $request->validated()["note"] ?? null,
+            ...$request->validated(),
+            "file_path" => $filePath,
+            "file_name" => $file->getClientOriginalName(),
+            "file_extension" => $file->extension(),
+            "mime_type" => $file->getClientMimeType(),
         ]);
 
         return $this->createdResponse(new ProposalDocumentResource($createdProposalDocument));
@@ -148,13 +139,14 @@ class ProposalDocumentController extends BaseController
      */
     public function update(ProposalDocumentUpdateRequest $request)
     {
-        $proposalStatus = $request->proposalDocument->proposal->status;
+        $proposalDocument = $request->getQueriedProposalDocumentOrFail();
+        $proposal = $proposalDocument->proposal;
 
-        if (!Collection::make([ProposalStatus::DRAFT, ProposalStatus::REJECTED])->contains($proposalStatus)) {
-            throw new ConflictHttpException("Cannot update. " . $proposalStatus->description());
+        if (collect([ProposalStatus::DRAFT, ProposalStatus::REJECTED])->contains($proposal->status)) {
+            throw new ConflictHttpException("Cannot update. " . $proposal->status->description());
         }
 
-        $request->proposalDocument->update($request->validated());
+        $proposalDocument->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -171,13 +163,15 @@ class ProposalDocumentController extends BaseController
      */
     public function destroy(ProposalDocumentDestroyRequest $request)
     {
-        $proposalStatus = $request->proposalDocument->proposal->status;
+        $proposalDocument = $request->getQueriedProposalDocumentOrFail();
+        $proposal = $proposalDocument->proposal;
 
-        if (!Collection::make([ProposalStatus::DRAFT, ProposalStatus::REJECTED])->contains($proposalStatus)) {
-            throw new ConflictHttpException("Cannot delete. " . $proposalStatus->description());
+        if (collect([ProposalStatus::DRAFT, ProposalStatus::REJECTED])->contains($proposal->status)) {
+            new ConflictHttpException("Cannot delete. " . $proposal->status->description());
         }
 
-        $request->proposalDocument->delete();
+        Storage::delete($proposalDocument->file_path);
+        $proposalDocument->delete();
         return $this->noContentResponse();
     }
 }

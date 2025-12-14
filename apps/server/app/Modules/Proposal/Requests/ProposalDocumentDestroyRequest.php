@@ -2,14 +2,12 @@
 
 namespace App\Modules\Proposal\Requests;
 
-use App\Modules\Proposal\Abstracts\BaseProposalRequest;
+use App\Modules\Proposal\Abstracts\BaseProposalDocumentRequest;
 use App\Modules\Proposal\Models\ProposalDocument;
 use Illuminate\Support\Facades\Gate;
 
-class ProposalDocumentDestroyRequest extends BaseProposalRequest
+class ProposalDocumentDestroyRequest extends BaseProposalDocumentRequest
 {
-    public ProposalDocument $proposalDocument;
-
     public function rules(): array
     {
         return [];
@@ -17,13 +15,7 @@ class ProposalDocumentDestroyRequest extends BaseProposalRequest
 
     public function authorize(): bool
     {
-        Gate::authorize("delete", $this->proposalDocument);
+        Gate::authorize("delete", $this->getQueriedProposalDocumentOrFail());
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        parent::prepareForValidation();
-        $this->proposal = ProposalDocument::with("proposal")->findOrFail($this->route("id"));
     }
 }

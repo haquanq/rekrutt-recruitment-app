@@ -3,13 +3,20 @@
 namespace App\Modules\Proposal\Abstracts;
 
 use App\Abstracts\BaseFormRequest;
+use App\Modules\Proposal\Models\ProposalDocument;
 use Illuminate\Validation\Rules\File as FileRule;
 
 abstract class BaseProposalDocumentRequest extends BaseFormRequest
 {
-    public function authorize(): bool
+    protected ?ProposalDocument $proposalDocument = null;
+
+    public function getQueriedProposalDocumentOrFail(string $param = "id"): ProposalDocument
     {
-        return true;
+        if ($this->proposalDocument === null) {
+            $this->proposalDocument = ProposalDocument::findOrFail($this->route($param));
+        }
+
+        return $this->proposalDocument;
     }
 
     public function rules(): array
@@ -21,10 +28,10 @@ abstract class BaseProposalDocumentRequest extends BaseFormRequest
              */
             "document" => ["required", FileRule::types(["pdf", "docx", "doc"])->max(5 * 1024)],
             /**
-             * Description
+             * Notes
              * @example "Requirements"
              */
-            "description" => ["string", "max:500"],
+            "notes" => ["string", "max:500"],
         ];
     }
 }
