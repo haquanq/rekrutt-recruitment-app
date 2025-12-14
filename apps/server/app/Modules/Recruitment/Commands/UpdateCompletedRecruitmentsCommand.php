@@ -2,10 +2,8 @@
 
 namespace App\Modules\Recruitment\Commands;
 
-use App\Modules\Recruitment\Enums\RecruitmentStatus;
-use App\Modules\Recruitment\Models\Recruitment;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class UpdateCompletedRecruitmentsCommand extends Command
 {
@@ -14,22 +12,31 @@ class UpdateCompletedRecruitmentsCommand extends Command
 
     public function handle(): void
     {
-        $closedRecruitments = Recruitment::with("applications")
-            ->where(["status" => RecruitmentStatus::CLOSED->value])
-            ->get();
+        DB::unprepared("
+            DO
+            $$
+            BEGIN
 
-        $completedRecruitmentIds = $closedRecruitments
-            ->filter(
-                fn($recruitment) => $recruitment->applications->every(fn($application) => $application->isCompleted()),
-            )
-            ->pluck("id")
-            ->toArray();
+                CREATE TEMP TABLE proposal_new_hire ON COMMIT DROP AS
+                SELECT a.id as recruitment_id, a.proposal_id, COUNT(CASE WHEN b.status = 'OFFER_ACCEPTED' THEN 1 ELSE NULL END) AS numbers_of_new_hires
+                FROM recruitment a JOIN recruitment_application b ON a.id = b.recruitment_id
+                WHERE a.status = 'CLOSED'
+                GROUP BY a.id
+                HAVING COUNT(CASE WHEN b.status IN ('WITHDRAWN', 'DISCARDED', 'OFFER_ACCEPTED', 'OFFER_REJECTED') THEN 1 ELSE NULL END) = COUNT(b.id);
 
-        Recruitment::query()
-            ->whereIn("id", $completedRecruitmentIds)
-            ->update([
-                "status" => RecruitmentStatus::COMPLETED,
-                "completed_at" => Carbon::now(),
-            ]);
+                UPDATE proposal
+                SET total_hires = total_hires + b.numbers_of_new_hires
+                FROM proposal_new_hire b
+                WHERE id = b.proposal_id;
+
+                UPDATE recruitment
+                SET status = 'COMPLETED'
+                FROM proposal_new_hire b
+                WHERE id = b.recruitment_id;
+
+            END;
+            $$;
+
+        ");
     }
 }
