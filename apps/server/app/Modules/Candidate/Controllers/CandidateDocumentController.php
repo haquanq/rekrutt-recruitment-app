@@ -115,7 +115,7 @@ class CandidateDocumentController extends BaseController
     public function store(CandidateDocumentStoreRequest $request)
     {
         $file = $request->file("document");
-        $filePath = Storage::disk("public")->putFile("/candidate_documents", $file);
+        $filePath = Storage::put("/candidate_documents", $file);
 
         $createdCandidateDocument = CandidateDocument::create([
             ...$request->validated(),
@@ -171,6 +171,7 @@ class CandidateDocumentController extends BaseController
         }
 
         $candidateDocument->delete();
+        Storage::delete($candidateDocument->file_path);
         return $this->noContentResponse();
     }
 }
