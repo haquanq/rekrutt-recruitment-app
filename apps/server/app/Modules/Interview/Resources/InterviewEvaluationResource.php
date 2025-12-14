@@ -15,11 +15,11 @@ class InterviewEvaluationResource extends JsonResource
         return [
             "id" => $this->id,
             "comment" => $this->comment,
+            "point" => RatingScalePointResource::make($this->whenLoaded("point")),
+            "interview" => InterviewResource::make($this->whenLoaded("interview")),
+            "created_by" => UserResource::make($this->whenLoaded("createdBy")),
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
-            "interview" => InterviewResource::make($this->whenLoaded("interview")),
-            "createdBy" => UserResource::make($this->whenLoaded("createdBy")),
-            "ratingScalePoint" => RatingScalePointResource::make($this->whenLoaded("ratingScalePoint")),
         ];
     }
 }

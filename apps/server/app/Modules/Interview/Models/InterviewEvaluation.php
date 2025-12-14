@@ -11,7 +11,7 @@ class InterviewEvaluation extends BaseModel
 {
     protected $guarded = ["id", "created_at", "updated_at"];
 
-    protected $with = ["ratingScalePoint"];
+    protected $with = ["point"];
 
     public function isCreatedBy(User $user): bool
     {
@@ -28,8 +28,8 @@ class InterviewEvaluation extends BaseModel
         return $this->belongsTo(User::class, "created_by_user_id", "id");
     }
 
-    public function ratingScalePoint(): BelongsTo
+    public function point(): BelongsTo
     {
-        return $this->belongsTo(RatingScalePoint::class);
+        return $this->belongsTo(RatingScalePoint::class, "rating_scale_point_id", "id");
     }
 }
