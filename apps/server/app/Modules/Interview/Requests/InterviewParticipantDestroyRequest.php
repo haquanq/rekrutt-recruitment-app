@@ -25,6 +25,6 @@ class InterviewParticipantDestroyRequest extends BaseInterviewParticipantRequest
     {
         parent::prepareForValidation();
 
-        $this->interview = InterviewParticipant::with("interview")->findOrFail($this->route("id"));
+        $this->interviewParticipant = InterviewParticipant::with("interview")->findOrFail($this->route("id"));
     }
 }
