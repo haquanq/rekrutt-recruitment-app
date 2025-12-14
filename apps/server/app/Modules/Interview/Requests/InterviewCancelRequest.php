@@ -13,8 +13,6 @@ use Illuminate\Validation\Rule;
 
 class InterviewCancelRequest extends BaseInterviewRequest
 {
-    public Interview $interview;
-
     public function rules(): array
     {
         return [
@@ -40,7 +38,7 @@ class InterviewCancelRequest extends BaseInterviewRequest
             "status" => [
                 "required",
                 Rule::enum(InterviewStatus::class)->only(InterviewStatus::CANCELLED),
-                new InterviewStatusTransitionsFromRule($this->interview->status),
+                new InterviewStatusTransitionsFromRule($this->getQueriedInterviewOrFail()->status),
             ],
         ];
     }
@@ -54,8 +52,6 @@ class InterviewCancelRequest extends BaseInterviewRequest
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-
-        $this->interview = Interview::findOrFail($this->route("id"));
 
         $this->merge([
             "status" => InterviewStatus::CANCELLED->value,

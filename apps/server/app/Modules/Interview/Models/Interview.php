@@ -6,12 +6,10 @@ use App\Abstracts\BaseModel;
 use App\Modules\Auth\Models\User;
 use App\Modules\Interview\Enums\InterviewStatus;
 use App\Modules\RatingScale\Models\RatingScale;
-use App\Modules\RatingScale\Resources\RatingScaleResource;
 use App\Modules\Recruitment\Models\RecruitmentApplication;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Facades\Log;
 
 class Interview extends BaseModel
 {
@@ -19,6 +17,8 @@ class Interview extends BaseModel
 
     protected $casts = [
         "status" => InterviewStatus::class,
+        "started_at" => "datetime",
+        "ended_at" => "datetime",
     ];
 
     public function isCreatedBy(User $user): bool

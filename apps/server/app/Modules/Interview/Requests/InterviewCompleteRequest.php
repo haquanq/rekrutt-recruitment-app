@@ -12,8 +12,6 @@ use Illuminate\Validation\Rule;
 
 class InterviewCompleteRequest extends BaseInterviewRequest
 {
-    public Interview $interview;
-
     public function rules(): array
     {
         return [
@@ -29,7 +27,7 @@ class InterviewCompleteRequest extends BaseInterviewRequest
             "status" => [
                 "required",
                 Rule::enum(InterviewStatus::class)->only(InterviewStatus::COMPLETED),
-                new InterviewStatusTransitionsFromRule($this->interview->status),
+                new InterviewStatusTransitionsFromRule($this->getQueriedInterviewOrFail()->status),
             ],
         ];
     }
@@ -43,8 +41,6 @@ class InterviewCompleteRequest extends BaseInterviewRequest
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-
-        $this->interview = Interview::withCount(["participants", "evaluations"])->findOrFail($this->route("id"));
 
         $this->merge([
             "status" => InterviewStatus::COMPLETED->value,

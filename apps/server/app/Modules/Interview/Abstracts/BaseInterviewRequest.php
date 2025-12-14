@@ -3,10 +3,22 @@
 namespace App\Modules\Interview\Abstracts;
 
 use App\Abstracts\BaseFormRequest;
+use App\Modules\Interview\Models\Interview;
 use App\Modules\RatingScale\Rules\RatingScaleIsActiveRule;
 
 abstract class BaseInterviewRequest extends BaseFormRequest
 {
+    protected ?Interview $interview = null;
+
+    public function getQueriedInterviewOrFail(string $param = "id"): Interview
+    {
+        if ($this->interview === null) {
+            $this->interview = Interview::findOrFail($this->route($param));
+        }
+
+        return $this->interview;
+    }
+
     public function rules(): array
     {
         return [

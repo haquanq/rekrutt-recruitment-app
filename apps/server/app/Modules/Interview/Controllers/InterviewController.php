@@ -13,12 +13,8 @@ use App\Modules\Interview\Requests\InterviewStoreRequest;
 use App\Modules\Interview\Requests\InterviewUpdateRequest;
 use App\Modules\Interview\Resources\InterviewResource;
 use App\Modules\Interview\Resources\InterviewResourceCollection;
-use App\Modules\Recruitment\Enums\RecruitmentApplicationStatus;
-use App\Modules\Recruitment\Models\RecruitmentApplication;
 use Dedoc\Scramble\Attributes\QueryParameter;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -158,13 +154,13 @@ class InterviewController extends BaseController
      */
     public function update(InterviewUpdateRequest $request)
     {
-        $interviewStatus = $request->interview->status;
+        $interview = $request->getQueriedInterviewOrFail();
 
-        if ($interviewStatus !== InterviewStatus::DRAFT) {
-            throw new ConflictHttpException("Cannot update. " . $interviewStatus->description());
+        if ($interview->status !== InterviewStatus::DRAFT) {
+            throw new ConflictHttpException("Cannot update. " . $interview->status->description());
         }
 
-        $request->interview->update($request->validated());
+        $interview->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -179,13 +175,13 @@ class InterviewController extends BaseController
      */
     public function destroy(InterviewDestroyRequest $request)
     {
-        $interviewStatus = $request->interview->status;
+        $interview = $request->getQueriedInterviewOrFail();
 
-        if ($interviewStatus !== InterviewStatus::DRAFT) {
-            throw new ConflictHttpException("Cannot delete. " . $interviewStatus->description());
+        if ($interview->status !== InterviewStatus::DRAFT) {
+            throw new ConflictHttpException("Cannot delete. " . $interview->status->description());
         }
 
-        $request->interview->delete();
+        $interview->delete();
         return $this->noContentResponse();
     }
 
@@ -200,11 +196,13 @@ class InterviewController extends BaseController
      */
     public function schedule(InterviewScheduleRequest $request)
     {
-        if ($request->interview->status === InterviewStatus::SCHEDULED) {
+        $interview = $request->getQueriedInterviewOrFail();
+
+        if ($interview->status === InterviewStatus::SCHEDULED) {
             throw new ConflictHttpException("Interview is already scheduled.");
         }
 
-        $request->interview->update($request->validated());
+        $interview->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -218,11 +216,13 @@ class InterviewController extends BaseController
      */
     public function cancel(InterviewCancelRequest $request)
     {
-        if ($request->interview->status === InterviewStatus::CANCELLED) {
+        $interview = $request->getQueriedInterviewOrFail();
+
+        if ($interview->status === InterviewStatus::CANCELLED) {
             throw new ConflictHttpException("Interview is already cancelled.");
         }
 
-        $request->interview->update($request->validated());
+        $interview->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -236,16 +236,17 @@ class InterviewController extends BaseController
      */
     public function complete(InterviewCompleteRequest $request)
     {
-        Log::info(json_encode($request->interview));
-        if ($request->interview->participants_count != $request->interview->evaluations_count) {
+        $interview = $request->getQueriedInterviewOrFail()->loadCount("participants", "evaluations");
+
+        if ($interview->participants_count != $interview->evaluations_count) {
             throw new ConflictHttpException("Interview is not evaluated by all participants.");
         }
 
-        if ($request->interview->status === InterviewStatus::COMPLETED) {
+        if ($interview->status === InterviewStatus::COMPLETED) {
             throw new ConflictHttpException("Interview is already completed.");
         }
 
-        $request->interview->update($request->validated());
+        $interview->update($request->validated());
         return $this->noContentResponse();
     }
 }

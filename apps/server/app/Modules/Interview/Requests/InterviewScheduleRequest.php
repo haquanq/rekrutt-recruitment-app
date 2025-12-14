@@ -4,7 +4,6 @@ namespace App\Modules\Interview\Requests;
 
 use App\Modules\Interview\Abstracts\BaseInterviewRequest;
 use App\Modules\Interview\Enums\InterviewStatus;
-use App\Modules\Interview\Models\Interview;
 use App\Modules\Interview\Rules\InterviewStatusTransitionsFromRule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -12,8 +11,6 @@ use Illuminate\Validation\Validator;
 
 class InterviewScheduleRequest extends BaseInterviewRequest
 {
-    public Interview $interview;
-
     public function rules(): array
     {
         return [
@@ -24,7 +21,7 @@ class InterviewScheduleRequest extends BaseInterviewRequest
             "status" => [
                 "required",
                 Rule::enum(InterviewStatus::class)->only(InterviewStatus::SCHEDULED),
-                new InterviewStatusTransitionsFromRule($this->interview->status),
+                new InterviewStatusTransitionsFromRule($this->getQueriedInterviewOrFail()->status),
             ],
         ];
     }
@@ -32,7 +29,7 @@ class InterviewScheduleRequest extends BaseInterviewRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
-            if ($this->interview->participants_count === 0) {
+            if ($this->getQueriedInterviewOrFail()->loadCount("participants")->participants_count === 0) {
                 $validator->errors()->add("participants", "Interview must have at least one participant.");
             }
         });
@@ -40,15 +37,13 @@ class InterviewScheduleRequest extends BaseInterviewRequest
 
     public function authorize(): bool
     {
-        Gate::authorize("schedule", $this->interview);
+        Gate::authorize("schedule", $this->getQueriedInterviewOrFail());
         return true;
     }
 
     public function prepareForValidation(): void
     {
         parent::prepareForValidation();
-
-        $this->interview = Interview::withCount("participants")->findOrFail($this->route("id"));
 
         $this->merge([
             "status" => InterviewStatus::SCHEDULED->value,
