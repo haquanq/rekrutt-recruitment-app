@@ -108,7 +108,7 @@ class CandidateDocumentController extends BaseController
      * Return file.
      *
      * Authorization
-     * - User can be anyone.
+     * - User must be hiring manager or recruiter.
      */
     public function download(int $id)
     {
