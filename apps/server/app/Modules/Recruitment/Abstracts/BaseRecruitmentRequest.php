@@ -9,7 +9,7 @@ abstract class BaseRecruitmentRequest extends BaseFormRequest
 {
     protected ?Recruitment $recruitment = null;
 
-    public function getRecruitmentOrFail(string $param = "id"): Recruitment
+    public function getQueriedRecruitmentOrFail(string $param = "id"): Recruitment
     {
         if ($this->recruitment === null) {
             $this->recruitment = Recruitment::findOrFail($this->route($param));

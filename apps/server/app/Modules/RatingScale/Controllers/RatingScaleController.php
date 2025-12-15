@@ -126,7 +126,7 @@ class RatingScaleController extends BaseController
      */
     public function update(RatingScaleUpdateRequest $request)
     {
-        $request->getRatingScaleOrFail()->update($request->validated());
+        $request->getQueriedRatingScaleOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -142,7 +142,7 @@ class RatingScaleController extends BaseController
      */
     public function destroy(RatingScaleDestroyRequest $request)
     {
-        $request->getRatingScaleOrFail()->delete();
+        $request->getQueriedRatingScaleOrFail()->delete();
         return $this->noContentResponse();
     }
 }

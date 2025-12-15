@@ -11,7 +11,7 @@ abstract class BaseRatingScalePointRequest extends BaseFormRequest
 {
     protected ?RatingScalePoint $ratingScalePoint = null;
 
-    public function getRatingScalePointOrFail(string $param = "id"): RatingScalePoint
+    public function getQueriedRatingScalePointOrFail(string $param = "id"): RatingScalePoint
     {
         if ($this->ratingScalePoint === null) {
             $this->ratingScalePoint = RatingScalePoint::findOrFail($this->route($param));

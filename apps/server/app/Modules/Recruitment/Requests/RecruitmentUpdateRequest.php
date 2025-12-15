@@ -9,7 +9,7 @@ class RecruitmentUpdateRequest extends BaseRecruitmentRequest
 {
     public function authorize(): bool
     {
-        Gate::authorize("update", $this->getRecruitmentOrFail());
+        Gate::authorize("update", $this->getQueriedRecruitmentOrFail());
         return true;
     }
 }

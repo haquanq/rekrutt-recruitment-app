@@ -124,7 +124,7 @@ class RatingScalePointController extends BaseController
      */
     public function update(RatingScalePointUpdateRequest $request)
     {
-        $request->getRatingScalePointOrFail()->update($request->validated());
+        $request->getQueriedRatingScalePointOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -140,7 +140,7 @@ class RatingScalePointController extends BaseController
      */
     public function destroy(RatingScalePointDestroyRequest $request)
     {
-        $request->getRatingScalePointOrFail()->delete();
+        $request->getQueriedRatingScalePointOrFail()->delete();
         return $this->noContentResponse();
     }
 }

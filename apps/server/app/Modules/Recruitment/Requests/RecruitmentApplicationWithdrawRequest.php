@@ -23,7 +23,9 @@ class RecruitmentApplicationWithdrawRequest extends BaseRecruitmentApplicationRe
                 "bail",
                 "required",
                 Rule::enum(RecruitmentApplicationStatus::class)->only([RecruitmentApplicationStatus::WITHDRAWN]),
-                new RecruitmentApplicationStatusTransitionsFromRule($this->getRecruitmentApplicationOrFail()->status),
+                new RecruitmentApplicationStatusTransitionsFromRule(
+                    $this->getQueriedRecruitmentApplicationOrFail()->status,
+                ),
             ],
 
             /**

@@ -14,7 +14,7 @@ class RecruitmentDestroyRequest extends BaseRecruitmentRequest
 
     public function authorize(): bool
     {
-        Gate::authorize("delete", $this->getRecruitmentOrFail());
+        Gate::authorize("delete", $this->getQueriedRecruitmentOrFail());
         return true;
     }
 }

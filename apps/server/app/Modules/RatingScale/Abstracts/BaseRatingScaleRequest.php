@@ -10,7 +10,7 @@ abstract class BaseRatingScaleRequest extends BaseFormRequest
 {
     protected ?RatingScale $ratingScale = null;
 
-    public function getRatingScaleOrFail(string $param = "id"): RatingScale
+    public function getQueriedRatingScaleOrFail(string $param = "id"): RatingScale
     {
         if ($this->ratingScale === null) {
             $this->ratingScale = RatingScale::findOrFail($this->route($param));

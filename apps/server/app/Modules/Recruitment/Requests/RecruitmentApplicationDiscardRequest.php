@@ -24,7 +24,9 @@ class RecruitmentApplicationDiscardRequest extends BaseRecruitmentApplicationReq
                 "bail",
                 "required",
                 Rule::enum(RecruitmentApplicationStatus::class)->only([RecruitmentApplicationStatus::DISCARDED]),
-                new RecruitmentApplicationStatusTransitionsFromRule($this->getRecruitmentApplicationOrFail()->status),
+                new RecruitmentApplicationStatusTransitionsFromRule(
+                    $this->getQueriedRecruitmentApplicationOrFail()->status,
+                ),
             ],
             /**
              * Discarded at timestamp === now

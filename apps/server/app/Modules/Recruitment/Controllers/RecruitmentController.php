@@ -136,7 +136,7 @@ class RecruitmentController extends BaseController
      */
     public function update(RecruitmentUpdateRequest $request, int $id)
     {
-        $recruitment = $request->getRecruitmentOrFail();
+        $recruitment = $request->getQueriedRecruitmentOrFail();
 
         if (
             !Collection::make([RecruitmentStatus::DRAFT, RecruitmentStatus::SCHEDULED])->contains($recruitment->status)
@@ -161,7 +161,7 @@ class RecruitmentController extends BaseController
      */
     public function destroy(RecruitmentDestroyRequest $request)
     {
-        $recruitment = $request->getRecruitmentOrFail();
+        $recruitment = $request->getQueriedRecruitmentOrFail();
 
         if ($recruitment->status !== RecruitmentStatus::DRAFT) {
             throw new ConflictHttpException("Cannot delete. " . $recruitment->status->description());
@@ -184,7 +184,7 @@ class RecruitmentController extends BaseController
      */
     public function schedule(RecruitmentScheduleRequest $request)
     {
-        $recruitment = $request->getRecruitmentOrFail();
+        $recruitment = $request->getQueriedRecruitmentOrFail();
 
         if ($recruitment->status === RecruitmentStatus::SCHEDULED) {
             throw new ConflictHttpException("Recruitment is already scheduled.");
@@ -207,7 +207,7 @@ class RecruitmentController extends BaseController
      */
     public function publish(RecruitmentPublishRequest $request)
     {
-        $recruitment = $request->getRecruitmentOrFail();
+        $recruitment = $request->getQueriedRecruitmentOrFail();
 
         if ($recruitment->status === RecruitmentStatus::PUBLISHED) {
             throw new ConflictHttpException("Recruitment is already published.");
@@ -229,7 +229,7 @@ class RecruitmentController extends BaseController
      */
     public function close(RecruitmentCloseRequest $request)
     {
-        $recruitment = $request->getRecruitmentOrFail();
+        $recruitment = $request->getQueriedRecruitmentOrFail();
 
         if ($recruitment->status === RecruitmentStatus::CLOSED) {
             throw new ConflictHttpException("Recruitment is already closed.");

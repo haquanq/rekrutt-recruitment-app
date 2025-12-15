@@ -28,7 +28,9 @@ class RecruitmentApplicationUpdateInterviewStatusRequest extends BaseRecruitment
                     RecruitmentApplicationStatus::INTERVIEW_PENDING,
                     RecruitmentApplicationStatus::INTERVIEW_COMPLETED,
                 ]),
-                new RecruitmentApplicationStatusTransitionsFromRule($this->getRecruitmentApplicationOrFail()->status),
+                new RecruitmentApplicationStatusTransitionsFromRule(
+                    $this->getQueriedRecruitmentApplicationOrFail()->status,
+                ),
             ],
         ];
     }

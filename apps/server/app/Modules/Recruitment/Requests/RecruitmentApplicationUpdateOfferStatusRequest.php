@@ -27,7 +27,9 @@ class RecruitmentApplicationUpdateOfferStatusRequest extends BaseRecruitmentAppl
                     RecruitmentApplicationStatus::OFFER_ACCEPTED,
                     RecruitmentApplicationStatus::OFFER_REJECTED,
                 ]),
-                new RecruitmentApplicationStatusTransitionsFromRule($this->getRecruitmentApplicationOrFail()->status),
+                new RecruitmentApplicationStatusTransitionsFromRule(
+                    $this->getQueriedRecruitmentApplicationOrFail()->status,
+                ),
             ],
             /**
              * Offer started at timestamp === now

@@ -22,7 +22,7 @@ class RecruitmentScheduleRequest extends BaseRecruitmentRequest
                 "bail",
                 "required",
                 Rule::enum(RecruitmentStatus::class)->only(RecruitmentStatus::SCHEDULED),
-                new RecruitmentStatusTransitionsFromRule($this->getRecruitmentOrFail()->status),
+                new RecruitmentStatusTransitionsFromRule($this->getQueriedRecruitmentOrFail()->status),
             ],
             /**
              * Scheduled start time
@@ -39,7 +39,7 @@ class RecruitmentScheduleRequest extends BaseRecruitmentRequest
 
     public function authorize(): bool
     {
-        Gate::authorize("schedule", $this->getRecruitmentOrFail());
+        Gate::authorize("schedule", $this->getQueriedRecruitmentOrFail());
         return true;
     }
 

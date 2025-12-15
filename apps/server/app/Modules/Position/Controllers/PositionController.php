@@ -126,7 +126,7 @@ class PositionController extends BaseController
      */
     public function update(PositionUpdateRequest $request)
     {
-        $request->getPositionOrFail()->update($request->validated());
+        $request->getQueriedPositionOrFail()->update($request->validated());
         return $this->noContentResponse();
     }
 
@@ -142,7 +142,7 @@ class PositionController extends BaseController
      */
     public function destroy(PositionDestroyRequest $request)
     {
-        $request->getPositionOrFail()->delete();
+        $request->getQueriedPositionOrFail()->delete();
         return $this->noContentResponse();
     }
 }
