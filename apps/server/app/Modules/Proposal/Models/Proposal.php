@@ -62,8 +62,8 @@ class Proposal extends BaseModel
         return $this->hasMany(ProposalDocument::class);
     }
 
-    public function recruitment(): HasOne
+    public function recruitments(): HasMany
     {
-        return $this->hasOne(Recruitment::class);
+        return $this->hasMany(Recruitment::class);
     }
 }
