@@ -236,10 +236,14 @@ class ScrambleServiceProvider extends ServiceProvider
         $response->description = $this->getStatusCodeDescription($response->code);
 
         foreach ($response->content as $contentTypeName => $content) {
-            if ($content instanceof Schema && $content->type instanceof ObjectType) {
-                if ($response->code < 400 && !isset($content->type->properties["data"])) {
-                    $content->type = new ObjectType()->addProperty("data", $content->type);
-                } elseif ($response->code >= 400 && !isset($content->type->properties["error"])) {
+            $this->updateTypeReference($content->type);
+
+            if ($content instanceof Schema) {
+                if ($response->code < 400) {
+                    if (!($content->type instanceof Reference && Str::contains($content->type->fullName, "Page"))) {
+                        $content->type = new ObjectType()->addProperty("data", $content->type);
+                    }
+                } else {
                     $content->type = new ObjectType()->addProperty("error", $content->type);
                 }
             }
@@ -248,10 +252,6 @@ class ScrambleServiceProvider extends ServiceProvider
                 $content->type,
                 new Reference("schemas", "ApiResponseMetadata", $document->components),
             ]);
-
-            foreach ($allOfType->items as $item) {
-                $this->updateTypeReference($item);
-            }
 
             $response->content[$contentTypeName] = Schema::fromType($allOfType);
         }
