@@ -116,7 +116,7 @@ class UserController extends BaseController
     public function store(UserStoreRequest $request)
     {
         $createdUser = User::create($request->validated());
-        return new UserResource($createdUser);
+        return $this->createdResponse(UserResource::make($createdUser));
     }
 
     /**
