@@ -4,7 +4,7 @@ namespace App\Middlewares;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class CookieMiddleware
 {
@@ -12,7 +12,7 @@ class CookieMiddleware
     {
         $token = $request->cookie("api_token");
 
-        if ($token !== null) {
+        if (Str::trim($request->header("Authorization")) === "Bearer" && $token) {
             $request->headers->set("Authorization", "Bearer $token");
         }
 
