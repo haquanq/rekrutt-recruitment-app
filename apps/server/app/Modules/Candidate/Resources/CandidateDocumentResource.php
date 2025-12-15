@@ -4,8 +4,6 @@ namespace App\Modules\Candidate\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\URL;
-use Storage;
 
 class CandidateDocumentResource extends JsonResource
 {
@@ -13,7 +11,7 @@ class CandidateDocumentResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "file_url" => URL::to("/") . Storage::url($this->file_path),
+            "file_url" => route("candidate-documents.download", $this->id),
             "file_name" => $this->file_name,
             "file_exension" => $this->file_extension,
             "mime_type" => $this->mime_type,

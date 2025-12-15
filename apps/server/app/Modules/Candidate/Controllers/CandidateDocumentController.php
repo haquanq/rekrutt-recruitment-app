@@ -103,6 +103,21 @@ class CandidateDocumentController extends BaseController
     }
 
     /**
+     * Download candidate document file by Id
+     *
+     * Return file.
+     *
+     * Authorization
+     * - User can be anyone.
+     */
+    public function download(int $id)
+    {
+        Gate::authorize("view", CandidateDocument::class);
+        $candidateDocument = CandidateDocument::findOrFail($id);
+        return Storage::download($candidateDocument->file_path, $candidateDocument->file_name);
+    }
+
+    /**
      * Create candidate document
      *
      * Return created candidate document.
@@ -129,7 +144,7 @@ class CandidateDocumentController extends BaseController
     }
 
     /**
-     * Update candidate document description
+     * Update candidate document
      *
      * Return no content.
      *

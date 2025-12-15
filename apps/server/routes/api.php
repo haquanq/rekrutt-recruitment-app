@@ -147,6 +147,7 @@ Route::middleware("auth:sanctum")->group(function () {
         ->group(function () {
             Route::get("", "index");
             Route::get("/{id}", "show");
+            Route::get("/{id}/file", "download")->name("candidate-documents.download");
             Route::post("", "store");
             Route::put("/{id}", "update");
             Route::delete("/{id}", "destroy");
