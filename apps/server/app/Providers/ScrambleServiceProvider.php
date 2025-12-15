@@ -215,10 +215,6 @@ class ScrambleServiceProvider extends ServiceProvider
                     $this->updateResponse($response, $document);
                 }
             }
-
-            if ($response instanceof Reference) {
-                logger($response->fullName);
-            }
         }
 
         if (Str::contains($operation->path, "{id}")) {
