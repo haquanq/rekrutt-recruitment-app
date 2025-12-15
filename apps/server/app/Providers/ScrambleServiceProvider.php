@@ -10,6 +10,7 @@ use Dedoc\Scramble\Support\Generator\Operation;
 use Dedoc\Scramble\Support\Generator\Reference;
 use Dedoc\Scramble\Support\Generator\Response;
 use Dedoc\Scramble\Support\Generator\Schema;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Dedoc\Scramble\Support\Generator\Types\ArrayType;
 use Dedoc\Scramble\Support\Generator\Types\BooleanType;
 use Dedoc\Scramble\Support\Generator\Types\IntegerType;
@@ -26,6 +27,7 @@ class ScrambleServiceProvider extends ServiceProvider
         Scramble::configure()
             ->expose(false)
             ->withDocumentTransformers(function (OpenApi $document) {
+                $this->updateDocumentSecurity($document);
                 $this->updateDocumentSchemas($document);
                 $this->updateDocumentResponse($document);
             })
@@ -60,6 +62,16 @@ class ScrambleServiceProvider extends ServiceProvider
                         ->example("00000000-0000-0000-0000-000000000000"),
                 )
                 ->setRequired(["success", "status_code", "timestamp", "request_id"]),
+        );
+    }
+
+    public function updateDocumentSecurity(OpenApi $document): void
+    {
+        $document->secure(
+            SecurityScheme::http("Bearer")->setDescription(
+                "For web browsers, the token is saved via Cookies and automatically sent for every request. </br>" .
+                    "For other clients, manually set this header will override the default behaviour.",
+            ),
         );
     }
 
