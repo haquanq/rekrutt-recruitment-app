@@ -23,7 +23,7 @@ return [
     | affect the paths of its internal API that aren't exposed to users.
     |
     */
-    "path" => "/scalar",
+    "path" => "/docs",
 
     /*
     |--------------------------------------------------------------------------
@@ -47,7 +47,7 @@ return [
     | Scalar Galaxy package. You can change this to use a custom OpenAPI file.
     |
     */
-    "url" => "./api.json",
+    "url" => "/docs/api.json",
 
     /*
     |--------------------------------------------------------------------------
@@ -91,7 +91,7 @@ return [
         "layout" => "modern",
 
         /** URL to a request proxy for the API client */
-        "proxyUrl" => "https://proxy.scalar.com",
+        // "proxyUrl" => "https://proxy.scalar.com",
 
         /** Whether to show the sidebar */
         "showSidebar" => true,
@@ -175,12 +175,13 @@ return [
         /**
          * List of servers to override the openapi spec servers
          */
-        // 'servers' => [
-        //     [
-        //         'url' => 'https://api.scalar.com',
-        //         'description' => 'Production server',
-        //     ],
-        // ],
+
+        'servers' => [
+            [
+                'url' => config("app.url"),
+                'description' => 'Production server',
+            ]
+        ],
 
         /**
          * We’re using Inter and JetBrains Mono as the default fonts. If you want to use your own fonts, set this to false.
