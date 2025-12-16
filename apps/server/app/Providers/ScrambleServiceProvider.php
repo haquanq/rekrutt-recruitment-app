@@ -24,7 +24,7 @@ class ScrambleServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Scramble::configure()
-            ->expose(false)
+            ->expose(document: "/docs/api.json")
             ->withDocumentTransformers(function (OpenApi $document) {
                 $this->updateDocumentSecurity($document);
                 $this->updateDocumentSchemas($document);
