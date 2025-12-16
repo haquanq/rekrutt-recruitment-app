@@ -12,8 +12,12 @@ class CookieMiddleware
     {
         $token = $request->cookie("api_token");
 
-        if (Str::trim($request->header("Authorization")) === "Bearer" && $token) {
-            $request->headers->set("Authorization", "Bearer $token");
+        $hasBearerToken =
+            Str::startsWith($request->header("Authorization") ?? "", "Bearer") &&
+            Str::trim($request->header("Authorization")) !== "Bearer";
+
+        if (!$hasBearerToken && $token) {
+            $request->headers->set("Authorization", "Bearer " . $token);
         }
 
         return $next($request);
