@@ -17,6 +17,12 @@ class AuthController extends BaseController
      * Login
      *
      * Return authenticated user with cookies.
+     *
+     * Test accounts (password: 12345678)
+     * - manager@gmail.com (general manager not hiring manager)
+     * - recruiter@gmail.com
+     * - hiring.manager@gmail.com
+     * - executive@gmail.com
      */
     public function login(UserLoginRequest $request)
     {
