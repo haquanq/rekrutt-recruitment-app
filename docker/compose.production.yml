@@ -1,0 +1,57 @@
+name: rekrutt-prod
+
+services:
+  app:
+    build:
+      context: ../
+      dockerfile: ./docker/php-fpm/Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www
+    environment:
+      - DB_USERNAME=sa
+      - DB_PASSWORD=1234
+      - APP_NAME=Rekrutt
+      - APP_URL=localhost
+      - APP_ENV=production
+      - APP_DEBUG=false
+    networks:
+      - laravel
+    depends_on:
+      - db
+    mem_limit: 200m
+
+  nginx:
+    build:
+      context: ../
+      dockerfile: ./docker/nginx/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - laravel
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - app
+    mem_limit: 50m
+
+  db:
+    image: postgres:18-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=recruitment_db
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=1234
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - laravel
+    mem_limit: 200m
+
+volumes:
+  pg_data:
+
+networks:
+  laravel:
+    driver: bridge

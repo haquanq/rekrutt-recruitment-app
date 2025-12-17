@@ -1,0 +1,16 @@
+name: rekrutt-dev
+
+services:
+  db:
+    image: postgres:18-alpine
+    ports:
+      - "6464:5432"
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=recruitment_db
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:

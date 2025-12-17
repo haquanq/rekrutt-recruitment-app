@@ -1,0 +1,24 @@
+# Server
+apps/server/vendor/
+apps/server/node_modules/
+apps/server/.git/
+apps/server/.github/
+apps/server/.env
+apps/server/.env.*
+apps/server/!.env.example
+apps/server/storage/logs/*
+apps/server/storage/framework/cache/*
+apps/server/storage/framework/sessions/*
+apps/server/storage/framework/views/*
+apps/server/bootstrap/cache/*
+apps/server/tests/
+apps/server/*.md
+apps/server/.editorconfig
+apps/server/.gitignore
+apps/server/.gitattributes
+apps/server/phpunit.xml
+apps/server/.phpunit.result.cache
+apps/server/docker-compose.yml
+apps/server/Dockerfile
+apps/server/.DS_Store
+apps/server/public/api.json
