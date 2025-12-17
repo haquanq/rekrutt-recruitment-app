@@ -35,6 +35,13 @@ Manage interviews, interview's participants and interview's evaluations
 - Schedule/cancel interviews.
 - Evaluate succeeded interviews (by participants).
 
+## Business Flow
+
+- Mangers (include hiring managers) create proposal for hiring needs and submit for approval.
+- Executives will either approve or reject proposals
+- Recruiters (or hiring manager) will create recruitments and schedule timeline for open/close.
+- Recruiters (or hiring manager) will attach candidates to openning recruitments, then schedule candidates for interviews, update candidate's applications statuses (interviews, offers, discarded or withdrawn)
+
 ## About This Repository
 
 This is a monorepo contains 2 projects
