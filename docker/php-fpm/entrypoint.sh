@@ -14,6 +14,8 @@ DB_DATABASE=recruitment_db
 DB_USERNAME=${DB_USERNAME}
 DB_PASSWORD=${DB_PASSWORD}
 DB_CONNECTION=pgsql
+
+CACHE_STORE=database
 EOF
 
 php artisan key:generate
