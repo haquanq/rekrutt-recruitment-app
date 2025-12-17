@@ -169,6 +169,16 @@ class ScrambleServiceProvider extends ServiceProvider
                             ->setRequired(["message"]),
                     ),
                 ),
+            "TooManyRequestsException" => new Response(429)
+                ->setDescription("Too Many Requests")
+                ->setContent(
+                    "application/json",
+                    Schema::fromType(
+                        new ObjectType()
+                            ->addProperty("message", new StringType()->setDescription("Error message."))
+                            ->setRequired(["message"]),
+                    ),
+                ),
 
             "\Illuminate\Validation\ValidationException" => new Response(422)
                 ->setDescription("Unprocessable Entity")
@@ -229,6 +239,11 @@ class ScrambleServiceProvider extends ServiceProvider
             $operation->responses,
             new Reference("responses", "InternalServerErrorException", $document->components),
         );
+
+        array_push(
+            $operation->responses,
+            new Reference("responses", "TooManyRequestsException", $document->components),
+        );
     }
 
     public function updateResponse(Response $response, OpenApi $document)
@@ -268,6 +283,7 @@ class ScrambleServiceProvider extends ServiceProvider
             403 => "Forbidden",
             404 => "Not Found",
             409 => "Conflict",
+            429 => "Too Many Requests",
             422 => "Validation Error",
             500 => "Internal Server Error",
             default => "Unknown Status Code",
